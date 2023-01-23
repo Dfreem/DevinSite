@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
     <None Remove="Roles\" />
+    <None Remove="Data\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -35,6 +36,7 @@
 
   <ItemGroup>
     <Folder Include="Roles\" />
+    <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="login\Register.cshtml" />

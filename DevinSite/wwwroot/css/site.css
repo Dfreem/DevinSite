@@ -21,7 +21,7 @@
     --queen-blue: #577590ff;
     --celadon-blue: #277da1ff;
     --smart-person-blue: #227c9d;
-    --df-any-link: #d19002;
+    --df-any-link: #d19c1d;
     --df-link-hover: var(--yellow-orange-color-wheel);
     --df-accent-dark: var(--celadon-blue);
     --df-accent-light: var(--maize-crayola);
@@ -39,9 +39,17 @@
 /*#endregion*/
 /*#region ============ Main Page ============*/
 body {
-    background-color: var(--df-primary-bg);
     color: var(--df-primary-text);
+    background: linear-gradient(35deg, rgba(146, 99, 58,.8) 0% 3%, rgba(234, 239, 189) 10.71%, rgba(144, 190, 109,.8));
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--df-primary-bg);
+    min-height: 100vh;
 }
+
+/*html {
+}*/
 
 #search-title {
     margin-block: auto;
@@ -72,6 +80,7 @@ a:any-link {
 
     a:any-link:hover {
         text-shadow: 2px 2px 2px var(--luxury-red);
+        color:chocolate;
     }
 
 header {
@@ -79,29 +88,25 @@ header {
     background-position: 100% 0;
     background-repeat: no-repeat;
     background-size: 500px 90px;
-    background: linear-gradient(0.25turn, var(--jungle-green), var(--queen-blue));
-    background-color: var(--jungle-green);
+    background-color: var(--df-primary-bg);
     color: var(--df-secondary-text);
     padding: 1em;
     position: center;
     border-bottom: 1px var(--df-accent-contrast-dark) solid;
 }
 
-#overview-btn {
-    background-color: var(--df-primary-btn);
-    color: var(--df-text-light);
-    font-family: 'Fredoka One', cursive;
-}
-
-#toggle-nav {
-    right: -14em;
-}
-
 a.navbar-brand {
-    color: var(--df-text-light);
+    color: Highlight;
     text-shadow: 4px 4px 4px var(--df-text-dark);
     font-family: 'Skranji', cursive;
+    margin-inline-start: 2em;
     /*    text-anchor: middle;*/
+}
+
+.cal-icon {
+    color: var(--maize-crayola);
+    margin-inline: 2em;
+    text-shadow: 4px 4px 4px var(--luxury-red);
 }
 
 .btn-primary {
@@ -126,7 +131,7 @@ a.navbar-brand {
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     background-color: var(--df-primary-btn);
-    color: var(--df-secondary-btn);
+    color: var(--df-any-link);
     font-family: 'Skranji', cursive;
     font-weight: 700;
     font-size: 1rem;
@@ -157,20 +162,6 @@ a.dropdown-item {
     color: var(--df-text-dark);
 }
 /*#endregion*/
-
-/*#region ========== wrapper ==========*/
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    min-width: fit-content;
-    min-height: 100vh;
-    max-height: 100vh;
-}
-/*#endregion*/
-.dropdown {
-    background-color: var(--df-secondary-btn);
-}
-
 
 #subject-1,
 #subject-2,
@@ -381,12 +372,12 @@ summary:hover {
 }
 
 #class-list {
-/*    top: -15em;*/
+    /*    top: -15em;*/
     width: fit-content;
     position: absolute;
     padding: .4em;
     padding-top: 1em;
-    margin-top:8em;
+    margin-top: 8em;
     right: 15em;
     border-radius: 25px;
     color: var(--df-text-light);
@@ -399,13 +390,17 @@ summary:hover {
     padding-inline: auto;
     max-width: 300px;
 }
+
     #user-info > input {
         border: none;
     }
 
 .profile-form {
     padding: 1em;
-
 }
 
+/*#endregion*/
+
+
+/*#region Login*/
 /*#endregion*/

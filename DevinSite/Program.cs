@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using DevinSite.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 string connection;
 
@@ -10,7 +8,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
     connection = builder.Configuration.GetConnectionString("MySqlConnection");
 }
 // if Not MacOS
-else 
+else
 {
     connection = builder.Configuration.GetConnectionString("DefaultConnection");
 }
@@ -21,7 +19,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+
+// This call adds a Role manager to the services container.
+builder.Services.AddIdentity<Student, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = true)
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -35,10 +35,12 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+// use scoped service provider to call SeedData initialization.
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
+    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
     SeedData.Init(services);
 }
 

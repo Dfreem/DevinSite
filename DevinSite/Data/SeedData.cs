@@ -6,7 +6,7 @@ public static class SeedData
     {
         using (var context = new ApplicationDbContext(services.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
         {
-            if (context.Users.Any())
+            if (context.Courses.Any() || context.Assignments.Any())
             {
                 return;
             }
