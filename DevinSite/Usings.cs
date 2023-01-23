@@ -1,0 +1,17 @@
+﻿global using DevinSite;
+global using DevinSite.Controllers;
+global using DevinSite.Data;
+global using DevinSite.Models;
+global using System.Runtime.InteropServices;
+global using System;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Html;
+global using Microsoft.AspNetCore.Http.Features;
+global using Microsoft.AspNetCore.Mvc;
+global using System.Linq;
+global using System.Diagnostics;
+global using System.Threading.Tasks;
+global using System.Collections.Generic;
+global using System.ComponentModel.DataAnnotations;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

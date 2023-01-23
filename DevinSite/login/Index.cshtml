@@ -1,0 +1,23 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="wrapper">
+
+    <div class="row m-auto">
+        <div class="container-fluid m-auto">
+
+            <div class="mx-auto">
+                <form method="post" asp-action="TryLogin" asp-controller="Login">
+                    <input asp-for="UserName" class="form-control">
+                    <input type="password" class="form-control" asp-for="Password">
+                    <button class="btn btn-info form-control my-3" type="submit">
+                        login
+                    </button>
+                </form>
+                <a asp-action="Register" asp-controller="Login">New Here? Register</a>
+            </div>
+        </div>
+    </div>
+</div>
