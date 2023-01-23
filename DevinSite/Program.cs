@@ -25,7 +25,8 @@ builder.Services.AddIdentity<Student, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = true)
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+        .AddDefaultTokenProviders()
+        .AddDefaultUI();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
