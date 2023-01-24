@@ -16,6 +16,7 @@ public class HomeController : Controller
     }
 
     // if navigated to by a search, deteremine if search string is date.
+    [Authorize()]
     public IActionResult Index(string searchString)
     {
         // retrieve all assignments in db.
