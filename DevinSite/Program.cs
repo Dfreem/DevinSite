@@ -40,9 +40,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
+    var context = services.GetRequiredService<ApplicationDbContext>();
     // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    SeedData.Init(services);
+    SeedData.Init(context, services);
 }
 
 // Configure the HTTP request pipeline.

@@ -20,7 +20,7 @@ public class HomeController : Controller
     public IActionResult Index(string searchString)
     {
         // retrieve all assignments in db.
-        var assignments = from m in _repo.Assignments
+        var assignments = from m in _repo.Assignments.Include(a => a.Course)
                           select m;
         DateOnly searchDate;
 
