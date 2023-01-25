@@ -10,35 +10,14 @@
 </head>
 <body>
 
-    <header class="d-flex">
+    <header class="d-flex flex-row">
 
-        <ul class="nav nav-pills p-3 me-4" id="nav-id" role="tablist">
-            <li class="nav-item">
-                <a asp-controller="UserProfile" asp-action="Index" class="nav-link btn btn-lg active mx-2">Profile</a>
-            </li>
 
-            <!-- #region week dropdown -->
-            @*<li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle btn btn-lg active mx-auto"
-                   data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    Your Week
-                </a>*@
-                @*<div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Sunday</a>
-                        <a class="dropdown-item" href="#">Monday</a>
-                        <a class="dropdown-item" href="#">Tuesday</a>
-                        <a class="dropdown-item" href="#">Wednesday</a>
-                        <a class="dropdown-item" href="#">Thursday</a>
-                        <a class="dropdown-item" href="#">Friday</a>
-                        <a class="dropdown-item" href="#">Saturday</a>
-                    </div>*@
-            @*</li>*@
-
-        </ul>
-        <a class="navbar-brand title-text" asp-action="Index" asp-Controller="Home"><h1>Keep My Schedule</h1></a>
         <h1 class="cal-icon"><i class="bi bi-calendar-range"></i></h1>
-        @await Html.PartialAsync("_LoginPartial.cshtml")
+        <a class="navbar-brand title-text" asp-action="Index" asp-Controller="Home"><h1>Keep My Schedule</h1></a>
+        <div class="mx-4">
+            @await Html.PartialAsync("_LoginPartial.cshtml")
+        </div>
         <!-- #endregion -->
     </header>
     <div class="container">

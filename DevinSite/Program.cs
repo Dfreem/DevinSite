@@ -25,7 +25,8 @@ builder.Services.AddIdentity<Student, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = true)
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+        .AddDefaultTokenProviders()
+        .AddDefaultUI();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -39,9 +40,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
+    var context = services.GetRequiredService<ApplicationDbContext>();
     // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    SeedData.Init(services);
+    SeedData.Init(context, services);
 }
 
 // Configure the HTTP request pipeline.
