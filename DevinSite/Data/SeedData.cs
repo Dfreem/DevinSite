@@ -2,8 +2,9 @@
 
 public static class SeedData
 {
-    public static void Init(ApplicationDbContext context, IServiceProvider services)
+    public static void Init(System.IServiceProvider services)
     {
+        ApplicationDbContext context = services.GetRequiredService<ApplicationDbContext>();
         if (context.Courses.Any() || context.Assignments.Any())
         {
             return;

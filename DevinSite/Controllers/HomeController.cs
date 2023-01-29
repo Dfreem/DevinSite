@@ -1,22 +1,41 @@
 ﻿
+using NuGet.Protocol;
 
 namespace DevinSite.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     //DDBContext _repo { get; set; }
+    private MoodleWare _moodle;
     private readonly ISiteRepository _repo;
-   
-    public HomeController(ILogger<HomeController> logger, ISiteRepository repo)
+
+    public HomeController(ILogger<HomeController> logger, System.IServiceProvider services)
     {
         // injected dependencies. 
         _logger = logger;
-        _repo = repo;  
+        _repo = services.GetRequiredService<ISiteRepository>();
+        _moodle = services.GetRequiredService<MoodleWare>();
+        _moodle.GetCalendarAsync();
+    }
+
+    /// <summary>
+    /// The instructions for retrieving a Moodle Calendar String are as follows:
+    /// 1. Login to your Moodle student account
+    /// 2. Navigate to the Calendar page.
+    /// 3. Make sure to be on the Day or Month view, You should see a button the says "Export Calendar"
+    /// 4. select eiter this week or next week as the time frame, and all events.
+    /// 5. push "Get Calendar URL"
+    /// 6. A URL is generated and diswplayed at the bottom of the screen, copy that and paste as the parameter to this method.
+    /// </summary>
+    /// <param name="newMoodle">The new moodle calendar connection string.</param>
+    public void SetMoodleString(string newMoodle)
+    {
+        _moodle.MoodleString = newMoodle;
     }
 
     // if navigated to by a search, deteremine if search string is date.
-    [Authorize()]
     public IActionResult Index(string searchString)
     {
         // retrieve all assignments in db.
@@ -76,7 +95,7 @@ public class HomeController : Controller
         _repo.UpdateAssignmnent(assignment);
         return RedirectToAction("Index", "Home");
     }
-
+    [AllowAnonymous]
     public IActionResult Privacy()
     {
         return View();

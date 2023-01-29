@@ -2,24 +2,26 @@
 var builder = WebApplication.CreateBuilder(args);
 string connection;
 
-// if My Machine
-if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-{
-    connection = builder.Configuration.GetConnectionString("MySqlConnection");
-}
-// if Not MacOS
-else
-{
-    connection = builder.Configuration.GetConnectionString("DefaultConnection");
-}
+//// if My Machine
+//if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+//{
+//    connection = builder.Configuration.GetConnectionString("MySqlConnection");
+//}
+//// if Not MacOS
+//else
+//{
+//}
+connection = builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTION");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connection, MySqlServerVersion.Parse("mysql-8.0.30")));
+    options.UseMySql(connection, MySqlServerVersion.Parse("mysql-8.0.28")));
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddTransient<MoodleWare>();
 
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddHttpClient();
 // This call adds a Role manager to the services container.
 builder.Services.AddIdentity<Student, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = true)
@@ -31,8 +33,12 @@ builder.Services.AddIdentity<Student, IdentityRole>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddAuthorization(options =>
-    options.AddPolicy("Administrator", policy =>
-        policy.RequireClaim("Admin")));
+{
+    options.AddPolicy("Admin", policy =>
+        policy.RequireClaim("AdministratorID"));
+    options.AddPolicy("Student", policy =>
+        policy.RequireClaim("StudentID"));
+});
 
 var app = builder.Build();
 
@@ -41,8 +47,9 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
+
     // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    SeedData.Init(context, services);
+    SeedData.Init(services);
 }
 
 // Configure the HTTP request pipeline.
@@ -56,6 +63,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

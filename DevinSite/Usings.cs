@@ -1,10 +1,18 @@
 ﻿global using DevinSite;
+global using DevinSite.Util;
 global using DevinSite.Data;
 global using DevinSite.Models;
 global using DevinSite.Controllers;
 global using DevinSite.Areas.Identity;
 global using DevinSite.Areas.Identity.Pages;
 global using DevinSite.Areas.Identity.Pages.Account;
+
+global using Ical;
+global using Ical.Net;
+global using Ical.Net.Serialization;
+global using Ical.Net.Evaluation;
+global using Ical.Net.CalendarComponents;
+global using Ical.Net.DataTypes;
 
 global using System;
 global using System.Text;
@@ -22,7 +30,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 
 global using Microsoft.AspNetCore.Mvc;
-global using Microsoft.AspNetCore.Html;
+global using Microsoft.AspNetCore.Html; 
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.AspNetCore.Authorization;

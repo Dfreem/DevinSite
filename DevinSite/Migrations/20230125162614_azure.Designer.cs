@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevinSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230124194856_Identity")]
-    partial class Identity
+    [Migration("20230125162614_azure")]
+    partial class azure
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

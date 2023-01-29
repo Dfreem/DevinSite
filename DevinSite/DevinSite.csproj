@@ -7,10 +7,16 @@
     <UserSecretsId>aspnet-DevinSite-167acab2-27d6-4b67-be19-40f3633c0601</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
     <None Remove="Roles\" />
     <None Remove="Data\" />
+    <None Remove="bootstrap" />
+    <None Remove="Ical.Net" />
+    <None Remove="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -32,11 +38,13 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
+    <PackageReference Include="bootstrap" Version="5.2.3" />
+    <PackageReference Include="Ical.Net" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Roles\" />
     <Folder Include="Data\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="login\Register.cshtml" />

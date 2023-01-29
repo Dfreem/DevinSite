@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DevinSite.Migrations
 {
-    public partial class Identity : Migration
+    public partial class azure : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
