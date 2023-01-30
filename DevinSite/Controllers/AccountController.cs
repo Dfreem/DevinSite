@@ -45,7 +45,7 @@ public class AccountController : Controller
     public async Task<IActionResult> LogOut()
     {
         await _signinManager.SignOutAsync();
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Login");
     }
 
     [HttpGet]

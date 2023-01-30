@@ -45,6 +45,9 @@ namespace DevinSite.Migrations
                     b.Property<bool>("IsEditting")
                         .HasColumnType("bit");
 
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -52,6 +55,8 @@ namespace DevinSite.Migrations
                     b.HasKey("AssignmentId");
 
                     b.HasIndex("CourseID");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Assignments");
                 });
@@ -72,11 +77,16 @@ namespace DevinSite.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CourseID");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Courses");
                 });
@@ -285,7 +295,18 @@ namespace DevinSite.Migrations
                         .WithMany("Assignments")
                         .HasForeignKey("CourseID");
 
+                    b.HasOne("DevinSite.Models.Student", null)
+                        .WithMany("Assignments")
+                        .HasForeignKey("StudentId");
+
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("DevinSite.Models.Course", b =>
+                {
+                    b.HasOne("DevinSite.Models.Student", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -342,6 +363,13 @@ namespace DevinSite.Migrations
             modelBuilder.Entity("DevinSite.Models.Course", b =>
                 {
                     b.Navigation("Assignments");
+                });
+
+            modelBuilder.Entity("DevinSite.Models.Student", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

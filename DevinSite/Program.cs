@@ -12,7 +12,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHttpClient();
 // This call adds a Role manager to the services container.
 builder.Services.AddIdentity<Student, IdentityRole>(options =>
-    options.SignIn.RequireConfirmedAccount = true)
+    options.SignIn.RequireConfirmedAccount = false)
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
@@ -24,7 +24,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Admin", policy =>
         policy.RequireClaim("AdministratorID"));
     options.AddPolicy("Student", policy =>
-        policy.RequireClaim("StudentID"));
+        policy.RequireClaim("ID"));
 });
 
 var app = builder.Build();

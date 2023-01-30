@@ -1,12 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<Student> SignInManager
-@inject UserManager<Student> UserManager
+@inject SignInManager<Student> signInManager
+@inject UserManager<Student> userManager
+@{
+
+}
 
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+    @if (signInManager.IsSignedIn(User))
     {
         <li class="logged-in">
-            <form class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <form class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">
                 <a class="login-labels" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
                 <button type="submit" class="btn logout">Logout</button>
             </form>

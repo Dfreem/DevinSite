@@ -49,21 +49,6 @@ namespace DevinSite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    CourseID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Instructor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MeetingTimes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.CourseID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -170,6 +155,27 @@ namespace DevinSite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    CourseID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Instructor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MeetingTimes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.CourseID);
+                    table.ForeignKey(
+                        name: "FK_Courses_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Assignments",
                 columns: table => new
                 {
@@ -180,11 +186,17 @@ namespace DevinSite.Migrations
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDone = table.Column<bool>(type: "bit", nullable: false),
-                    IsEditting = table.Column<bool>(type: "bit", nullable: false)
+                    IsEditting = table.Column<bool>(type: "bit", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Assignments", x => x.AssignmentId);
+                    table.ForeignKey(
+                        name: "FK_Assignments_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Assignments_Courses_CourseID",
                         column: x => x.CourseID,
@@ -235,6 +247,16 @@ namespace DevinSite.Migrations
                 name: "IX_Assignments_CourseID",
                 table: "Assignments",
                 column: "CourseID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assignments_StudentId",
+                table: "Assignments",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_StudentId",
+                table: "Courses",
+                column: "StudentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -261,10 +283,10 @@ namespace DevinSite.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "AspNetUsers");
         }
     }
 }

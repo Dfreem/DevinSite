@@ -23,7 +23,7 @@ public static class SeedData
         {
             UserName = "dfreem987",
             Email = "freemand@my.lanecc.edu",
-            EmailConfirmed = true
+            EmailConfirmed = true,
         };
         _userManager.CreateAsync(devin, "!BassCase987");
 
@@ -59,14 +59,25 @@ public static class SeedData
             MeetingTimes = "Never, Always, ∞"
         };
 
+        // assign 1:1 => Assignment.Course : Course
         firstAssignment.Course = course1;
         secondAssignment.Course = course1;
         thirdAssignment.Course = course1;
 
-        devin.
+        // assign 1:many => Student:Course
+        devin.Courses ??= new();
+        devin.Courses.Add(course1);
 
-        _context.Assignments.AddRange(firstAssignment, secondAssignment, thirdAssignment);
+        // assign 1:many => Student:Assignment
+        devin.Assignments.Add(firstAssignment);
+        devin.Assignments.Add(secondAssignment);
+        devin.Assignments.Add(thirdAssignment);
+
+        // save to DB
+        //_context.Assignments.AddRange(firstAssignment, secondAssignment, thirdAssignment);
         _context.Courses.Add(course1);
+        _context.Users.Add(devin);
+        _context.Users.Add(joe);
         _context.SaveChanges();
     }
 }

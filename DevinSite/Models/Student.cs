@@ -4,10 +4,10 @@ namespace DevinSite.Models
 {
     public class Student : IdentityUser
     {
-        List<Course> Courses { get; set; } = default!;
-        List<Assignment> Assignment { get; set; } = default!;
+        public List<Course> Courses { get; set; } = new();
+        public List<Assignment> Assignments { get; set; } = new();
         [NotMapped]
-        IList<string> RoleNames { get; set; } = default!;
+        public IList<string>? RoleNames { get; set; }
     }
 }
 
