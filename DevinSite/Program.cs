@@ -1,21 +1,9 @@
-
 var builder = WebApplication.CreateBuilder(args);
-string connection;
-
-//// if My Machine
-//if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-//{
-//    connection = builder.Configuration.GetConnectionString("MySqlConnection");
-//}
-//// if Not MacOS
-//else
-//{
-//}
-connection = builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTION");
+string connection = builder.Configuration.GetConnectionString("SQL_SERVER_CONNECTION");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connection, MySqlServerVersion.Parse("mysql-8.0.28")));
+    options.UseSqlServer(connection));
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
 builder.Services.AddTransient<MoodleWare>();
@@ -27,8 +15,7 @@ builder.Services.AddIdentity<Student, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = true)
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders()
-        .AddDefaultUI();
+        .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

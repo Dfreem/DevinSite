@@ -23,19 +23,19 @@ public static class SeedData
         Assignment firstAssignment = new()
         {
             Title = "Fake1",
-            DueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3)),
+            DueDate = DateTime.Now.AddDays(3),
             Details = "Test test"
         };
         Assignment secondAssignment = new()
         {
             Title = "Fake2",
-            DueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3)),
+            DueDate = DateTime.Now.AddDays(3),
             Details = "Test test"
         };
         Assignment thirdAssignment = new()
         {
             Title = "Fake3",
-            DueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3)),
+            DueDate = DateTime.Now.AddDays(3),
             Details = "Test test"
         };
 

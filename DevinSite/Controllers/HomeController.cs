@@ -41,10 +41,10 @@ public class HomeController : Controller
         // retrieve all assignments in db.
         var assignments = from m in _repo.Assignments.Include(a => a.Course)
                           select m;
-        DateOnly searchDate;
+        DateTime searchDate;
 
         // try parse search string into a Date
-        bool didParse = DateOnly.TryParse(searchString, out searchDate);
+        bool didParse = DateTime.TryParse(searchString, out searchDate);
         if (didParse)
         {
             // if date -> search by due date

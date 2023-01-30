@@ -1,11 +1,9 @@
 ﻿global using DevinSite;
+global using DevinSite.ViewModels;
 global using DevinSite.Util;
 global using DevinSite.Data;
 global using DevinSite.Models;
 global using DevinSite.Controllers;
-global using DevinSite.Areas.Identity;
-global using DevinSite.Areas.Identity.Pages;
-global using DevinSite.Areas.Identity.Pages.Account;
 
 global using Ical;
 global using Ical.Net;
@@ -37,5 +35,6 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Http.Features;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.Identity.UI;
 global using Microsoft.AspNetCore.Identity.UI.Services;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
