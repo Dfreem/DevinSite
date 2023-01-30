@@ -2,23 +2,30 @@
 
 public static class SeedData
 {
-    public static void Init(System.IServiceProvider services)
+    public static void Init(System.IServiceProvider services, ApplicationDbContext context)
     {
-        ApplicationDbContext context = services.GetRequiredService<ApplicationDbContext>();
-        if (context.Courses.Any() || context.Assignments.Any())
+        ApplicationDbContext _context = context;
+        UserManager<Student> _userManager = services.GetRequiredService<UserManager<Student>>();
+
+        if (_context.Courses.Any() || _context.Assignments.Any())
         {
             return;
         }
-
-        PasswordHasher<Student> phash = new PasswordHasher<Student>();
-
         Student joe = new()
         {
             UserName = "joe",
             Email = "fake@user.com",
-            
+            EmailConfirmed = true
         };
-        joe.PasswordHash = phash.HashPassword(joe, "badPassword");
+        _userManager.CreateAsync(joe, "BadPassword123");
+
+        Student devin = new()
+        {
+            UserName = "dfreem987",
+            Email = "freemand@my.lanecc.edu",
+            EmailConfirmed = true
+        };
+        _userManager.CreateAsync(devin, "!BassCase987");
 
         Assignment firstAssignment = new()
         {
@@ -55,8 +62,11 @@ public static class SeedData
         firstAssignment.Course = course1;
         secondAssignment.Course = course1;
         thirdAssignment.Course = course1;
-        context.Assignments.AddRange(firstAssignment, secondAssignment, thirdAssignment);
-        context.Courses.Add(course1);
-        context.SaveChanges();
+
+        devin.
+
+        _context.Assignments.AddRange(firstAssignment, secondAssignment, thirdAssignment);
+        _context.Courses.Add(course1);
+        _context.SaveChanges();
     }
 }

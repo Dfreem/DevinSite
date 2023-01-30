@@ -9,16 +9,12 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-
     <header class="d-flex flex-row">
-
-
         <h1 class="cal-icon"><i class="bi bi-calendar-range"></i></h1>
         <a class="navbar-brand title-text" asp-action="Index" asp-Controller="Home"><h1>Keep My Schedule</h1></a>
         <div class="mx-4">
             @await Html.PartialAsync("_LoginPartial.cshtml")
         </div>
-        <!-- #endregion -->
     </header>
     <div class="container">
         <main role="main" class="pb-3">

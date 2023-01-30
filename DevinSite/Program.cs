@@ -36,7 +36,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ApplicationDbContext>();
 
     // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    SeedData.Init(services);
+    SeedData.Init(services, context);
 }
 
 // Configure the HTTP request pipeline.
