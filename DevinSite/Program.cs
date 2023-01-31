@@ -1,9 +1,13 @@
 var builder = WebApplication.CreateBuilder(args);
-string connection = builder.Configuration.GetConnectionString("SQL_SERVER_CONNECTION");
+string connection = builder.Configuration.GetConnectionString("MySqlConnection");
+//string connection = builder.Configuration.GetConnectionString("SQL_SERVER_CONNECTION");
 
 // Add services to the container.
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlServer(connection));
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connection));
+    options.UseMySql(connection, MySqlServerVersion.Parse("mysql-8.0.30")));
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
 builder.Services.AddTransient<MoodleWare>();
@@ -21,8 +25,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Admin", policy =>
-        policy.RequireClaim("AdministratorID"));
+    //options.AddPolicy("Admin", policy =>
+    //    policy.RequireClaim("AdministratorID"));
     options.AddPolicy("Student", policy =>
         policy.RequireClaim("ID"));
 });
