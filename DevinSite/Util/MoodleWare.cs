@@ -3,7 +3,7 @@ namespace DevinSite.Util;
 
 public class MoodleWare : Calendar
 {
-    private string _moodleString = "http://classes.lanecc.edu/calendar/export_execute.php?userid=110123&authtoken=9688ee8ecad434630fe9e7b8120a93c9a138b350&preset_what=all&preset_time=weeknext";
+    private string _moodleString = "https://classes.lanecc.edu/calendar/export_execute.php?userid=110123&authtoken=9688ee8ecad434630fe9e7b8120a93c9a138b350&preset_what=all&preset_time=monthnext";
 
     public MoodleWare()
     {
@@ -29,7 +29,12 @@ public class MoodleWare : Calendar
         {
             var response = await httpClient.GetAsync(_moodleString);
             var icsData = await response.Content.ReadAsStringAsync();
-            Calendar = Load(icsData);
+            Console.WriteLine(icsData);
+            var calendar = Load(icsData);
+            for (int i = 0; i < Calendar.Events.Count; i++)
+            {
+                Console.WriteLine(Calendar.Children[i]);
+            }
         }
     }
 }

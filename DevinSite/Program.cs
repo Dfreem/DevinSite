@@ -1,9 +1,11 @@
+
 var builder = WebApplication.CreateBuilder(args);
 string connection = builder.Configuration.GetConnectionString("SQL_SERVER_CONNECTION");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connection));
+
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
 builder.Services.AddTransient<MoodleWare>();
