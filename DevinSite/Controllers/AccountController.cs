@@ -21,7 +21,7 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterVM model)
     {
-        // if (ModelState.IsValid)
+         if (ModelState.IsValid)
         {
             var user = new Student { UserName = model.UserName };
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -45,7 +45,7 @@ public class AccountController : Controller
     public async Task<IActionResult> LogOut()
     {
         await _signinManager.SignOutAsync();
-        return RedirectToAction("Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]

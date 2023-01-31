@@ -1,7 +1,7 @@
 ﻿
 namespace DevinSite.Controllers;
 
-[Authorize(Roles = "student, admin")]
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
