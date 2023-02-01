@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 namespace DevinSite.Util;
 
 public class MoodleWare : Calendar
@@ -29,12 +31,18 @@ public class MoodleWare : Calendar
         {
             var response = await httpClient.GetAsync(_moodleString);
             var icsData = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(icsData);
-            var calendar = Load(icsData);
-            for (int i = 0; i < Calendar.Events.Count; i++)
-            {
-                Console.WriteLine(Calendar.Children[i]);
-            }
+            string[] splits = icsData.ToString()?.Split("VEVENT")!;
+            string[] summaries = icsData.ToString()?.Split("SUMMARY")!;
+            string[] descriptions = icsData.ToString()?.Split("DESCRIPTION")!;
+            //for (int i = 0; i < descriptions.Length; i++)
+            //{
+
+            //    Console.WriteLine(descriptions[i]);
+            //}
+            Console.WriteLine("****SPLITS****" + splits[1] + "\r\n" + splits[1]);
+            //Console.WriteLine("****SUMMARIES****" + summaries[1] + "\r\n");
+            //Console.WriteLine("****DESCRIPTIONS****" + descriptions[1] + "\r\n");
+
         }
     }
 }

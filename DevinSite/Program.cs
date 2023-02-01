@@ -9,13 +9,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
 builder.Services.AddTransient<MoodleWare>();
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHttpClient();
 // This call adds a Role manager to the services container.
 builder.Services.AddIdentity<Student, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false)
         .AddRoles<IdentityRole>()
+        //.AddDefaultUI()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
@@ -55,12 +55,9 @@ else
 app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
