@@ -31,18 +31,13 @@ public class MoodleWare : Calendar
         {
             var response = await httpClient.GetAsync(_moodleString);
             var icsData = await response.Content.ReadAsStringAsync();
-            string[] splits = icsData.ToString()?.Split("VEVENT")!;
-            string[] summaries = icsData.ToString()?.Split("SUMMARY")!;
-            string[] descriptions = icsData.ToString()?.Split("DESCRIPTION")!;
-            //for (int i = 0; i < descriptions.Length; i++)
-            //{
-
-            //    Console.WriteLine(descriptions[i]);
-            //}
-            Console.WriteLine("****SPLITS****" + splits[1] + "\r\n" + splits[1]);
-            //Console.WriteLine("****SUMMARIES****" + summaries[1] + "\r\n");
-            //Console.WriteLine("****DESCRIPTIONS****" + descriptions[1] + "\r\n");
-
+            Dictionary<string, string> VEVENTS = new();
+            string[] splitOnVevent = icsData.Split("VEVENT");
+            splitOnVevent = splitOnVevent[1].Split(':', '\r');
+            for (int i = 1; i < splitOnVevent.Length - 1; i += 2)
+            {
+                VEVENTS.Add(splitOnVevent[i - 1], splitOnVevent[i]);
+            }
         }
     }
 }
