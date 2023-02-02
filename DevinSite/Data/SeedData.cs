@@ -6,7 +6,6 @@ public static class SeedData
     {
         ApplicationDbContext _context = context;
         UserManager<Student> _userManager = services.GetRequiredService<UserManager<Student>>();
-
         if (_context.Courses.Any() || _context.Assignments.Any())
         {
             return;
