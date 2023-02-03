@@ -1,4 +1,6 @@
 ﻿
+using System.Linq;
+
 namespace DevinSite.Util;
 
 public class MoodleWare : Calendar
@@ -27,9 +29,17 @@ public class MoodleWare : Calendar
     {
         using (var httpClient = new HttpClient())
         {
+            Assignment assignment = new();
             var response = await httpClient.GetAsync(_moodleString);
             var icsData = await response.Content.ReadAsStringAsync();
-            Calendar = Load(icsData);
+            List<string> lines = icsData.Split("\r\n").ToList();
+            int summaryIndex = lines.FindIndex(line => line.StartsWith("SUMMARY:"));
+            //int detailsIndex = lines.FindIndex(line => line.StartsWith("SUMMARY:"));
+            Console.WriteLine(summaryIndex);
+            foreach (var line in lines)
+            {
+                Console.WriteLine(line);
+            }
         }
     }
 }

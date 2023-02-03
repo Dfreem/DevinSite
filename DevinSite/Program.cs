@@ -25,10 +25,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddAuthorization(options =>
 {
-    //options.AddPolicy("Admin", policy =>
-    //    policy.RequireClaim("AdministratorID"));
     options.AddPolicy("Student", policy =>
         policy.RequireClaim("ID"));
+    //options.AddPolicy("Admin", policy =>
+    //    policy.RequireClaim("AdministratorID"));
 });
 
 var app = builder.Build();
