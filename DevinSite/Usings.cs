@@ -12,6 +12,8 @@ global using Ical.Net.Evaluation;
 global using Ical.Net.CalendarComponents;
 global using Ical.Net.DataTypes;
 
+global using IServiceProvider = System.IServiceProvider;
+
 global using System;
 global using System.Text;
 global using System.Linq;

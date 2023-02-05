@@ -4,22 +4,30 @@ namespace DevinSite.Data
 {
     public class SiteRepository : ISiteRepository
     {
-        public IQueryable<Assignment> Assignments { get; set; }
-        public IQueryable<Course> Courses { get; set; }
-        public IQueryable<Student> Students { get; set; }
+        public List<Assignment> Assignments { get; set; }
+        public List<Course> Courses { get; set; }
+        public List<Student> Students { get; set; }
         private readonly ApplicationDbContext _context;
 
         public SiteRepository(ApplicationDbContext context)
         {
             _context = context;
-            Assignments = _context.Assignments;
-            Courses = _context.Courses;
-            Students = _context.Users.Cast<Student>();
+            if (_context.Assignments is null) Assignments = new(); 
+            else Assignments = _context.Assignments.ToList();
+
+            Courses = _context.Courses.ToList();
+            Students = _context.Users.ToList<Student>();
         }
 
         public void AddAssignment(Assignment assignment)
         {
             _context.Assignments.Add(assignment);
+            _context.SaveChanges();
+        }
+
+        public void AddAssignments(List<Assignment> assignments)
+        {
+            _context.AddRange(assignments);
             _context.SaveChanges();
         }
 

@@ -10,7 +10,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connection, MySqlServerVersion.Parse("mysql-8.0.30")));
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
-builder.Services.AddTransient<MoodleWare>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHttpClient();
@@ -34,14 +33,14 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // use scoped service provider to call SeedData initialization.
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var context = services.GetRequiredService<ApplicationDbContext>();
 
-    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    SeedData.Init(services, context);
-}
+//    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
+//    SeedData.Init(services, context);
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

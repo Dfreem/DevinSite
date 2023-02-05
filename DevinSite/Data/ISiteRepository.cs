@@ -3,13 +3,15 @@ namespace DevinSite.Data
 {
     public interface ISiteRepository
     {
-        IQueryable<Assignment> Assignments { get; set; }
-        IQueryable<Course> Courses { get; set; }
-        IQueryable<Student> Students { get; set; }
+        List<Assignment> Assignments { get; set; }
+        List<Course> Courses { get; set; }
+        List<Student> Students { get; set; }
 
         public void AddAssignment(Assignment assignment);
         public void UpdateAssignmnent(Assignment assignment);
-        public void DeleteAssignmnent(Assignment assignment); 
+        public void DeleteAssignmnent(Assignment assignment);
+
+        public void AddAssignments(List<Assignment> assignments);
 
         public void AddCourse(Course course);
         public void UpdateCourse(Course course);

@@ -6,7 +6,6 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     //DDBContext _repo { get; set; }
-    private MoodleWare _moodle;
     private readonly ISiteRepository _repo;
 
     public HomeController(ILogger<HomeController> logger, System.IServiceProvider services)
@@ -14,30 +13,15 @@ public class HomeController : Controller
         // injected dependencies. 
         _logger = logger;
         _repo = services.GetRequiredService<ISiteRepository>();
-        _moodle = services.GetRequiredService<MoodleWare>();
-        _moodle.GetCalendarAsync();
+        RetrieveAssignments();
     }
 
-    /// <summary>
-    /// The instructions for retrieving a Moodle Calendar String are as follows:
-    /// 1. Login to your Moodle student account
-    /// 2. Navigate to the Calendar page.
-    /// 3. Make sure to be on the Day or Month view, You should see a button the says "Export Calendar"
-    /// 4. select eiter this week or next week as the time frame, and all events.
-    /// 5. push "Get Calendar URL"
-    /// 6. A URL is generated and diswplayed at the bottom of the screen, copy that and paste as the parameter to this method.
-    /// </summary>
-    /// <param name="newMoodle">The new moodle calendar connection string.</param>
-    public void SetMoodleString(string newMoodle)
-    {
-        _moodle.MoodleString = newMoodle;
-    }
 
     // if navigated to by a search, deteremine if search string is date.
     public IActionResult Index(string searchString)
     {
         // retrieve all assignments in db.
-        var assignments = from m in _repo.Assignments.Include(a => a.Course)
+        var assignments = from m in _repo.Assignments
                           select m;
         DateTime searchDate;
 
@@ -45,7 +29,7 @@ public class HomeController : Controller
         bool didParse = DateTime.TryParse(searchString, out searchDate);
         if (didParse)
         {
-            // if date -> search by due date
+            // if date was parsed syuccessfully -> search by due date
             assignments = assignments.Where(a => a.DueDate.Equals(searchDate));
         }
         else if (searchString is not null)
@@ -93,6 +77,23 @@ public class HomeController : Controller
         _repo.UpdateAssignmnent(assignment);
         return RedirectToAction("Index", "Home");
     }
+
+    public void RetrieveAssignments()
+    {
+        var cal = MoodleWare.GetCalendar();
+        for (int i = 0; i < cal.Count; i++)
+        {
+            if (_repo.Assignments.Contains(cal[i]))
+            {
+                _repo.UpdateAssignmnent(cal[i]);
+            }
+            else
+            {
+                _repo.AddAssignment(cal[i]);
+            }
+        }
+    }
+
     [AllowAnonymous]
     public IActionResult Privacy()
     {
