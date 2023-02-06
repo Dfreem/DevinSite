@@ -2,9 +2,14 @@
 
 public static class SeedData
 {
-    public static void Init(System.IServiceProvider services, ApplicationDbContext context)
+    /// <summary>
+    /// Init is used to seed a database without authorization in place.
+    /// For use with Identity Role based authorizatioin, use <see cref="SeedAdminUserAsync(System.IServiceProvider)"/> and <see cref="Seed(ModelBuilder)"/>
+    /// </summary>
+    /// <param name="services"></param>
+    public static void Init(System.IServiceProvider services)
     {
-        ApplicationDbContext _context = context;
+        ApplicationDbContext _context = services.GetRequiredService<ApplicationDbContext>();
         UserManager<Student> _userManager = services.GetRequiredService<UserManager<Student>>();
 
         if (_context.Courses.Any() || _context.Assignments.Any())
@@ -79,5 +84,100 @@ public static class SeedData
         _context.Users.Add(devin);
         _context.Users.Add(joe);
         _context.SaveChanges();
+    }
+
+    const string USER_NAME = "dfreem987";
+    const string PASSWORD = "!BassCase987";
+    const string ROLE_NAME = "Admin";
+
+    /// <summary>
+    /// Async method used in conjunction with Identity Role based authorization.
+    /// </summary>
+    /// <param name="services">a <see cref="IServiceProvider"/> that handles inject of dependencies.</param>
+    public static async void SeedAdminUserAsync(IServiceProvider services)
+    {
+        RoleManager<IdentityRole> roleManager = services
+            .GetRequiredService<RoleManager<IdentityRole>>();
+
+        UserManager<Student> studentManager = services
+            .GetRequiredService<UserManager<Student>>();
+
+        // check for admin role existance
+        if (!await roleManager.RoleExistsAsync(ROLE_NAME))
+        {
+            await roleManager.CreateAsync(new IdentityRole(ROLE_NAME));
+        }
+        if (await studentManager.FindByNameAsync(USER_NAME) == null)
+        {
+            // I'm the admin.
+            Student Devin = new()
+            {
+                UserName = USER_NAME,
+                Name = "Devin Freeman",
+                Email = "freemand@my.lanecc.edu",
+                EmailConfirmed = true,
+                RoleNames = { "Admin", "Student" },
+            };
+
+            //  administrator user creation with password
+            var status = await studentManager.CreateAsync(Devin, PASSWORD);
+
+            // add admin user to admin role.
+            if (status.Succeeded)
+            { await studentManager.AddToRoleAsync(Devin, ROLE_NAME); }
+        }
+    }
+
+    public static void Seed(this ModelBuilder modelBuilder)
+    {
+        // create 4 Courses
+        Course CS296 = new()
+        {
+            Title = "ASP.NET Web Development",
+            Instructor = "Brian Bird",
+            MeetingTimes = "T, TH : 10AM"
+        };
+        Course CS276 = new()
+        {
+            Title = "Database Systems and Modeling",
+            Instructor = " Lindy Stewart"
+        };
+        Course CS246 = new()
+        {
+            Title = "Systems Design",
+            Instructor = "Brian Bird",
+            MeetingTimes = "T, TH : 2PM"
+        };
+
+        // create 3 more students
+        Student Ben = new()
+        {
+            Name = "Ben Wilson",
+            Courses = {CS296, CS276, CS246},
+            Email = "wilsonb@my.lancc.edu",
+            EmailConfirmed = true,
+            RoleNames = {"Student"}
+        };
+
+        Student Totoro = new()
+        {
+            Name = "Totoro and Co.",
+            Courses = {CS246},
+            Email = "ttronco@my.lancc.edu",
+            EmailConfirmed = true,
+            RoleNames = {"Student"}
+        };
+
+        Student Lauren = new()
+        {
+            Name = "Lauren Lastnameson",
+            Courses = {CS296, CS276, CS246},
+            Email = "lastnamesonL@my.lancc.edu",
+            EmailConfirmed = true,
+            RoleNames = {"Student"}
+        };
+
+        modelBuilder.Entity<Assignment>()
+            .HasData(MoodleWare.GetCalendar());
     }
 }

@@ -12,7 +12,7 @@ namespace DevinSite.Data
         public SiteRepository(ApplicationDbContext context)
         {
             _context = context;
-            if (_context.Assignments is null) Assignments = new(); 
+            if (_context.Assignments is null) Assignments = new();
             else Assignments = _context.Assignments.ToList();
 
             Courses = _context.Courses.ToList();
@@ -62,6 +62,7 @@ namespace DevinSite.Data
 
         public void UpdateAssignmnent(Assignment assignment)
         {
+
             _context.Assignments.Update(assignment);
             _context.SaveChanges();
         }

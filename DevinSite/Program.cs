@@ -21,7 +21,7 @@ builder.Services.AddIdentity<Student, IdentityRole>(options =>
         .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Student", policy =>
@@ -33,14 +33,13 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // use scoped service provider to call SeedData initialization.
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    var context = services.GetRequiredService<ApplicationDbContext>();
-
-//    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-//    SeedData.Init(services, context);
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
+    SeedData.SeedAdminUserAsync(services);
+    SeedData.Seed()
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

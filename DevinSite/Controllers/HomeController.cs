@@ -5,17 +5,13 @@ namespace DevinSite.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    //DDBContext _repo { get; set; }
     private readonly ISiteRepository _repo;
 
     public HomeController(ILogger<HomeController> logger, System.IServiceProvider services)
     {
-        // injected dependencies. 
         _logger = logger;
         _repo = services.GetRequiredService<ISiteRepository>();
-        RetrieveAssignments();
     }
-
 
     // if navigated to by a search, deteremine if search string is date.
     public IActionResult Index(string searchString)
@@ -40,20 +36,6 @@ public class HomeController : Controller
         return View(assignments.ToList());
     }
 
-    public IActionResult AddNewAssignment()
-    {
-        Assignment assignment = new();
-        return View(assignment);
-    }
-
-    [HttpPost]
-    public IActionResult AddNewAssignment(Assignment assignment)
-    {
-        // add assignment to Assignments table.
-        _repo.AddAssignment(assignment);
-        return RedirectToAction("Index");
-    }
-
     public IActionResult RemoveAssignment(int id)
     {
         // look for assignment in db with AssignmentId == id
@@ -76,22 +58,6 @@ public class HomeController : Controller
         // if this assignment is in  the DB, get that version.
         _repo.UpdateAssignmnent(assignment);
         return RedirectToAction("Index", "Home");
-    }
-
-    public void RetrieveAssignments()
-    {
-        var cal = MoodleWare.GetCalendar();
-        for (int i = 0; i < cal.Count; i++)
-        {
-            if (_repo.Assignments.Contains(cal[i]))
-            {
-                _repo.UpdateAssignmnent(cal[i]);
-            }
-            else
-            {
-                _repo.AddAssignment(cal[i]);
-            }
-        }
     }
 
     [AllowAnonymous]

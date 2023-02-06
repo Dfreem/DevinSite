@@ -36,6 +36,7 @@ global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Http.Features;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
+global using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Identity.UI;
 global using Microsoft.AspNetCore.Identity.UI.Services;
