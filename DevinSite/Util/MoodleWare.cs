@@ -62,14 +62,19 @@ public static class MoodleWare
         List<Assignment> assignmentList = new();
         // split on newlines
         string[]? lines = icsString.Split("\r\n");
+        int negativeId = 0;
 
         while (lines is not null && lines.Any())
         {
+            negativeId--;
             Assignment assignment = new();
-            assignment.Course = new();
+            assignment.CourseId = negativeId;
             assignment.Title = PartExtractor(AssignmentPart.Title, lines!, out lines);
             assignment.Details = PartExtractor(AssignmentPart.Details, lines!, out lines);
-            assignment.Course.Title = PartExtractor(AssignmentPart.Course, lines!, out lines);
+            
+            Course course = new() { Assignments = new() { assignment } };
+            course.Title = PartExtractor(AssignmentPart.Course, lines!, out lines);
+           
             assignmentList.Add(assignment);
         }
         return assignmentList;

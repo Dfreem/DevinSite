@@ -5,7 +5,7 @@
     List<Course> currentClasses = new();
     foreach (Assignment assignment in Model)
     {
-        currentClasses.Add(assignment.Course!);
+        currentClasses.Add(assignment.GetCourse!);
     }
     string[] days = CalendarHelpers.GetShortDayStrings();
     DateTime[] calDates = CalendarHelpers.GetThisWeek();
@@ -55,7 +55,7 @@
                     <div class="card my-2 assmt-card">
                         <div class="card-header d-flex justify-content-evenly">
                             <div class="me-0 ">Title: <span class="text-secondary">@assignment.Title</span></div>
-                            <div>Class: <span class="text-secondary">@assignment.Course!.Title </span></div>
+                            <div>Class: <span class="text-secondary">@assignment.GetCourse!.Title </span></div>
                             <div>Due: <span class="text-secondary">@assignment.DueDate</span></div>&nbsp;
                         </div>
                         <details>

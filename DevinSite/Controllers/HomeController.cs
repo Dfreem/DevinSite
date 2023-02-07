@@ -5,19 +5,20 @@ namespace DevinSite.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly ISiteRepository _repo;
+    //private readonly ISiteRepository _repo;
+    private readonly ApplicationDbContext _context;
 
     public HomeController(ILogger<HomeController> logger, System.IServiceProvider services)
     {
         _logger = logger;
-        _repo = services.GetRequiredService<ISiteRepository>();
+        _context = services.GetRequiredService<ApplicationDbContext>();
     }
 
     // if navigated to by a search, deteremine if search string is date.
     public IActionResult Index(string searchString)
     {
         // retrieve all assignments in db.
-        var assignments = from m in _repo.Assignments
+        var assignments = from m in _context.Assignments
                           select m;
         DateTime searchDate;
 
@@ -39,26 +40,33 @@ public class HomeController : Controller
     public IActionResult RemoveAssignment(int id)
     {
         // look for assignment in db with AssignmentId == id
-        Assignment? toDelete = _repo.Assignments.First(assignment => assignment.AssignmentId.Equals(id));
+        Assignment? toDelete = _context.Assignments.First(assignment => assignment.AssignmentId.Equals(id));
         if (toDelete is not null)
         {
-            _repo.DeleteAssignmnent(toDelete);
+            // remove assignment from DbSet. discard the result.
+            _ = _context.Assignments.Remove(toDelete);
+
+            // save changes after removing
+            int linesChanged = _context.SaveChanges();
+
+            // log the number of line that changed. 
+            Console.WriteLine("Lines Removed" + linesChanged);
         }
         return RedirectToAction("Index", "Home");
     }
 
-    public IActionResult EditAssignment(int id)
-    {
-        return View(_repo.Assignments.First(a => a.AssignmentId.Equals(id)));
-    }
+    //public IActionResult EditAssignment(int id)
+    //{
+    //    return View(_context.Assignments.Find(id));
+    //}
 
-    [HttpPost]
-    public IActionResult EditAssignment(Assignment assignment)
-    {
-        // if this assignment is in  the DB, get that version.
-        _repo.UpdateAssignmnent(assignment);
-        return RedirectToAction("Index", "Home");
-    }
+    //[HttpPost]
+    //public IActionResult EditAssignment(Assignment assignment)
+    //{
+    //    // if this assignment is in  the DB, get that version.
+    //    _context.Assignments.Update(assignment);
+    //    return RedirectToAction("Index", "Home");
+    //}
 
     [AllowAnonymous]
     public IActionResult Privacy()

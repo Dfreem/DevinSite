@@ -74,5 +74,44 @@ public class AccountController : Controller
         ModelState.AddModelError("", "Invalid username/password.");
         return View(model);
     }
+    public ViewResult AccessDenied()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult ChangePassword()
+    {
+        var model = new ChangePasswordViewModel
+        {
+            Username = User.Identity?.Name ?? ""
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            Student user = await _userManager.FindByNameAsync(model.Username);
+            var result = await _userManager.ChangePasswordAsync(user,
+                model.OldPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                TempData["message"] = "Password changed successfully";
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+        }
+        return View(model);
+    }
 
 }

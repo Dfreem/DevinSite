@@ -8,5 +8,6 @@ public class Course
     public string? MeetingTimes { get; set; } = default!;
     public string? Title { get; set; } = default!;
     public List<Assignment> Assignments { get; set; } = new();
+    public List<Enrollment> GetEnrollments { get; set; } = new();
 }
 

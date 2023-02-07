@@ -9,7 +9,7 @@ string connection = builder.Configuration.GetConnectionString("MySqlConnection")
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connection, MySqlServerVersion.Parse("mysql-8.0.30")));
 
-builder.Services.AddTransient<ISiteRepository, SiteRepository>();
+//builder.Services.AddTransient<ISiteRepository, SiteRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHttpClient();
@@ -22,24 +22,17 @@ builder.Services.AddIdentity<Student, IdentityRole>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Student", policy =>
-        policy.RequireClaim("ID"));
-    //options.AddPolicy("Admin", policy =>
-    //    policy.RequireClaim("AdministratorID"));
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("Student", policy =>
+//        policy.RequireClaim("ID"));
+//    options.AddPolicy("Admin", policy =>
+//        policy.RequireClaim("AdministratorID"));
+//});
 
 var app = builder.Build();
 
 // use scoped service provider to call SeedData initialization.
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    SeedData.SeedAdminUserAsync(services);
-    SeedData.Seed()
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -65,6 +58,13 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
+    SeedData.SeedAdminUserAsync(services).Wait();
+}
 
 app.Run();
 
