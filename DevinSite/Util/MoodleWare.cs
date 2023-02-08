@@ -14,11 +14,11 @@ public static class MoodleWare
     }
     public static readonly Dictionary<AssignmentPart, (string, string)> Dilimiters = new()
     {
-        { AssignmentPart.Title, ("SUMMARY", "DESCRIPTION:")},
-        { AssignmentPart.Details, ("DESCRIPTION:", "CLASS") },
-        { AssignmentPart.CourseTitle, ("CATEGORIES:", "CLASS:" ) },
-        { AssignmentPart.Instructor, ("(", "BEGIN:") },
-        { AssignmentPart.DueDate, ("DTSTART", "T")}
+        { AssignmentPart.Title, ("SUMMARY:", "DESCRIPTION:")},
+        { AssignmentPart.Details, ("DESCRIPTION:", "CLASS:") },
+        { AssignmentPart.DueDate, ("DTSTART:", "DTEND:")},
+        { AssignmentPart.CourseTitle, ("CATEGORIES:", "END:" ) },
+
     };
 
     public static async Task<List<Assignment>> GetCalendarAsync(IServiceProvider services)
@@ -34,16 +34,19 @@ public static class MoodleWare
                 //int year = int.Parse(due[0..3]);
                 //int month = int.Parse(due[3..5]);
                 //int day = int.Parse(due[5..]);
-                Console.WriteLine(lines[i]);
-                Assignment assignment = new()
+                //Console.WriteLine(lines[i]);
+                if (!lines[i].Contains("END:VCALENDAR"))
                 {
-                    Title = ParsePart(in lines, AssignmentPart.Title, out lines),
-                    GetCourse = (Course)ParsePart(in lines, AssignmentPart.CourseTitle, out lines),
-                    Details = ParsePart(in lines, AssignmentPart.Details, out lines),
-                    //DueDate = new DateTime(year, month, day)
-                };
-                Console.WriteLine(assignment.ToString()); ;
-                assignments.Add(assignment);
+                    Assignment assignment = new()
+                    {
+                        Title = ParsePart(in lines, AssignmentPart.Title, out lines),
+                        GetCourse = (Course)ParsePart(in lines, AssignmentPart.CourseTitle, out lines),
+                        Details = ParsePart(in lines, AssignmentPart.Details, out lines),
+                        //DueDate = new DateTime(year, month, day)
+                    };
+                    Console.WriteLine(assignment.ToString()); ;
+                    assignments.Add(assignment);
+                }
             }
             return assignments;
         }
@@ -55,9 +58,15 @@ public static class MoodleWare
         List<string> lineList = lines.ToList();
         int startIndex = lineList.FindIndex(l => l.StartsWith(start));
         int endIndex = lineList.FindIndex(l => l.StartsWith(stop));
-        parsedPart = String.Concat(lines[startIndex..endIndex]).Replace(start, "").Replace(stop, "");
-        linesMinusAssignmentPart = lines[endIndex..];
-        return parsedPart;
+        if (startIndex <= endIndex && startIndex > 0)
+        {
+            parsedPart = String.Concat(lines[startIndex..endIndex]).Replace(start, "").Replace(stop, "");
+            linesMinusAssignmentPart = lines[endIndex..];
+            return parsedPart;
+
+        }
+        linesMinusAssignmentPart = lines;
+        return "";
     }
 
 }
