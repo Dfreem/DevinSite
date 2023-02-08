@@ -8,12 +8,17 @@ public class AssignmentVM
     public string? Details { get; set; }
     public DateTime DueDate { get; set; }
 
-    public static implicit operator Assignment(AssignmentVM vm) => new Assignment()
+    public static implicit operator Assignment(AssignmentVM vm)
     {
-        Title = vm.Title,
-        Details = vm.Details,
-        DueDate = vm.DueDate,
-    };
+        Course c = (Course)vm.Course;
+        return new Assignment()
+        {
+            Title = vm.Title,
+            Details = vm.Details,
+            DueDate = vm.DueDate,
+            GetCourse = c,
+        };
+    }
 
     public override string ToString()
     {

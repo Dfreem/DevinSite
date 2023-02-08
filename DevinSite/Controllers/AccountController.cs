@@ -15,7 +15,7 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Register()
     {
-        return View();
+        return View(new RegisterVM());
     }
 
     [HttpPost]
@@ -23,7 +23,7 @@ public class AccountController : Controller
     {
          if (ModelState.IsValid)
         {
-            var user = new Student { UserName = model.UserName };
+            var user = (Student)model;
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
