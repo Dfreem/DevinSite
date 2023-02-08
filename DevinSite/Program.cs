@@ -53,7 +53,7 @@ using (var scope = app.Services.CreateScope())
     await context.Assignments.AddRangeAsync(cal);
     await context.SaveChangesAsync();
     //Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    //await SeedData.Init(services);
+    await SeedData.Init(services);
 }
 
 app.Run();
