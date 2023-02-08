@@ -9,7 +9,7 @@
     "ConnectionStrings": {
         "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB; Database=DevinSite; Trusted_Connection=True; MultipleActiveResultSets=true",
         "MySqlConnection": "server=127.0.0.1;uid=root;pwd=YOUR_PASSWORD;database=DevinSite",
-        "SQL_SERVER_CONNECTION": "Server=localhost;Database=DevinSite;UID=sa;Password=YOUR_PASSWORD; Trusted_Connection=False; TrustServerCertificate=True;"
+        "SQL_SERVER_CONNECTION": "Server=localhost,1433;Database=DevinSite;UID=sa;Password=YOUR_PASSWORD; Trusted_Connection=True; TrustServerCertificate=True;"
 
     }
 }

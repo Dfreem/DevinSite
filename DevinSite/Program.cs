@@ -8,38 +8,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();
-builder.Services.AddTransient<MoodleWare>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHttpClient();
 // This call adds a Role manager to the services container.
 builder.Services.AddIdentity<Student, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false)
-        .AddRoles<IdentityRole>()
-        //.AddDefaultUI()
+        //.AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Admin", policy =>
-        policy.RequireClaim("AdministratorID"));
-    options.AddPolicy("Student", policy =>
-        policy.RequireClaim("ID"));
-});
 
 var app = builder.Build();
 
-// use scoped service provider to call SeedData initialization.
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-
-    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    SeedData.Init(services, context);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -62,6 +44,15 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+// use scoped service provider to call SeedData initialization.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    await MoodleWare.GetCalendarAsync(services);
+    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
+    //SeedData.Init(services, context);
+}
 
 app.Run();
 

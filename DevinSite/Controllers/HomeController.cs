@@ -1,12 +1,11 @@
 ﻿
 namespace DevinSite.Controllers;
 
-[Authorize]
+//[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     //DDBContext _repo { get; set; }
-    private MoodleWare _moodle;
     private readonly ISiteRepository _repo;
 
     public HomeController(ILogger<HomeController> logger, System.IServiceProvider services)
@@ -14,8 +13,6 @@ public class HomeController : Controller
         // injected dependencies. 
         _logger = logger;
         _repo = services.GetRequiredService<ISiteRepository>();
-        _moodle = services.GetRequiredService<MoodleWare>();
-        _moodle.GetCalendarAsync();
     }
 
     /// <summary>
@@ -30,14 +27,14 @@ public class HomeController : Controller
     /// <param name="newMoodle">The new moodle calendar connection string.</param>
     public void SetMoodleString(string newMoodle)
     {
-        _moodle.MoodleString = newMoodle;
+        MoodleWare.MoodleString = newMoodle;
     }
 
     // if navigated to by a search, deteremine if search string is date.
     public IActionResult Index(string searchString)
     {
         // retrieve all assignments in db.
-        var assignments = from m in _repo.Assignments.Include(a => a.Course)
+        var assignments = from m in _repo.Assignments
                           select m;
         DateTime searchDate;
 

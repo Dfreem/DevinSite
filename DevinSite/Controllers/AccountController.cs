@@ -4,8 +4,8 @@ namespace DevinSite.Controllers;
 
 public class AccountController : Controller
 {
-    private UserManager<Student> _userManager;
-    private SignInManager<Student> _signinManager;
+    private readonly UserManager<Student> _userManager;
+    private readonly SignInManager<Student> _signinManager;
 
     public AccountController(UserManager<Student> userM, SignInManager<Student> signin)
     {

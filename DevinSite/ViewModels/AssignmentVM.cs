@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data;
-
+﻿
 namespace DevinSite.ViewModels;
 
 public class AssignmentVM
@@ -15,7 +13,6 @@ public class AssignmentVM
         Title = vm.Title,
         Details = vm.Details,
         DueDate = vm.DueDate,
-        IsEditting = true
     };
 
     public override string ToString()
