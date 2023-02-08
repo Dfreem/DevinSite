@@ -11,6 +11,8 @@ public static class SeedData
             return;
         }
         await SeedUsersAsync(userManager);
+        await SeedAssignments(context);
+        await SeedEnrollments(context, userManager);
     }
     public static async Task SeedUsersAsync(UserManager<Student> userManager)
     {
@@ -69,6 +71,7 @@ public static class SeedData
             Details = "Test test"
         };
         await context.Assignments.AddAsync(thirdAssignment);
+        await context.SaveChangesAsync();
         Course CS246 = new()
         {
             Name = "Systems Design",
@@ -101,9 +104,9 @@ public static class SeedData
         context.SaveChanges();
     }
 
-    public static async Task SeedEnrollments(ApplicationDbContext context, IServiceProvider services)
+    public static async Task SeedEnrollments(ApplicationDbContext context, UserManager<Student> userManager)
     {
-        UserManager<Student> userManager = services.GetRequiredService<UserManager<Student>>();
+
         var joe = await userManager.FindByNameAsync("joeUser");
         var devin = await userManager.FindByNameAsync("dfreem987");
         var yuri = await userManager.FindByNameAsync("Yurisaurus123");
@@ -133,7 +136,7 @@ public static class SeedData
                     StudentId = "y1"
                 }
             );
-            await context.SaveChangesAsync();
         }
+        await context.SaveChangesAsync();
     }
 }

@@ -49,9 +49,11 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
-    await MoodleWare.GetCalendarAsync(services);
-    // Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
-    //SeedData.Init(services, context);
+    var cal = await MoodleWare.GetCalendarAsync(services);
+    await context.Assignments.AddRangeAsync(cal);
+    await context.SaveChangesAsync();
+    //Init in the static SeedData class checks for the presence of data in the database before seeding or returning.
+    //await SeedData.Init(services);
 }
 
 app.Run();
