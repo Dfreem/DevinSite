@@ -3,7 +3,6 @@ namespace DevinSite.Util;
 
 public static class MoodleWare
 {
-    public static string MoodleString { get; set; } = "https://classes.lanecc.edu/calendar/export_execute.php?userid=110123&authtoken=9688ee8ecad434630fe9e7b8120a93c9a138b350&preset_what=all&preset_time=monthnext";
     public enum AssignmentPart
     {
         Title,
@@ -21,11 +20,11 @@ public static class MoodleWare
 
     };
 
-    public static async Task<List<Assignment>> GetCalendarAsync(IServiceProvider services)
+    public static async Task<List<Assignment>> GetCalendarAsync(IServiceProvider services, string moodleString)
     {
         using (var httpClient = new HttpClient())
         {
-            var icsData = await httpClient.GetStringAsync(MoodleString);
+            var icsData = await httpClient.GetStringAsync(moodleString);
             string[] lines = icsData.Split("\r\n");
             List<Assignment> assignments = new();
             for (int i = 0; i < lines.Length; i++)
@@ -37,12 +36,16 @@ public static class MoodleWare
                 //Console.WriteLine(lines[i]);
                 if (!lines[i].Contains("END:VCALENDAR"))
                 {
+                    string dt = ParsePart(in lines, AssignmentPart.DueDate, out lines);
+                    string date = dt.Split('T')[0];
+                    Console.WriteLine(int.Parse(date[..4]) + "\n" + int.Parse(date[4..6]) + "\n" + int.Parse(date[6..]));
+
                     Assignment assignment = new()
                     {
                         Title = ParsePart(in lines, AssignmentPart.Title, out lines),
                         GetCourse = (Course)ParsePart(in lines, AssignmentPart.CourseTitle, out lines),
                         Details = ParsePart(in lines, AssignmentPart.Details, out lines),
-                        //DueDate = new DateTime(year, month, day)
+                        DueDate = new DateTime(int.Parse(date[..4]), int.Parse(date[4..6]), int.Parse(date[6..]))
                     };
                     Console.WriteLine(assignment.ToString()); ;
                     assignments.Add(assignment);

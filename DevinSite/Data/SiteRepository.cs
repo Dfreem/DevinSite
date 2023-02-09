@@ -7,20 +7,28 @@ namespace DevinSite.Data
         public List<Assignment> Assignments { get; set; }
         public List<Course> Courses { get; set; }
         public List<Student> Students { get; set; }
+        public List<Enrollment> Enrollments { get; set; }
         private readonly ApplicationDbContext _context;
 
         public SiteRepository(ApplicationDbContext context)
         {
             _context = context;
-            Assignments = _context.Assignments.ToList();
+            Assignments = _context.Assignments.Include(a => a.GetCourse).ToList();
             Courses = _context.Courses.ToList();
             Students = _context.Users.ToList<Student>();
+            Enrollments = _context.Enrollments.Include(e => e.GetCourse).Include(e => e.GetStudent).ToList<Enrollment>();
         }
 
         public void AddAssignment(Assignment assignment)
         {
             _context.Assignments.Add(assignment);
             _context.SaveChanges();
+        }
+
+        public async Task AddAssignmentRangeAsync(List<Assignment> assignments)
+        {
+            await _context.Assignments.AddRangeAsync(assignments);
+            await _context.SaveChangesAsync();
         }
 
         public void AddCourse(Course course)
@@ -37,6 +45,12 @@ namespace DevinSite.Data
         public void DeleteAssignmnent(Assignment assignment)
         {
             _context.Assignments.Remove(assignment);
+            _context.SaveChanges();
+        }
+
+        public void DeleteAssignmentRange(List<Assignment> assignments)
+        {
+            _context.Assignments.RemoveRange(assignments);
             _context.SaveChanges();
         }
 
@@ -69,6 +83,8 @@ namespace DevinSite.Data
             _context.Users.Update(student);
             _context.SaveChanges();
         }
+
+       
     }
 }
 

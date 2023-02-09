@@ -6,11 +6,16 @@ public class AccountController : Controller
 {
     private readonly UserManager<Student> _userManager;
     private readonly SignInManager<Student> _signinManager;
+    private readonly ISiteRepository _repo;
+    private readonly IConfiguration _config;
 
-    public AccountController(UserManager<Student> userM, SignInManager<Student> signin)
+
+    public AccountController(UserManager<Student> userM, SignInManager<Student> signin, ISiteRepository repo, IConfiguration configuration)
     {
         _userManager = userM;
         _signinManager = signin;
+        _repo = repo;
+        _config = configuration;
     }
     [HttpGet]
     public IActionResult Register()
@@ -75,4 +80,14 @@ public class AccountController : Controller
         return View(model);
     }
 
+    //public async Task UpdateSchedule()
+    //{
+    //    string? current = _signinManager.Context.User.Identity!.Name;
+    //    var currentUser = await _userManager.FindByNameAsync(current);
+    //    if (DateTime.Today.Subtract(currentUser.LastUpdate).Days > 3)
+    //    {
+    //        _repo.DeleteAssignmentRange(_repo.Assignments);
+    //        var cal = await MoodleWare.GetCalendarAsync(_, _config["ConnectionStrings:MoodelString"]); 
+    //    }
+    //}
 }
