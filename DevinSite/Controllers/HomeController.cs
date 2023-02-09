@@ -74,6 +74,8 @@ public class HomeController : Controller
             _repo.DeleteAssignmentRange(_repo.Assignments);
             var cal = await MoodleWare.GetCalendarAsync(_services, moodleString);
             await _repo.AddAssignmentRangeAsync(cal);
+            currentUser.LastUpdate = DateTime.Now;
+            await _userManager.UpdateAsync(currentUser);
         }
     }
 
