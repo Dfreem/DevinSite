@@ -13,5 +13,6 @@ public class ApplicationDbContext : IdentityDbContext<Student>
         : base(options)
     {
     }
+   
 }
 

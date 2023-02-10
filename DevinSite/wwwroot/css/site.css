@@ -142,6 +142,12 @@ body {
     min-height: 100vh;
 }
 
+.assignments {
+    max-width:min-content;
+    min-width:fit-content;
+}
+
+/*#region =========== Calendar =========== */
 
 #calendar-wrap {
     background-color: var(--android-green);
@@ -192,6 +198,8 @@ body {
     min-height: 100px;
     max-height: 100px;
 }
+
+/*#endregion*/
 
 .open-button {
     position: absolute;

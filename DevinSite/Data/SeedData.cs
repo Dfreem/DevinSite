@@ -2,15 +2,18 @@
 
 public static class SeedData
 {
-    public static async Task Init(System.IServiceProvider services)
+    public static void Init(System.IServiceProvider services, IConfiguration configuration)
     {
+        string moodleString = configuration["ConnectionStrings:MoodleString"];
         ApplicationDbContext context = services.GetRequiredService<ApplicationDbContext>();
         UserManager<Student> userManager = services.GetRequiredService<UserManager<Student>>();
         if (userManager.Users.Any())
         {
             return;
         }
-        await SeedUsersAsync(userManager);
+        SeedUsersAsync(userManager).Wait();
+        SeedAssignments(services, moodleString).Wait();
+        SeedEnrollments(context, userManager).Wait();
     }
     public static async Task SeedUsersAsync(UserManager<Student> userManager)
     {
@@ -45,65 +48,17 @@ public static class SeedData
         await userManager.CreateAsync(yuri);
 
     }
-    public static async Task SeedAssignments(ApplicationDbContext context)
+    public static async Task SeedAssignments(IServiceProvider services, string moodleString)
     {
-
-        Assignment firstAssignment = new()
-        {
-            Title = "Fake1",
-            DueDate = DateTime.Now.AddDays(3),
-            Details = "Test test",
-        };
-        await context.Assignments.AddAsync(firstAssignment);
-        Assignment secondAssignment = new()
-        {
-            Title = "Fake2",
-            DueDate = DateTime.Now.AddDays(3),
-            Details = "Test test"
-        };
-        await context.Assignments.AddAsync(secondAssignment);
-        Assignment thirdAssignment = new()
-        {
-            Title = "Fake3",
-            DueDate = DateTime.Now.AddDays(3),
-            Details = "Test test"
-        };
-        await context.Assignments.AddAsync(thirdAssignment);
-        Course CS246 = new()
-        {
-            Name = "Systems Design",
-            Instructor = "Brian Bird",
-            Assignments = new() { firstAssignment },
-            MeetingTimes = "2PM : Tue, Thu",
-            CourseID = 296
-        };
-        context.Courses.Add(CS246);
-        Course CS276 = new()
-        {
-            Name = "Database Systems Design",
-            Instructor = "Lindey Stewart",
-            Assignments = new()
-            { secondAssignment },
-            MeetingTimes = "Never, Always, ∞",
-            CourseID = 276
-        };
-        context.Add(CS276);
-        Course CS296 = new()
-        {
-            Name = "ASP.NET Web Development",
-            Instructor = "Brian Bird",
-            Assignments = new()
-            { thirdAssignment },
-            MeetingTimes = "10AM : Tue, Thu",
-            CourseID = 296
-        };
-        context.Courses.Add(CS296);
-        context.SaveChanges();
+        var repo = services.GetRequiredService<ISiteRepository>();
+        
+        var cal = await MoodleWare.GetCalendarAsync(services, moodleString);
+        await repo.AddAssignmentRangeAsync(cal);
     }
 
-    public static async Task SeedEnrollments(ApplicationDbContext context, IServiceProvider services)
+    public static async Task SeedEnrollments(ApplicationDbContext context, UserManager<Student> userManager)
     {
-        UserManager<Student> userManager = services.GetRequiredService<UserManager<Student>>();
+
         var joe = await userManager.FindByNameAsync("joeUser");
         var devin = await userManager.FindByNameAsync("dfreem987");
         var yuri = await userManager.FindByNameAsync("Yurisaurus123");
@@ -133,7 +88,7 @@ public static class SeedData
                     StudentId = "y1"
                 }
             );
-            await context.SaveChangesAsync();
         }
+        await context.SaveChangesAsync();
     }
 }

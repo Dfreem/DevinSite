@@ -9,6 +9,6 @@ public class Student : IdentityUser
     public IList<string>? RoleNames { get; set; }
     // Do I need this also? TODO either remove or uncomment
     //public List<Enrollment>? GetEnrollments { get; set; }
-    DateTime LastUpdate { get; set; } = DateTime.UnixEpoch;
+    public DateTime LastUpdate { get; set; } = DateTime.UnixEpoch;
 }
 

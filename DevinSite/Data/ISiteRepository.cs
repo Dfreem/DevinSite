@@ -9,7 +9,10 @@ namespace DevinSite.Data
 
         public void AddAssignment(Assignment assignment);
         public void UpdateAssignmnent(Assignment assignment);
-        public void DeleteAssignmnent(Assignment assignment); 
+        public void DeleteAssignmnent(Assignment assignment);
+        public void DeleteAssignmentRange(List<Assignment> assignments);
+
+        public Task AddAssignmentRangeAsync(List<Assignment> assignments);
 
         public void AddCourse(Course course);
         public void UpdateCourse(Course course);

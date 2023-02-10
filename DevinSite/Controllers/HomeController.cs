@@ -1,17 +1,26 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
+
 namespace DevinSite.Controllers;
 
-//[Authorize]
+//[Authorize(Roles ="Student")]
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    //DDBContext _repo { get; set; }
+    private readonly IServiceProvider _services;
     private readonly ISiteRepository _repo;
+    private readonly IConfiguration _config;
+    private readonly SignInManager<Student> _signInManager;
+    private readonly UserManager<Student> _userManager;
 
-    public HomeController(ILogger<HomeController> logger, System.IServiceProvider services)
+    public HomeController(ILogger<HomeController> logger, System.IServiceProvider services, IConfiguration configuration)
     {
         // injected dependencies. 
-        _logger = logger;
+        _services = services;
+        _config = configuration;
+        _signInManager = _services.GetRequiredService<SignInManager<Student>>();
+        _userManager = _services.GetRequiredService<UserManager<Student>>();_logger = logger;
         _repo = services.GetRequiredService<ISiteRepository>();
     }
 
@@ -27,7 +36,7 @@ public class HomeController : Controller
     /// <param name="newMoodle">The new moodle calendar connection string.</param>
     public void SetMoodleString(string newMoodle)
     {
-        MoodleWare.MoodleString = newMoodle;
+        _config["MoodleString"] = newMoodle;
     }
 
     // if navigated to by a search, deteremine if search string is date.
@@ -37,6 +46,8 @@ public class HomeController : Controller
         var assignments = from m in _repo.Assignments
                           select m;
         DateTime searchDate;
+        var currentUser = _signInManager.Context.User.Identity!.Name;
+        if (currentUser is not null) UpdateSchedule().Wait();
 
         // try parse search string into a Date
         bool didParse = DateTime.TryParse(searchString, out searchDate);
@@ -53,6 +64,21 @@ public class HomeController : Controller
         return View(assignments.ToList());
     }
 
+    public async Task UpdateSchedule()
+    {
+        string? current = _signInManager.Context.User.Identity!.Name;
+        var currentUser = await _userManager.FindByNameAsync(current);
+        if (DateTime.Today.Subtract(currentUser.LastUpdate).Days > 3)
+        {
+            string moodleString = _config["ConnectionStrings:MoodleString"];
+            _repo.DeleteAssignmentRange(_repo.Assignments);
+            var cal = await MoodleWare.GetCalendarAsync(_services, moodleString);
+            await _repo.AddAssignmentRangeAsync(cal);
+            currentUser.LastUpdate = DateTime.Now;
+            await _userManager.UpdateAsync(currentUser);
+        }
+    }
+
     public IActionResult AddNewAssignment()
     {
         Assignment assignment = new();
@@ -65,6 +91,13 @@ public class HomeController : Controller
         // add assignment to Assignments table.
         _repo.AddAssignment(assignment);
         return RedirectToAction("Index");
+    }
+
+    public IActionResult RemoveAllAssignments(List<Assignment> assignments)
+    {
+        _repo.DeleteAssignmentRange(assignments);
+
+        return RedirectToAction("Index", new List<Assignment>());
     }
 
     public IActionResult RemoveAssignment(int id)
