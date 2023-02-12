@@ -19,10 +19,10 @@ namespace DevinSite.Data
             Enrollments = _context.Enrollments.Include(e => e.GetCourse).Include(e => e.GetStudent).ToList<Enrollment>();
         }
 
-        public void AddAssignment(Assignment assignment)
+        public async Task AddAssignmentAsync(Assignment assignment)
         {
-            _context.Assignments.Add(assignment);
-            _context.SaveChanges();
+            await _context.Assignments.AddAsync(assignment);
+            await _context.SaveChangesAsync();
         }
 
         public async Task AddAssignmentRangeAsync(List<Assignment> assignments)
@@ -31,15 +31,10 @@ namespace DevinSite.Data
             await _context.SaveChangesAsync();
         }
 
-        public void AddCourse(Course course)
+        public async Task AddCourseAsync(Course course)
         {
-            _context.Courses.Add(course);
-            _context.SaveChanges();
-        }
-
-        public void AddStudent(Student student)
-        {
-            _context.Users.Add(student);
+            await _context.Courses.AddAsync(course);
+            await _context.SaveChangesAsync();
         }
 
         public void DeleteAssignmnent(Assignment assignment)
@@ -47,10 +42,10 @@ namespace DevinSite.Data
             _context.Assignments.Remove(assignment);
             _context.SaveChanges();
         }
-
-        public void DeleteAssignmentRange(List<Assignment> assignments)
+        
+        public void DeleteAllStudentAssignments()
         {
-            _context.Assignments.RemoveRange(assignments);
+            _context.Assignments.RemoveRange(Assignments);
             _context.SaveChanges();
         }
 

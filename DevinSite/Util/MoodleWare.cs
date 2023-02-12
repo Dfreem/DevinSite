@@ -3,6 +3,21 @@ namespace DevinSite.Util;
 
 public static class MoodleWare
 {
+    public enum MoodleOptions
+    {
+        NextMonth,
+        ThisMonth,
+        NextWeek,
+        ThisWeek
+    }
+    public static readonly Dictionary<Enum, string> Options = new()
+    {
+        { MoodleOptions.NextMonth, "monthnow" },
+        { MoodleOptions.ThisMonth, "monththis" },
+        { MoodleOptions.ThisWeek, "weeknow" },
+        { MoodleOptions.NextWeek, "weeknext" }
+    };
+
     public enum AssignmentPart
     {
         Title,
@@ -29,16 +44,11 @@ public static class MoodleWare
             List<Assignment> assignments = new();
             for (int i = 0; i < lines.Length; i++)
             {
-                //var due = ParsePart(in lines, AssignmentPart.DueDate, out lines);
-                //int year = int.Parse(due[0..3]);
-                //int month = int.Parse(due[3..5]);
-                //int day = int.Parse(due[5..]);
-                //Console.WriteLine(lines[i]);
                 if (!lines[i].Contains("END:VCALENDAR"))
                 {
                     string dt = ParsePart(in lines, AssignmentPart.DueDate, out lines);
                     string date = dt.Split('T')[0];
-                    Console.WriteLine(int.Parse(date[..4]) + "\n" + int.Parse(date[4..6]) + "\n" + int.Parse(date[6..]));
+                    //Console.WriteLine(int.Parse(date[..4]) + "\n" + int.Parse(date[4..6]) + "\n" + int.Parse(date[6..]));
 
                     Assignment assignment = new()
                     {
@@ -71,5 +81,26 @@ public static class MoodleWare
         linesMinusAssignmentPart = lines;
         return "";
     }
+    public static string AssembleMoodleString(string options, IConfiguration config)
+    {
+        return config["Moodle:BASE"] +
+                "userid=" + config["Moodle:UID"] +
+                "&" + config["Moodle:TOKEN"] +
+                config["Moodle:OPTIONS"] + options;
+    }
 
+    public static List<Assignment>? SearchAssignmentsByDate(DateTime toSearch, List<Assignment> assignments)
+    {
+        assignments.Sort((x, y) => x.DueDate.CompareTo(y.DueDate));
+        string moodleString = "";
+        if (DateTime.Today < toSearch)
+        {
+            moodleString += MoodleWare.MoodleOptions.NextWeek;
+        }
+        else
+        {
+            moodleString += MoodleWare.MoodleOptions.ThisWeek;
+        }
+        return assignments.FindAll(a => a.DueDate.Day.Equals(toSearch.Day));
+    }
 }

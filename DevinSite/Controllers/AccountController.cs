@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 namespace DevinSite.Controllers;
-
 public class AccountController : Controller
 {
     private readonly UserManager<Student> _userManager;
@@ -17,6 +16,14 @@ public class AccountController : Controller
         _repo = repo;
         _config = configuration;
     }
+    [Authorize]
+    public async Task<IActionResult> Index()
+    {
+        string? un = _signinManager.Context.User.Identity!.Name;
+        var student = await _userManager.FindByNameAsync(un);
+        return View(student);
+    }
+
     [HttpGet]
     public IActionResult Register()
     {
@@ -26,7 +33,7 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterVM model)
     {
-         if (ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             var user = (Student)model;
             var result = await _userManager.CreateAsync(user, model.Password);

@@ -8,9 +8,10 @@
 <ul class="navbar-nav">
     @if (signInManager.IsSignedIn(User))
     {
+        
         <li class="logged-in">
+                <a class="login-labels" asp-controller="Account" asp-action="Index" asp-route-returnUrl="@Url.Action("Index", "Account")">Hello @User.Identity?.Name!</a>
             <form class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">
-                <a class="login-labels" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
                 <button type="submit" class="btn logout">Logout</button>
             </form>
         </li>
@@ -22,7 +23,7 @@
             <a asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a>
         </li>
         <li class="nav-item">
-            <a asp-area="Identity" asp-controller="Account"asp-action="Login">Login</a>
+            <a asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>
         </li>
     }
 </ul>

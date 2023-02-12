@@ -4,7 +4,9 @@ public static class SeedData
 {
     public static void Init(System.IServiceProvider services, IConfiguration configuration)
     {
-        string moodleString = configuration["ConnectionStrings:MoodleString"];
+        var moodleOptions = Util.MoodleWare.MoodleOptions.ThisWeek;
+        string options = MoodleWare.Options[moodleOptions];
+        string moodleString = MoodleWare.AssembleMoodleString(options, configuration);
         ApplicationDbContext context = services.GetRequiredService<ApplicationDbContext>();
         UserManager<Student> userManager = services.GetRequiredService<UserManager<Student>>();
         if (userManager.Users.Any())

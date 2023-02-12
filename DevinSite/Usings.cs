@@ -1,6 +1,8 @@
 ﻿global using DevinSite;
 global using DevinSite.ViewModels;
 global using DevinSite.Util;
+global using MoodleWare = DevinSite.Util.MoodleWare;
+global using CalendarHelper = DevinSite.Util.CalendarHelpers;
 global using DevinSite.Data;
 global using DevinSite.Models;
 global using DevinSite.Controllers;
@@ -38,6 +40,10 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Http.Features;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.Authentication;
-//global using Microsoft.AspNetCore.Identity.UI;
-//global using Microsoft.AspNetCore.Identity.UI.Services;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+// ========== Home ==========
+// TODO link course buttons and use course names for values
+// TODO this week / Next week buttons
+// TODO User Profile page functionality: change user info, submit button for changing password.
+// TODO Note Pad

@@ -7,8 +7,6 @@ public class Student : IdentityUser
     public List<Assignment> GetAssignments { get; set; } = new();
     [NotMapped]
     public IList<string>? RoleNames { get; set; }
-    // Do I need this also? TODO either remove or uncomment
-    //public List<Enrollment>? GetEnrollments { get; set; }
     public DateTime LastUpdate { get; set; } = DateTime.UnixEpoch;
 }
 
