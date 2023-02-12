@@ -9,7 +9,8 @@
 }
 
 <div>
-    <table>
+    <table class="table profile-table">
+        <caption>@studentName profile</caption>
         <thead>
             <tr>
                 <th>
@@ -43,15 +44,11 @@
                     @Model.LastUpdate.ToString();
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <label asp-for="@password">enter password</label>
-                    <input type="password" asp-for="@password" />
-                    <label asp-for="@confirmPassword">Confirm Password</label>
-                    <input type="text" asp-for="@confirmPassword" />
-                </td>
-                <td>
-                </td>
-            </tr>
     </table>
+    <form class="container bg-warning" asp-action="EditProfileInfo" asp-controller="Account">
+        <label asp-for="@p">enter password</label>
+        <input type="password" asp-for="@password" />
+        <label asp-for="@confirmPassword">Confirm Password</label>
+        <input type="text" asp-for="@confirmPassword" />
+    </form>
 </div>

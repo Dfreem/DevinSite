@@ -87,14 +87,9 @@ public class AccountController : Controller
         return View(model);
     }
 
-    //public async Task UpdateSchedule()
-    //{
-    //    string? current = _signinManager.Context.User.Identity!.Name;
-    //    var currentUser = await _userManager.FindByNameAsync(current);
-    //    if (DateTime.Today.Subtract(currentUser.LastUpdate).Days > 3)
-    //    {
-    //        _repo.DeleteAssignmentRange(_repo.Assignments);
-    //        var cal = await MoodleWare.GetCalendarAsync(_, _config["ConnectionStrings:MoodelString"]); 
-    //    }
-    //}
+    [HttpPost]
+    public async Task EditProfileInfo(Student student)
+    {
+        await _userManager.UpdateAsync(student);
+    }
 }
