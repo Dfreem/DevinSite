@@ -1,7 +1,7 @@
 ﻿@model Student
 @inject SignInManager<Student> signInManager
 @{
-    string? studentName = signInManager.Context.User.Identity!.Name;
+    string? studentName = Model.Name;
     var userManager = signInManager.UserManager;
     string password = "";
     string? confirmPassword = "";
@@ -10,14 +10,14 @@
 
 <div>
     <table class="table profile-table">
-        <caption>@studentName profile</caption>
+        <caption class="caption-top">@studentName profile</caption>
         <thead>
             <tr>
-                <th>
+                <th class="table-active">
                     User:
                 </th>
-                <th>
-                    @Model.Name
+                <th class="table-secondary">
+                    <input type="text" asp-for="@Model.Name" placeholder="@Model.Name"/>
                 </th>
             </tr>
             <tr>
@@ -45,8 +45,8 @@
                 </td>
             </tr>
     </table>
-    <form class="container bg-warning" asp-action="EditProfileInfo" asp-controller="Account">
-        <label asp-for="@p">enter password</label>
+    <form class="container bg-warning" asp-action="EditProfileInfoAsync" asp-controller="Account">
+        <label asp-for="@password">enter password</label>
         <input type="password" asp-for="@password" />
         <label asp-for="@confirmPassword">Confirm Password</label>
         <input type="text" asp-for="@confirmPassword" />

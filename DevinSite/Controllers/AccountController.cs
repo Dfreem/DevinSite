@@ -19,19 +19,22 @@ public class AccountController : Controller
     [Authorize]
     public async Task<IActionResult> Index()
     {
+        // Retreive the name of the currently signed in user
         string? un = _signinManager.Context.User.Identity!.Name;
+
+        // get signed in user from UserManager
         var student = await _userManager.FindByNameAsync(un);
         return View(student);
     }
 
     [HttpGet]
-    public IActionResult Register()
+    public IActionResult RegisterAsync()
     {
         return View(new RegisterVM());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterVM model)
+    public async Task<IActionResult> RegisterAsync(RegisterVM model)
     {
         if (ModelState.IsValid)
         {
@@ -54,21 +57,21 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> LogOut()
+    public async Task<IActionResult> LogOutAsync()
     {
         await _signinManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
-    public IActionResult LogIn(string returnURL = "")
+    public IActionResult LogInAsync(string returnURL = "")
     {
         var model = new LoginVM { ReturnUrl = returnURL };
         return View(model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> LogIn(LoginVM model)
+    public async Task<IActionResult> LogInAsync(LoginVM model)
     {
         if (ModelState.IsValid)
         {
@@ -88,7 +91,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task EditProfileInfo(Student student)
+    public async Task EditProfileInfoAsync(Student student)
     {
         await _userManager.UpdateAsync(student);
     }
