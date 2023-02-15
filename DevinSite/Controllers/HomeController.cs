@@ -91,11 +91,13 @@ public class HomeController : Controller
             // Full size version of pre-configured URL
             var options = Util.MoodleWare.MoodleOptions.ThisWeek;
             var moodleOptions = MoodleWare.Options[options];
-            string moodleString = MoodleWare.AssembleMoodleString(moodleOptions, _config);
 
+            // This is the real way the app will get the string in the future, but for now, it is hard coded.
+            //string moodleString = MoodleWare.AssembleMoodleString(moodleOptions, _config);
+            string moodleString = "https://classes.lanecc.edu/calendar/export_execute.php?userid=110123&authtoken=9688ee8ecad434630fe9e7b8120a93c9a138b350&preset_what=all&preset_time=weeknow";
             // delete assignments in the DB and replace with newly retreived. 
             _repo.DeleteAllStudentAssignments();
-            var cal = await MoodleWare.GetCalendarAsync(_services, moodleString);
+            var cal = await MoodleWare.GetCalendarAsync(moodleString);
             await _repo.AddAssignmentRangeAsync(cal);
 
             // reset last update to todays date.

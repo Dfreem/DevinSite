@@ -13,6 +13,4 @@ This is no longer necessary. The app is connected to an Azure Sql Database and s
 
 - run project.
 - Register User.
-  - No email provider has been set up for email verification, so in order for a new user to be verified, you need to click the verification link after registering a new user.~~
-
-- Login with registerted user.
+- Login with registered user.

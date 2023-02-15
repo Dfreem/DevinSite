@@ -35,7 +35,7 @@ public static class MoodleWare
 
     };
 
-    public static async Task<List<Assignment>> GetCalendarAsync(IServiceProvider services, string moodleString)
+    public static async Task<List<Assignment>> GetCalendarAsync(string moodleString)
     {
         using (var httpClient = new HttpClient())
         {

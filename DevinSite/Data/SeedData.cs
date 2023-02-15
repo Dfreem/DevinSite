@@ -54,7 +54,7 @@ public static class SeedData
     {
         var repo = services.GetRequiredService<ISiteRepository>();
         
-        var cal = await MoodleWare.GetCalendarAsync(services, moodleString);
+        var cal = await MoodleWare.GetCalendarAsync(moodleString);
         await repo.AddAssignmentRangeAsync(cal);
     }
 

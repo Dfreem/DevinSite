@@ -1,4 +1,5 @@
 ﻿global using DevinSite;
+global using DevinSite.Repositories;
 global using DevinSite.ViewModels;
 global using DevinSite.Util;
 global using MoodleWare = DevinSite.Util.MoodleWare;
@@ -47,3 +48,4 @@ global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 // TODO this week / Next week buttons
 // TODO User Profile page functionality: change user info, submit button for changing password.
 // TODO Note Pad
+// TODO Add Course parsing to MoodleWare
