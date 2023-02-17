@@ -7,6 +7,7 @@ namespace DevinSite.Repositories
         public MockRepository()
         {
             string moodleString = "https://classes.lanecc.edu/calendar/export_execute.php?userid=110123&authtoken=9688ee8ecad434630fe9e7b8120a93c9a138b350&preset_what=all&preset_time=weeknow";
+            // if Moodle URL is stored in parts in app secrets / appsettigns
             //string moodleString = MoodleWare.AssembleMoodleString()
             Assignments = MoodleWare.GetCalendarAsync(moodleString).Result;
             
