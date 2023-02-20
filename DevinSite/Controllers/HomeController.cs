@@ -137,20 +137,13 @@ public class HomeController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    public IActionResult EditAssignment(int id)
-    {
-        return View(_repo.Assignments.First(a => a.AssignmentId.Equals(id)));
-    }
-
-
-
     [HttpPost]
-    public IActionResult EditAssignment(Assignment assignment)
+    public ContentResult UpdateAssignment(Assignment assignment)
     {
-        // if this assignment is in  the DB, get that version.
         _repo.UpdateAssignmnent(assignment);
-        return RedirectToAction("Index", "Home");
+        return Content(assignment.Notes);
     }
+
     [AllowAnonymous]
     public IActionResult Privacy()
     {

@@ -46,7 +46,7 @@ public class RepoTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal("test", result.Title);
+        Assert.Equal("test", result!.Title);
     }
 
     [Fact]

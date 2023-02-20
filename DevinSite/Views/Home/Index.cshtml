@@ -72,11 +72,20 @@
                                     @assignment.Details
                                 </span>
                             </div>
+                            <div class="notes">@assignment.Notes</div>
+                            <form asp-controller="Home" asp-action="UpdateAssignment" asp-route-assignment="@assignment">
+                                <input type="text" asp-for="@assignment.Notes" height="50" value="@assignment.Notes" />
+                                <input type="submit" />
+                            </form>
                         </details>
-                        <a asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a>
+
+                        <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a>
                     </div>
                 }
             </div>
+        </div>
+        <div class="container w-50 h-50 bg-light">
+
         </div>
     </div>
 </div>
