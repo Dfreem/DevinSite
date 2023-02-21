@@ -263,19 +263,18 @@ namespace DevinSite.Migrations
                 {
                     EnrollmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StudentId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CourseId = table.Column<int>(type: "int", nullable: false)
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    GetStudentId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Enrollments", x => x.EnrollmentId);
                     table.ForeignKey(
-                        name: "FK_Enrollments_AspNetUsers_StudentId",
-                        column: x => x.StudentId,
+                        name: "FK_Enrollments_AspNetUsers_GetStudentId",
+                        column: x => x.GetStudentId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Enrollments_Courses_CourseId",
                         column: x => x.CourseId,
@@ -343,9 +342,9 @@ namespace DevinSite.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_StudentId",
+                name: "IX_Enrollments_GetStudentId",
                 table: "Enrollments",
-                column: "StudentId");
+                column: "GetStudentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

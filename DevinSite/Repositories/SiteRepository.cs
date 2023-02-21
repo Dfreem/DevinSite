@@ -6,7 +6,6 @@ public class SiteRepository : ISiteRepository
 {
     public List<Assignment> Assignments { get; set; }
     public List<Course> Courses { get; set; }
-    public List<Student> Students { get; set; }
     public List<Enrollment> Enrollments { get; set; }
     private readonly ApplicationDbContext _context;
 
@@ -15,7 +14,6 @@ public class SiteRepository : ISiteRepository
         _context = context;
         Assignments = _context.Assignments.Include(a => a.GetCourse).ToList();
         Courses = _context.Courses.ToList();
-        Students = _context.Users.ToList<Student>();
         Enrollments = _context.Enrollments.Include(e => e.GetCourse).Include(e => e.GetStudent).ToList<Enrollment>();
     }
 

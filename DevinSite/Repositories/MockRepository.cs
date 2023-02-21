@@ -14,7 +14,6 @@ namespace DevinSite.Repositories
         }
         public List<Assignment> Assignments { get; set; }
         public List<Course> Courses { get; set; } = new ();
-        public List<Student> Students { get; set; } = new();
         public List<Enrollment> Enrollments { get; set; } = new();
 
         public async Task AddAssignmentAsync(Assignment assignment)
@@ -50,11 +49,6 @@ namespace DevinSite.Repositories
             Courses.Remove(course);
         }
 
-        public void DeleteStudent(Student student)
-        {
-            Students.Remove(student);
-        }
-
         public void UpdateAssignmnent(Assignment assignment)
         {
             int index = Assignments.FindIndex(a => a.AssignmentId.Equals(assignment.AssignmentId));
@@ -65,12 +59,6 @@ namespace DevinSite.Repositories
         {
             int index = Courses.FindIndex(c => c.CourseID.Equals(course.CourseID));
             Courses[index] = course;
-        }
-
-        public void UpdateStudent(Student student)
-        {
-            int index = Students.FindIndex(s => s.Id.Equals(student.Id));
-            Students[index] = student;
         }
     }
 }

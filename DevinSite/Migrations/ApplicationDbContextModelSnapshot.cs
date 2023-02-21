@@ -94,15 +94,14 @@ namespace DevinSite.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentId")
-                        .IsRequired()
+                    b.Property<string>("GetStudentId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("EnrollmentId");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("GetStudentId");
 
                     b.ToTable("Enrollments");
                 });
@@ -336,9 +335,7 @@ namespace DevinSite.Migrations
 
                     b.HasOne("DevinSite.Models.Student", "GetStudent")
                         .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GetStudentId");
 
                     b.Navigation("GetCourse");
 

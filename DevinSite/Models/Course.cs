@@ -9,7 +9,7 @@ public class Course
     public string Name { get; set; } = default!;
     public List<Assignment>? Assignments { get; set; }
     public List<Enrollment>? GetEnrollments { get; set; }
-
+   
     public static explicit operator Course(string? v)
     {
         return new Course()

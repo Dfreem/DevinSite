@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevinSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230220221449_az_mysql")]
+    [Migration("20230221051537_az_mysql")]
     partial class az_mysql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,15 +96,14 @@ namespace DevinSite.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentId")
-                        .IsRequired()
+                    b.Property<string>("GetStudentId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("EnrollmentId");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("GetStudentId");
 
                     b.ToTable("Enrollments");
                 });
@@ -338,9 +337,7 @@ namespace DevinSite.Migrations
 
                     b.HasOne("DevinSite.Models.Student", "GetStudent")
                         .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GetStudentId");
 
                     b.Navigation("GetCourse");
 

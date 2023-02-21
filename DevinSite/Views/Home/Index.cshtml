@@ -1,12 +1,7 @@
-﻿@model List<Assignment>
+﻿@model UserProfileVM
 @using DevinSite.Util
 @{
     ViewData["Title"] = "Home";
-    List<Course> currentClasses = new();
-    foreach (Assignment assignment in Model)
-    {
-        currentClasses.Add(assignment.GetCourse!);
-    }
     string[] days = CalendarHelpers.GetShortDayStrings();
     DateTime[] calDates = CalendarHelpers.GetThisWeek();
 }
@@ -54,7 +49,7 @@
             </div>
 
             <div class="assignments rounded-4">
-                @foreach (Assignment? assignment in Model)
+                @foreach (Assignment? assignment in Model.GetAssignments)
                 {
                     <div class="card my-2 assmt-card">
                         <div class="card-header d-flex justify-content-evenly">

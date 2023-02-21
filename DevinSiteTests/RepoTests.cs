@@ -238,22 +238,5 @@ public class RepoTests
     //    Assert.DoesNotContain(courseToUpdate, coursesAfterUpdate);
     //}
 
-    [Fact]
-    public void TestAddEnrollment()
-    {
-        // Arrange
-        var enrollmentToAdd = new Enrollment()
-        {
-            EnrollmentId = 1,
-            CourseId = 1,
-            StudentId = "one"
-        };
-
-        // Act
-        Repo.Enrollments.Add(enrollmentToAdd);
-        var enrollmentsAfterAdd = Repo.Enrollments;
-
-        // Assert
-        Assert.Contains(enrollmentToAdd, enrollmentsAfterAdd);
-    }
+    
 }
