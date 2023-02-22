@@ -1,0 +1,238 @@
+<!DOCTYPE HTML><html xmlns:jmeter="http://jmeter.apache.org/">
+   <title>Schematic view of Test Plan</title>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <style>
+ul.tree, ul.tree ul {
+    list-style-type: none;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAKAQMAAABPHKYJAAAAA1BMVEWIiIhYZW6zAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1ggGExMZBky19AAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC') repeat-y;
+    margin: 0;
+    padding: 0;
+}
+ul.tree ul {
+    margin-left: 10px;
+}
+ul.tree li {
+    margin: 0;
+    padding: 0 12px;
+    line-height: 20px;
+    background:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIJYVaFGwAAAARSURBVAjXY2hgQIf/GTDFGgDSkwqATqpCHAAAAABJRU5ErkJggg==') no-repeat;
+    color: #369;
+}
+ul.tree li:last-child {
+    background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIIhs+gc8AAAAQSURBVAjXY2hgQIf/GbAAAKCTBYBUjWvCAAAAAElFTkSuQmCC') no-repeat;
+}
+</style>
+   </head>
+   <body>
+      <ul class="tree" id="tree">
+         <li><b>load test </b>
+            "Test Plan" 
+            (globalVars:[],
+            executeTearDownThreadsOnShutdown: true)
+            <br>
+            &nbsp;&nbsp;&nbsp;Comments: <i style="color:green"></i></li>
+         <li>
+            <ul>
+               <li><b>run</b>
+                  "Thread Group" 
+                  (
+                  threads: "1000",
+                  loops: "1",
+                  ramp-up: "4"
+                  )
+                  </li>
+               <li>
+                  <ul>
+                     <li><b>http defaults</b>
+                        "HTTP Request Defaults" 
+                        (protocol: "https",
+                        domain: "d-serve.azurewebsites.net",
+                        port: "",
+                        path: "",
+                        connectTimeout: ""ms,
+                        responseTimeout: ""ms
+                        )
+                        </li>
+                     <li><b>handle cookies</b>
+                        "HTTP Cookie Manager" 
+                        (clearOnEachIteration: false,
+                        policy: "",
+                        cookies: [
+                        ])
+                        </li>
+                     <li><b>add headers</b>
+                        "HTTP Header Manager" 
+                        (headers:[
+                        ])
+                        </li>
+                     <li><b>http request</b>
+                        "HTTP Request" 
+                        (method: "GET",
+                        url: "
+                        ://://",
+                        
+                        body: [
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li><b>RecordingController</b>
+                        "Recording Controller" </li>
+                     <li>
+                        <ul>
+                           <li><b>http request</b>
+                              "/canonical.html-1" 
+                              (method: "GET",
+                              url: "
+                              http://detectportal.firefox.com://canonical.html",
+                              
+                              body: [
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              </li>
+                           <li>
+                              <ul>
+                                 <li><b>add headers</b>
+                                    "HTTP Header Manager" 
+                                    (headers:[
+                                    
+                                    {"Accept-Language"=
+                                    "en-US,en;q=0.5"
+                                    ,
+                                    {"Cache-Control"=
+                                    "no-cache"
+                                    ,
+                                    {"Accept-Encoding"=
+                                    "gzip, deflate"
+                                    ,
+                                    {"Pragma"=
+                                    "no-cache"
+                                    ,
+                                    {"User-Agent"=
+                                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0"
+                                    ,
+                                    {"Accept"=
+                                    "*/*"
+                                    ])
+                                    </li>
+                              </ul>
+                           </li>
+                           <li><b>http request</b>
+                              "/success.txt-2" 
+                              (method: "GET",
+                              url: "
+                              http://detectportal.firefox.com://success.txt",
+                              
+                              body: [
+                              
+                              "ipv4"=
+                              ""
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              </li>
+                           <li>
+                              <ul>
+                                 <li><b>add headers</b>
+                                    "HTTP Header Manager" 
+                                    (headers:[
+                                    
+                                    {"Accept-Language"=
+                                    "en-US,en;q=0.5"
+                                    ,
+                                    {"Cache-Control"=
+                                    "no-cache"
+                                    ,
+                                    {"Accept-Encoding"=
+                                    "gzip, deflate"
+                                    ,
+                                    {"Pragma"=
+                                    "no-cache"
+                                    ,
+                                    {"User-Agent"=
+                                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0"
+                                    ,
+                                    {"Accept"=
+                                    "*/*"
+                                    ])
+                                    </li>
+                              </ul>
+                           </li>
+                           <li><b>http request</b>
+                              "/success.txt-3" 
+                              (method: "GET",
+                              url: "
+                              http://detectportal.firefox.com://success.txt",
+                              
+                              body: [
+                              
+                              "ipv6"=
+                              ""
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              </li>
+                           <li>
+                              <ul>
+                                 <li><b>add headers</b>
+                                    "HTTP Header Manager" 
+                                    (headers:[
+                                    
+                                    {"Accept-Language"=
+                                    "en-US,en;q=0.5"
+                                    ,
+                                    {"Cache-Control"=
+                                    "no-cache"
+                                    ,
+                                    {"Accept-Encoding"=
+                                    "gzip, deflate"
+                                    ,
+                                    {"Pragma"=
+                                    "no-cache"
+                                    ,
+                                    {"User-Agent"=
+                                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0"
+                                    ,
+                                    {"Accept"=
+                                    "*/*"
+                                    ])
+                                    </li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </li>
+                     <li><b>write samples</b>
+                        "View Results Tree" </li>
+                     <li><b>write samples</b>
+                        "Graph Results" </li>
+                     <li><b>kg.apc.jmeter.vizualizers.CorrectedResultCollector</b>
+                        "jp@gc - Response Latencies Over Time" </li>
+                     <li><b>kg.apc.jmeter.vizualizers.CorrectedResultCollector</b>
+                        "jp@gc - Connect Times Over Time" </li>
+                  </ul>
+               </li>
+               <li><b>ProxyControl</b>
+                  "HTTP(S) Test Script Recorder" </li>
+            </ul>
+         </li>
+      </ul>
+   </body>
+</html>

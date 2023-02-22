@@ -6,15 +6,25 @@ public class SiteRepository : ISiteRepository
 {
     public List<Assignment> Assignments { get; set; }
     public List<Course> Courses { get; set; }
+    public List<Student> Students { get; set; }
     public List<Enrollment> Enrollments { get; set; }
     private readonly ApplicationDbContext _context;
 
     public SiteRepository(ApplicationDbContext context)
     {
         _context = context;
-        Assignments = _context.Assignments.Include(a => a.GetCourse).ToList();
         Courses = _context.Courses.ToList();
-        Enrollments = _context.Enrollments.Include(e => e.GetCourse).Include(e => e.GetStudent).ToList<Enrollment>();
+
+        // get all the assignments related to the current students courses
+        Assignments = _context.Assignments
+            .Include(a => a.GetCourse)
+            .Where(a => Courses.Contains(a.GetCourse!))
+            .ToList();
+        Students = _context.Users.ToList<Student>();
+        Enrollments = _context.Enrollments
+            .Include(e => e.GetCourse)
+            .Include(e => e.GetStudent)
+            .ToList<Enrollment>();
     }
 
     public async Task AddAssignmentAsync(Assignment assignment)
@@ -76,7 +86,5 @@ public class SiteRepository : ISiteRepository
         _context.Users.Update(student);
         _context.SaveChanges();
     }
-
-   
 }
 

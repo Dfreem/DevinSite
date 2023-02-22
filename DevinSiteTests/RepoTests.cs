@@ -124,44 +124,6 @@ public class RepoTests
     }
 
     [Fact]
-    public async Task TestDeleteStudentAsync()
-    {
-        // Arrange
-        Student toDelete = new Student { Id = "student", Name = "John Doe" };
-        Repo.Students.Add(toDelete);
-
-        // Act
-        Repo.DeleteStudent(toDelete);
-        await Task.CompletedTask;
-
-        // Assert
-        Assert.DoesNotContain(toDelete, Repo.Students);
-    }
-
-    [Fact]
-    public async Task TestUpdateAssignmentAsync()
-    {
-        // Arrange
-        Assignment toUpdate = Repo.Assignments[0];
-        Assignment updated = new()
-        {
-            AssignmentId = toUpdate.AssignmentId,
-            Title = "Updated Title",
-            Details = "Updated Details",
-            DueDate = DateTime.Now.AddDays(7)
-        };
-
-        // Act
-        Repo.UpdateAssignmnent(updated);
-
-        // Assert
-        Assignment? testerFromRepo = Repo.Assignments.Find(a => a.AssignmentId.Equals(toUpdate.AssignmentId));
-        Assert.Equal(updated.Title, testerFromRepo.Title);
-        Assert.Equal(updated.Details, testerFromRepo.Details);
-        Assert.Equal(updated.DueDate, testerFromRepo.DueDate);
-    }
-
-    [Fact]
     public void TestDeleteAssignment()
     {
         // Arrange

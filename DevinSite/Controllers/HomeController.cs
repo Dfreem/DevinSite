@@ -60,12 +60,7 @@ public class HomeController : Controller
     public IActionResult Index(string searchString)
     {
         UpdateScheduleAsync().Wait();
-        UserProfileVM userVM = new()
-        {
-            GetStudent = CurrentUser,
-            GetCourses = CurrentUser.Courses,
-            GetAssignments = CurrentUser.GetAssignments
-        };
+        UserProfileVM userVM = new(CurrentUser);
         // if navigated to by a search, deteremine if search string is date.
         bool didParse = DateTime.TryParse(searchString, out DateTime searchDate);
         if (didParse)
@@ -98,6 +93,7 @@ public class HomeController : Controller
         {
             // use the MoodleWare class to retrieve and sort the calendar.
             CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(MoodleString);
+            CurrentUser.LastUpdate = DateTime.Now;
             // update the user on the userManager with the new retrieved schedule.
             await _userManager.UpdateAsync(CurrentUser);
         }
@@ -106,15 +102,10 @@ public class HomeController : Controller
 
     public async Task<IActionResult> RefreshFromMoodle()
     {
-        CurrentUser.LastUpdate.AddDays(-3);
+        CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
+        await _userManager.UpdateAsync(CurrentUser);
         await UpdateScheduleAsync();
-        UserProfileVM userVM = new()
-        {
-            GetStudent = CurrentUser,
-            GetAssignments = CurrentUser.GetAssignments,
-            GetCourses = CurrentUser.Courses
-        };
-        return RedirectToAction("Index", userVM);
+        return RedirectToAction("Index");
     }
 
     /// <summary>
@@ -125,7 +116,7 @@ public class HomeController : Controller
     public IActionResult RemoveAllAssignments()
     {
         _repo.DeleteAllStudentAssignments();
-        return RedirectToAction("Index", new List<Assignment>());
+        return RedirectToAction("Index");
     }
 
     public IActionResult RemoveAssignment(int id)
