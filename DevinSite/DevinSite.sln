@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1704.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevinSite", "DevinSite.csproj", "{B839C47A-5AD1-411E-8059-71423BF5A11B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevinSiteTests", "..\DevinSiteTests\DevinSiteTests.csproj", "{073E15D5-8D65-4AE1-8ADF-E677A712701D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B839C47A-5AD1-411E-8059-71423BF5A11B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B839C47A-5AD1-411E-8059-71423BF5A11B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B839C47A-5AD1-411E-8059-71423BF5A11B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{073E15D5-8D65-4AE1-8ADF-E677A712701D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{073E15D5-8D65-4AE1-8ADF-E677A712701D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{073E15D5-8D65-4AE1-8ADF-E677A712701D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{073E15D5-8D65-4AE1-8ADF-E677A712701D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

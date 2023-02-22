@@ -1,12 +1,7 @@
-﻿@model List<Assignment>
+﻿@model UserProfileVM
 @using DevinSite.Util
 @{
     ViewData["Title"] = "Home";
-    List<Course> currentClasses = new();
-    foreach (Assignment assignment in Model)
-    {
-        currentClasses.Add(assignment.GetCourse!);
-    }
     string[] days = CalendarHelpers.GetShortDayStrings();
     DateTime[] calDates = CalendarHelpers.GetThisWeek();
 }
@@ -20,7 +15,7 @@
                 <a href="#" class="btn btn-primary btn" id="subject-4">Course 4</a>
             </div>
             <a class="btn btn-danger brounded" asp-controller="Home" asp-action="RemoveAllAssignments">Delete All</a>
-            <a class="btn btn-warning rounded" asp-controller="Home" asp-action="RefreshFromDB">Update from Moodle</a>
+            <a class="btn btn-warning rounded" asp-controller="Home" asp-action="RefreshFromMoodle">Update from Moodle</a>
             <div>
                 <div id="calendar-wrap">
 
@@ -54,7 +49,7 @@
             </div>
 
             <div class="assignments rounded-4">
-                @foreach (Assignment? assignment in Model)
+                @foreach (Assignment? assignment in Model.GetAssignments)
                 {
                     <div class="card my-2 assmt-card">
                         <div class="card-header d-flex justify-content-evenly">
@@ -72,11 +67,20 @@
                                     @assignment.Details
                                 </span>
                             </div>
+                            <div class="notes">@assignment.Notes</div>
+                            <form asp-controller="Home" asp-action="UpdateAssignment" asp-route-assignment="@assignment">
+                                <input type="text" asp-for="@assignment.Notes" height="50" value="@assignment.Notes" />
+                                <input type="submit" />
+                            </form>
                         </details>
-                        <a asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a>
+
+                        <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a>
                     </div>
                 }
             </div>
+        </div>
+        <div class="container w-50 h-50 bg-light">
+
         </div>
     </div>
 </div>

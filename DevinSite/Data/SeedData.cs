@@ -15,7 +15,6 @@ public static class SeedData
         }
         SeedUsersAsync(userManager).Wait();
         SeedAssignments(services, moodleString).Wait();
-        SeedEnrollments(context, userManager).Wait();
     }
     public static async Task SeedUsersAsync(UserManager<Student> userManager)
     {
@@ -54,43 +53,25 @@ public static class SeedData
     {
         var repo = services.GetRequiredService<ISiteRepository>();
         
-        var cal = await MoodleWare.GetCalendarAsync(services, moodleString);
+        var cal = await MoodleWare.GetCalendarAsync(moodleString);
         await repo.AddAssignmentRangeAsync(cal);
     }
 
-    public static async Task SeedEnrollments(ApplicationDbContext context, UserManager<Student> userManager)
+    public static void SeedCourses()
     {
 
-        var joe = await userManager.FindByNameAsync("joeUser");
-        var devin = await userManager.FindByNameAsync("dfreem987");
-        var yuri = await userManager.FindByNameAsync("Yurisaurus123");
+    }
 
-        foreach (var course in context.Courses)
+    public static async Task SeedEnrollments(IServiceProvider services)
+    {
+        var repo = services.GetRequiredService<ISiteRepository>();
+        var userManager = services.GetRequiredService<UserManager<Student>>();
+        foreach (Student student in userManager.Users)
         {
-            await context.Enrollments.AddRangeAsync(
-                new Enrollment()
-                {
-                    GetCourse = course,
-                    CourseId = course.CourseID,
-                    GetStudent = joe,
-                    StudentId = "j1"
-                },
-                new Enrollment()
-                {
-                    GetCourse = course,
-                    CourseId = course.CourseID,
-                    GetStudent = devin,
-                    StudentId = "d1"
-                },
-                new Enrollment()
-                {
-                    GetCourse = course,
-                    CourseId = course.CourseID,
-                    GetStudent = yuri,
-                    StudentId = "y1"
-                }
-            );
+            foreach (var course in student.Courses)
+            {
+
+            }
         }
-        await context.SaveChangesAsync();
     }
 }

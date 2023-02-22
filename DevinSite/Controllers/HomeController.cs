@@ -16,20 +16,29 @@ public class HomeController : Controller
     private readonly IConfiguration _config;
     private readonly SignInManager<Student> _signInManager;
     private readonly UserManager<Student> _userManager;
+    private readonly Student CurrentUser;
+    public string MoodleString { get; set; }
+
     public string? _currentUser;
 
-    public HomeController(ILogger<HomeController> logger, System.IServiceProvider services, IConfiguration configuration)
+    public HomeController(ILogger<HomeController> logger, IServiceProvider services, IConfiguration configuration)
     {
         // injected dependencies. 
+        _logger = logger;
         _services = services;
         _config = configuration;
 
+        // set calendar options for use when downloading calendar.
+        var dateOption = MoodleWare.MoodleOptions.ThisWeek;
+        var options = MoodleWare.Options[dateOption];
+        MoodleString = MoodleWare.AssembleMoodleString(options, _config);
+
         // used to retrieve the current user.
         _signInManager = _services.GetRequiredService<SignInManager<Student>>();
-        _userManager = _services.GetRequiredService<UserManager<Student>>(); _logger = logger;
+        _userManager = _services.GetRequiredService<UserManager<Student>>();
         _repo = services.GetRequiredService<ISiteRepository>();
         _currentUser = _signInManager.Context.User.Identity!.Name;
-        Console.WriteLine(MoodleWare.MoodleOptions.NextWeek);
+        CurrentUser = _userManager.FindByNameAsync(_currentUser).Result;
     }
 
     /// <summary>
@@ -41,37 +50,35 @@ public class HomeController : Controller
     /// 5. push "Get Calendar URL"<br />
     /// 6. A URL is generated and diswplayed at the bottom of the screen, copy that and paste as the parameter to this method.<br />
     /// </summary>
-    /// <param name="newMoodle">The new moodle calendar connection string.</param>
+    /// <param name = "newMoodle" > The new moodle calendar connection string.</param>
     //public void SetMoodleString(string newMoodle)
     //{
     //    int baseEndIndex = newMoodle.IndexOf('?');
     //    int optionsIndex = newMoodle.IndexOf('')
     //}
+
     public IActionResult Index(string searchString)
     {
-        // retrieve all assignments in db.
-        var currentUser = _signInManager.Context.User.Identity!.Name;
-        var assignments = from m in _repo.Assignments
-                          select m;
-        DateTime searchDate;
-        if (currentUser is not null) UpdateScheduleAsync().Wait();
-
+        UpdateScheduleAsync().Wait();
+        UserProfileVM userVM = new(CurrentUser);
         // if navigated to by a search, deteremine if search string is date.
-        bool didParse = DateTime.TryParse(searchString, out searchDate);
+        bool didParse = DateTime.TryParse(searchString, out DateTime searchDate);
         if (didParse)
         {
             // if date -> search by due date
-            assignments = MoodleWare.SearchAssignmentsByDate(searchDate, assignments.ToList<Assignment>());
+            userVM.GetAssignments = CurrentUser.GetAssignments
+                .FindAll(a => a.DueDate.Equals(searchDate));
         }
         else if (searchString is not null)
         {
             // if not date -> search by title
-            assignments = assignments.Where(a => a.Title.Contains(searchString));
+            userVM.GetAssignments = CurrentUser.GetAssignments
+                .FindAll(a => a.Title.Contains(searchString) ||
+                a.Details!.Contains(searchString) ||
+                a.GetCourse!.Equals(searchString));
         }
-        return View(assignments!.ToList());
+        return View(userVM);
     }
-
-
 
     /// <summary>
     /// Update Schedule will check when the currently logged in user was last updated.
@@ -81,34 +88,22 @@ public class HomeController : Controller
     /// <returns>A Task that completes when the DB is finished updating the current user.</returns>
     public async Task UpdateScheduleAsync()
     {
-        // look for the currently signed in user name using signInManager
-        // retrieved currently signed in user.
-        var currentUser = await _userManager.FindByNameAsync(_currentUser);
-
-        // check how long ago the users last update was.
-        if (DateTime.Today.Subtract(currentUser.LastUpdate).Days > 3)
+        // check users LastUpdate property to see if the last update is more than 3 days ago.
+        if (CurrentUser.LastUpdate.AddDays(3).Day < DateTime.Now.Day)
         {
-            // Full size version of pre-configured URL
-            var options = Util.MoodleWare.MoodleOptions.ThisWeek;
-            var moodleOptions = MoodleWare.Options[options];
-            string moodleString = MoodleWare.AssembleMoodleString(moodleOptions, _config);
-
-            // delete assignments in the DB and replace with newly retreived. 
-            _repo.DeleteAllStudentAssignments();
-            var cal = await MoodleWare.GetCalendarAsync(_services, moodleString);
-            await _repo.AddAssignmentRangeAsync(cal);
-
-            // reset last update to todays date.
-            currentUser.LastUpdate = DateTime.Now;
-            await _userManager.UpdateAsync(currentUser);
+            // use the MoodleWare class to retrieve and sort the calendar.
+            CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(MoodleString);
+            CurrentUser.LastUpdate = DateTime.Now;
+            // update the user on the userManager with the new retrieved schedule.
+            await _userManager.UpdateAsync(CurrentUser);
         }
+        await Task.CompletedTask;
     }
 
-    public async Task<IActionResult> RefreshFromDB()
+    public async Task<IActionResult> RefreshFromMoodle()
     {
-        var current = await _userManager.FindByNameAsync(_currentUser);
-        current.LastUpdate = new DateTime(DateTime.Now.Day - 4);
-        _ = await _userManager.UpdateAsync(current);
+        CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
+        await _userManager.UpdateAsync(CurrentUser);
         await UpdateScheduleAsync();
         return RedirectToAction("Index");
     }
@@ -121,7 +116,7 @@ public class HomeController : Controller
     public IActionResult RemoveAllAssignments()
     {
         _repo.DeleteAllStudentAssignments();
-        return RedirectToAction("Index", new List<Assignment>());
+        return RedirectToAction("Index");
     }
 
     public IActionResult RemoveAssignment(int id)
@@ -135,20 +130,13 @@ public class HomeController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    public IActionResult EditAssignment(int id)
-    {
-        return View(_repo.Assignments.First(a => a.AssignmentId.Equals(id)));
-    }
-
-
-
     [HttpPost]
-    public IActionResult EditAssignment(Assignment assignment)
+    public ContentResult UpdateAssignment(Assignment assignment)
     {
-        // if this assignment is in  the DB, get that version.
         _repo.UpdateAssignmnent(assignment);
-        return RedirectToAction("Index", "Home");
+        return Content(assignment.Notes);
     }
+
     [AllowAnonymous]
     public IActionResult Privacy()
     {

@@ -1,10 +1,10 @@
 
 var builder = WebApplication.CreateBuilder(args);
-string connection = builder.Configuration.GetConnectionString("AZURE_SQLSERVER_CONNECTION");
+string connection = builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTION");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connection));
+    options.UseMySql(connection, MySqlServerVersion.Parse("mysql-8.0")));
 
 
 builder.Services.AddTransient<ISiteRepository, SiteRepository>();

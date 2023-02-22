@@ -14,7 +14,7 @@
         "UID": "<YOUR_UI>(SEE README)",
         "TOKEN": "authtoken=<YOUR_AUTH_TOKEN>(SEE README)",
         "OPTIONS": "&preset_what=all&preset_time=",
-        "BASE": "https://classes.lanecc.edu/calendar/export_execute.php?"
-
+        "BASE": "https://classes.lanecc.edu/calendar/export_execute.php?",
+        "ForTest": "https://classes.lanecc.edu/calendar/export_execute.php?userid=110123&authtoken=9688ee8ecad434630fe9e7b8120a93c9a138b350&preset_what=all&preset_time=weeknow"
     }
 }
