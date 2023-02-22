@@ -131,7 +131,7 @@ a.navbar-brand {
 
 /*#endregion*/
 
-/* #region Home */
+/* #region =========== Home =========== */
 
 body {
     color: var(--charcoal);
@@ -201,11 +201,11 @@ body {
 
 /*#endregion*/
 
-.open-button {
+/*.open-button {
     position: absolute;
-    left: 2em;
+    left: 2em;*/
     /*    display:inline;*/
-}
+/*}*/
 
 #search-title {
     width: fit-content;
@@ -216,3 +216,14 @@ body {
     color: #33aa99;
 }
 /* #endregion */
+
+/*#region =========== User Profile Page =========== */
+.profile-table {
+    max-width: fit-content;
+    color: var(--dark-purple-2);
+    font-family: 'Fredoka One', cursive;
+    position: absolute;
+    margin-top: 2em;
+    margin-inline: 3em;
+}
+/*#endregion*/

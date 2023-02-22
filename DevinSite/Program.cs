@@ -1,6 +1,6 @@
 
 var builder = WebApplication.CreateBuilder(args);
-string connection = builder.Configuration.GetConnectionString("SQL_SERVER_CONNECTION");
+string connection = builder.Configuration.GetConnectionString("AZURE_SQLSERVER_CONNECTION");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -1,6 +1,54 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Student
+@inject SignInManager<Student> signInManager
 @{
+    string? studentName = Model.Name;
+    var userManager = signInManager.UserManager;
+    string password = "";
+    string? confirmPassword = "";
+    ViewData["Title"] = "User Profile";
 }
 
+<div>
+    <table class="table profile-table">
+        <caption class="caption-top">@studentName profile</caption>
+        <thead>
+            <tr>
+                <th class="table-active">
+                    User:
+                </th>
+                <th class="table-secondary">
+                    <input type="text" asp-for="@Model.Name" placeholder="@Model.Name"/>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    User Name
+                </td>
+                <td>
+                    @Model.UserName
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    e-mail
+                </td>
+                <td>
+                    @Model.Email
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    last assignment update
+                </td>
+                <td>
+                    @Model.LastUpdate.ToString();
+                </td>
+            </tr>
+    </table>
+    <form class="container bg-warning" asp-action="EditProfileInfoAsync" asp-controller="Account">
+        <label asp-for="@password">enter password</label>
+        <input type="password" asp-for="@password" />
+        <label asp-for="@confirmPassword">Confirm Password</label>
+        <input type="text" asp-for="@confirmPassword" />
+    </form>
+</div>

@@ -1,15 +1,20 @@
 {
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "AllowedHosts": "*",
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft.AspNetCore": "Warning"
+        }
+    },
+    "AllowedHosts": "*",
     "ConnectionStrings": {
-        "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB; Database=DevinSite; Trusted_Connection=True; MultipleActiveResultSets=true",
-        "MySqlConnection": "server=127.0.0.1;uid=root;pwd=YOUR_PASSWORD;database=DevinSite",
-        "SQL_SERVER_CONNECTION": "Server=localhost,1433;Database=DevinSite;UID=sa;Password=YOUR_PASSWORD; Trusted_Connection=True; TrustServerCertificate=True;"
+        "MySqlConnection": "server=127.0.0.1;uid=root;pwd=BassCase987;database=KeepMySchedule",
+        "SQL_SERVER_CONNECTION": "Server=127.0.0.1,1433;USER ID=<YOUR_USERID>;Password=<YOUR_PASSWORD>;Database=DevinSite;TrustServerCertificate=True;MultipleActiveResultSets=True;Encrypt=False"
+    },
+    "Moodle": {
+        "UID": "<YOUR_UI>(SEE README)",
+        "TOKEN": "authtoken=<YOUR_AUTH_TOKEN>(SEE README)",
+        "OPTIONS": "&preset_what=all&preset_time=",
+        "BASE": "https://classes.lanecc.edu/calendar/export_execute.php?"
 
     }
 }
