@@ -54,7 +54,7 @@
                     <div class="card my-2 assmt-card">
                         <div class="card-header d-flex justify-content-evenly">
                             <div class="me-0 ">Title: <span class="text-secondary">@assignment.Title</span></div>
-                            @*<div>Class: <span class="text-secondary">@assignment.GetCourse!.Name </span></div>*@
+                            <div>Class: <span class="text-secondary">@assignment.GetCourse!.Name </span></div>
                             <div>Due: <span class="text-secondary">@assignment.DueDate</span></div>&nbsp;
                         </div>
                         <details>
@@ -62,14 +62,14 @@
                                 <i class="text-dark p-2 calendar-icon"></i>instructions
                             </summary>
                             <div class="card-body">
-                                @*<a asp-action="EditAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId" class=" btn btn-sm btn-secondary">Edit</a>*@
                                 <span class="text-secondary">
                                     @assignment.Details
                                 </span>
                             </div>
                             <div class="notes">@assignment.Notes</div>
-                            <form asp-controller="Home" asp-action="UpdateAssignment" asp-route-assignment="@assignment">
-                                <input type="text" asp-for="@assignment.Notes" height="50" value="@assignment.Notes" />
+                            <form asp-controller="Home" asp-action="UpdateAssignment">
+                                <textarea rows="3" cols="5" asp-for="@assignment.Notes" height="50">@assignment.Notes</textarea>
+                                <input type="hidden" asp-for="@assignment.AssignmentId" value="@assignment.AssignmentId" />
                                 <input type="submit" />
                             </form>
                         </details>

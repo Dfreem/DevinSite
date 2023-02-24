@@ -1,23 +1,28 @@
 ﻿@model UserProfileVM
-@inject SignInManager<Student> signInManager
+@*@inject SignInManager<Student> signInManager*@
 @{
-    string? studentName = Model.Name;
-    var userManager = signInManager.UserManager;
-    string password = "";
-    string? confirmPassword = "";
     ViewData["Title"] = "User Profile";
 }
 
 <div>
     <table class="table profile-table">
-        <caption class="caption-top">@studentName profile</caption>
+        <caption class="caption-top">@Model.Name profile</caption>
         <thead>
             <tr>
                 <th class="table-active">
                     User:
                 </th>
                 <th class="table-secondary">
-                    <input type="text" asp-for="@Model.Name" placeholder="@Model.Name"/>
+                    <input type="text" asp-for="@Model.Name" value="@Model.Name" />
+                </th>
+                <th class="table-secondary">
+                    <form asp-action="SetMoodleString">
+                        <label asp-for="@Model.NewMoodle">
+                            Enter a new Calendar URL for retrieving your assignments.
+                        </label>
+                        <input asp-for="@Model.NewMoodle" />
+                        <input type="submit" value="save calendar URL">
+                    </form>
                 </th>
             </tr>
             <tr>
@@ -45,10 +50,15 @@
                 </td>
             </tr>
     </table>
-    <form class="container bg-warning" asp-action="EditProfileInfoAsync" asp-controller="Account">
-        <label asp-for="@password">enter password</label>
-        <input type="password" asp-for="@password" />
-        <label asp-for="@confirmPassword">Confirm Password</label>
-        <input type="text" asp-for="@confirmPassword" />
-    </form>
 </div>
+    <form asp-action="ChangePasswordAsync" asp-controller="Account">
+        <div class="d-flex">
+            <label asp-for="@Model.Password">Current password</label>
+            <input type="password" asp-for="@Model.Password" />
+            <label asp-for="@Model.NewPassword">New password</label>
+            <input type="password" asp-for="@Model.Password" />
+            <label asp-for="@Model.ConfirmPassword">Confirm new Password</label>
+            <input type="password" asp-for="@Model.ConfirmPassword" />
+            <input type="submit" value="Change Password" />
+        </div>
+    </form>

@@ -1,7 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Identity.Client.Extensions.Msal;
-using NodaTime.Extensions;
+﻿using Microsoft.IdentityModel.Tokens;
 
 namespace DevinSite.Controllers;
 
@@ -10,57 +7,34 @@ namespace DevinSite.Controllers;
 public class HomeController : Controller
 {
 
-    private readonly ILogger<HomeController> _logger;
     private readonly IServiceProvider _services;
     private readonly ISiteRepository _repo;
     private readonly IConfiguration _config;
     private readonly SignInManager<Student> _signInManager;
     private readonly UserManager<Student> _userManager;
-    private readonly Student CurrentUser;
-    public string MoodleString { get; set; }
+    private Student CurrentUser { get; }
 
-    public string? _currentUser;
+    public string? _currentUserName;
 
-    public HomeController(ILogger<HomeController> logger, IServiceProvider services, IConfiguration configuration)
+    public HomeController(IServiceProvider services, IConfiguration configuration)
     {
         // injected dependencies. 
-        _logger = logger;
         _services = services;
         _config = configuration;
-
-        // set calendar options for use when downloading calendar.
-        var dateOption = MoodleWare.MoodleOptions.ThisWeek;
-        var options = MoodleWare.Options[dateOption];
-        MoodleString = MoodleWare.AssembleMoodleString(options, _config);
 
         // used to retrieve the current user.
         _signInManager = _services.GetRequiredService<SignInManager<Student>>();
         _userManager = _services.GetRequiredService<UserManager<Student>>();
         _repo = services.GetRequiredService<ISiteRepository>();
-        _currentUser = _signInManager.Context.User.Identity!.Name;
-        CurrentUser = _userManager.FindByNameAsync(_currentUser).Result;
+        _currentUserName = _signInManager.Context.User.Identity!.Name;
+        CurrentUser = _userManager.FindByNameAsync(_currentUserName).Result;
     }
-
-    /// <summary>
-    /// The instructions for retrieving a Moodle Calendar String are as follows:<br />
-    /// 1. Login to your Moodle student account<br />
-    /// 2. Navigate to the Calendar page.<br />
-    /// 3. Make sure to be on the Day or Month view, You should see a button the says "Export Calendar"<br />
-    /// 4. select eiter this week or next week as the time frame, and all events.<br />
-    /// 5. push "Get Calendar URL"<br />
-    /// 6. A URL is generated and diswplayed at the bottom of the screen, copy that and paste as the parameter to this method.<br />
-    /// </summary>
-    /// <param name = "newMoodle" > The new moodle calendar connection string.</param>
-    //public void SetMoodleString(string newMoodle)
-    //{
-    //    int baseEndIndex = newMoodle.IndexOf('?');
-    //    int optionsIndex = newMoodle.IndexOf('')
-    //}
 
     public IActionResult Index(string searchString)
     {
-        UpdateScheduleAsync().Wait();
         UserProfileVM userVM = new(CurrentUser);
+        //UpdateScheduleAsync().Wait();
+
         // if navigated to by a search, deteremine if search string is date.
         bool didParse = DateTime.TryParse(searchString, out DateTime searchDate);
         if (didParse)
@@ -92,7 +66,7 @@ public class HomeController : Controller
         if (CurrentUser.LastUpdate.AddDays(3).Day < DateTime.Now.Day)
         {
             // use the MoodleWare class to retrieve and sort the calendar.
-            CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(MoodleString);
+            CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
             CurrentUser.LastUpdate = DateTime.Now;
             // update the user on the userManager with the new retrieved schedule.
             await _userManager.UpdateAsync(CurrentUser);
@@ -131,11 +105,28 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public ContentResult UpdateAssignment(Assignment assignment)
+    public async Task<IActionResult> UpdateAssignment(Assignment assignment)
     {
-        _repo.UpdateAssignmnent(assignment);
-        return Content(assignment.Notes);
+        var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
+        oldAssignment!.Notes = oldAssignment.Notes + "\n" + assignment.Notes;
+        _repo.UpdateAssignmnent(oldAssignment);
+        return RedirectToAction("Index");
     }
+
+    //public static List<Assignment>? SearchAssignmentsByDate(DateTime toSearch, List<Assignment> assignments)
+    //{
+    //assignments.Sort((x, y) => x.DueDate.CompareTo(y.DueDate));
+    //    string moodleString = "";
+    //    if (DateTime.Today < toSearch)
+    //    {
+    //        moodleString += MoodleWare.MoodleOptions.NextWeek;
+    //    }
+    //    else
+    //    {
+    //        moodleString += MoodleWare.MoodleOptions.ThisWeek;
+    //    }
+    //    return assignments.FindAll(a => a.DueDate.Day.Equals(toSearch.Day));
+    //}
 
     [AllowAnonymous]
     public IActionResult Privacy()

@@ -7,12 +7,11 @@
     },
     "AllowedHosts": "*",
     "ConnectionStrings": {
-        "MySqlConnection": "server=127.0.0.1;uid=root;pwd=BassCase987;database=KeepMySchedule",
-        "SQL_SERVER_CONNECTION": "Server=127.0.0.1,1433;USER ID=<YOUR_USERID>;Password=<YOUR_PASSWORD>;Database=DevinSite;TrustServerCertificate=True;MultipleActiveResultSets=True;Encrypt=False"
+        "AZURE_MYSQL_CONNECTION": "server=my-serve.mysql.database.azure.com;uid=dserve;pwd=BassCase987;database=devin-site;"
     },
     "Moodle": {
-        "UID": "<YOUR_UI>(SEE README)",
-        "TOKEN": "authtoken=<YOUR_AUTH_TOKEN>(SEE README)",
+        "UID": "userid=",
+        "TOKEN": "authtoken=",
         "OPTIONS": "&preset_what=all&preset_time=",
         "BASE": "https://classes.lanecc.edu/calendar/export_execute.php?",
         "ForTest": "https://classes.lanecc.edu/calendar/export_execute.php?userid=110123&authtoken=9688ee8ecad434630fe9e7b8120a93c9a138b350&preset_what=all&preset_time=weeknow"

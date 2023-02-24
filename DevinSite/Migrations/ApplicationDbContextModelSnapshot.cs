@@ -134,6 +134,13 @@ namespace DevinSite.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("MoodleIsSet")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("MoodleString")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");

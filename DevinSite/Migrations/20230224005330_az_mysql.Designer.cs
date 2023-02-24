@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevinSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230221051537_az_mysql")]
+    [Migration("20230224005330_az_mysql")]
     partial class az_mysql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +135,13 @@ namespace DevinSite.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("MoodleIsSet")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("MoodleString")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()

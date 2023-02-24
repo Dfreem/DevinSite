@@ -1,0 +1,164 @@
+BEGIN:VCALENDAR
+METHOD:PUBLISH
+PRODID:-//Moodle Pty Ltd//NONSGML Moodle Version 2021051709//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:33929866@classes.lanecc.edu
+SUMMARY:Midterm Part One closes
+DESCRIPTION:
+CLASS:PUBLIC
+LAST-MODIFIED:20230220T235218Z
+DTSTAMP:20230224T001118Z
+DTSTART:20230220T075900Z
+DTEND:20230220T075900Z
+CATEGORIES:CS 276 W23 (Stewart 31364)
+END:VEVENT
+BEGIN:VEVENT
+UID:33929868@classes.lanecc.edu
+SUMMARY:Practice Quiz 1 closes
+DESCRIPTION:
+CLASS:PUBLIC
+LAST-MODIFIED:20230220T235218Z
+DTSTAMP:20230224T001118Z
+DTSTART:20230220T075900Z
+DTEND:20230220T075900Z
+CATEGORIES:CS 276 W23 (Stewart 31364)
+END:VEVENT
+BEGIN:VEVENT
+UID:33929869@classes.lanecc.edu
+SUMMARY:Practice Quiz 2 closes
+DESCRIPTION:
+CLASS:PUBLIC
+LAST-MODIFIED:20230220T235218Z
+DTSTAMP:20230224T001118Z
+DTSTART:20230220T075900Z
+DTEND:20230220T075900Z
+CATEGORIES:CS 276 W23 (Stewart 31364)
+END:VEVENT
+BEGIN:VEVENT
+UID:33929870@classes.lanecc.edu
+SUMMARY:Midterm Part Two closes
+DESCRIPTION:
+CLASS:PUBLIC
+LAST-MODIFIED:20230220T235218Z
+DTSTAMP:20230224T001118Z
+DTSTART:20230220T075900Z
+DTEND:20230220T075900Z
+CATEGORIES:CS 276 W23 (Stewart 31364)
+END:VEVENT
+BEGIN:VEVENT
+UID:31105705@classes.lanecc.edu
+SUMMARY:Quiz 7 closes
+DESCRIPTION:Reading quiz covering this week's required reading.\n\n
+CLASS:PUBLIC
+LAST-MODIFIED:20230216T173714Z
+DTSTAMP:20230224T001119Z
+DTSTART:20230221T075900Z
+DTEND:20230221T075900Z
+CATEGORIES:CS 296N W23 (Bird 30397)
+END:VEVENT
+BEGIN:VEVENT
+UID:31108387@classes.lanecc.edu
+SUMMARY:Lab 6A: Team Contract is due
+DESCRIPTION:Team contract\n
+CLASS:PUBLIC
+LAST-MODIFIED:20230108T043648Z
+DTSTAMP:20230224T001119Z
+DTSTART:20230224T075500Z
+DTEND:20230224T075500Z
+CATEGORIES:CS 246 W23 (Bird 30677)
+END:VEVENT
+BEGIN:VEVENT
+UID:31108388@classes.lanecc.edu
+SUMMARY:Lab 6B: UX Design is due
+DESCRIPTION:Team contract\n
+CLASS:PUBLIC
+LAST-MODIFIED:20230108T043648Z
+DTSTAMP:20230224T001119Z
+DTSTART:20230224T075500Z
+DTEND:20230224T075500Z
+CATEGORIES:CS 246 W23 (Bird 30677)
+END:VEVENT
+BEGIN:VEVENT
+UID:31105669@classes.lanecc.edu
+SUMMARY:Lab 6 Production Version is due
+DESCRIPTION:See the lab instructions for details on what to submit\n
+CLASS:PUBLIC
+LAST-MODIFIED:20230216T173712Z
+DTSTAMP:20230224T001119Z
+DTSTART:20230224T075900Z
+DTEND:20230224T075900Z
+CATEGORIES:CS 296N W23 (Bird 30397)
+END:VEVENT
+BEGIN:VEVENT
+UID:31108386@classes.lanecc.edu
+SUMMARY:Lab 5B - Client Contract Submission is due
+DESCRIPTION:See the lab instructions for direction on what to submit.\n
+CLASS:PUBLIC
+LAST-MODIFIED:20230108T043648Z
+DTSTAMP:20230224T001119Z
+DTSTART:20230224T075900Z
+DTEND:20230224T075900Z
+CATEGORIES:CS 246 W23 (Bird 30677)
+END:VEVENT
+BEGIN:VEVENT
+UID:34686899@classes.lanecc.edu
+SUMMARY:Practice Activity 5 is due
+DESCRIPTION:PRACTICE ACTIVITY \n\nUse SQL Server 2016 or above (2019) Manag
+	ement Studio for this activity. If you have not already set up SQL Server o
+	n your own laptop\, use one of the computers in the lab. \n\nAfter completi
+	ng the activities make you save your files for reference AND take screensho
+	ts (where directed)\, place them in a word document and submit document in 
+	Moodle. \n\nComplete the following:\n\n	* SQL Server Transactions and Locki
+	ng\, Murach Chapter 16 Exercises 1-2 Pg. 535. Take a screenshots of both ex
+	ercises\n\n
+	
+CLASS:PUBLIC
+LAST-MODIFIED:20230221T193800Z
+DTSTAMP:20230224T001119Z
+DTSTART:20230224T080000Z
+DTEND:20230224T080000Z
+CATEGORIES:CS 276 W23 (Stewart 31364)
+END:VEVENT
+BEGIN:VEVENT
+UID:34686900@classes.lanecc.edu
+SUMMARY:Lab 5 is due
+DESCRIPTION:INSTRUCTIONS\n\nThere are two parts to the lab. You will need t
+	o complete each section. Create a word document to show your answers (instr
+	uctions are listed below). Save your document with the following naming con
+	vention:\n\n	* Course Number_Lab_LastNameFirstInitial (Example: CS 276_Lab4
+	_Stewartl.docx)\n\nAlong with the word document you will also want to submi
+	t your script file _if_ and _when_ creating SQL statements. The script file
+	 should be done in a text editor (notepad or SQL file). \n\nPART ONE\n\nWor
+	k on creating your database for your term project. Complete the following:\
+	n\n	* Create an ERD \n	* SQL Create Database Statement\n	* SQL Create Table
+	 Statements. Make sure to include any constraints\, primary and foreign key
+	s \n	* SQL Create Insert Statements\n	* SQL Create Indexes\n\n_Paste a scre
+	en print of the ERD and SQL statements in your Word document. Be sure to al
+	so include your script file (.txt) for all of your SQL statements.  _\n\nPA
+	RT TWO\n\n_Murach College Exercises - Chapter 16: How to Manage Transaction
+	s_\n\n1. Write a script that includes two SQL statements coded as a transac
+	tion to delete the row with a student ID of 10 from the Students table. To 
+	do this\, you must first delete all courses for that student from the Stude
+	ntCourses table.\n\nIf these statements execute successfully\, commit the c
+	hanges. Otherwise\, roll back the changes.\n\n_Paste a screen print of the 
+	SQL and the results of their execution in your Word document. Be sure to la
+	bel each screen print with the number of the exercise._\n\n2. Write a scrip
+	t that includes these statements coded as a transaction:\n\n  INSERT Studen
+	ts\n\n  VALUES ('Smith'\, 'John'\, GETDATE()\, NULL)\;\n\n  SET @StudentID 
+	= SYNTAX ERROR: IDENTITY\;</p><p>Â  INSERT StudentCourses</p><p>Â  VALUES (
+	@StudentID\, @CourseID)\;</p><p>Here\, the IDENTITY variable is used to get
+	 the student ID value that’s automatically generated when the first INSERT 
+	statement inserts a student.\n\nIf these statements execute successfully\, 
+	commit the changes. Otherwise\, roll back the changes.\n\n_Paste a screen p
+	rint of the SQL and the results of their execution in your Word document. B
+	e sure to label each screen print with the number of the exercise._\n\n
+	
+CLASS:PUBLIC
+LAST-MODIFIED:20230221T001722Z
+DTSTAMP:20230224T001119Z
+DTSTART:20230226T080000Z
+DTEND:20230226T080000Z
+CATEGORIES:CS 276 W23 (Stewart 31364)
+END:VEVENT
+END:VCALENDAR
