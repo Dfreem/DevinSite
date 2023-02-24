@@ -53,56 +53,52 @@ public static class MoodleWare
     public static async Task<List<Assignment>> GetCalendarAsync(string moodleString)
     {
         // create new HttpClient seperate from the web app's HttpClient.
-        using (var httpClient = new HttpClient())
+        string icsData = await GetCalendarAsStringAsync(moodleString);
+        // Split response string into seperate lines of text.
+        string[] lines = icsData.Split("\r\n");
+
+        // Create assignments list the will hold the assignments and be returned from the method.
+        List<Assignment> assignments = new();
+
+        // search each line in the response.
+        for (int i = 0; i < lines.Length; i++)
         {
-            // user moodle string to GET the students calendar from Moodle, store as a string.
-            var icsData = await httpClient.GetStringAsync(moodleString);
-
-            // Split response string into seperate lines of text.
-            string[] lines = icsData.Split("\r\n");
-
-            // Create assignments list the will hold the assignments and be returned from the method.
-            List<Assignment> assignments = new();
-
-            // search each line in the response.
-            for (int i = 0; i < lines.Length; i++)
+            // if it's not the end of the calendar, parse the assignment.
+            if (!lines[i].Contains("END:VCALENDAR"))
             {
-                // if it's not the end of the calendar, parse the assignment.
-                if (!lines[i].Contains("END:VCALENDAR"))
+                // the matter in which these assignment parts are parsed does matter.
+                // First - DueDate
+                string dt = ParsePart(in lines, AssignmentPart.DueDate, out lines);
+
+                // splits out the time, only uses the date.
+                string date = dt.Split('T')[0];
+
+                // Second - Course Title (Not the Assignment title)
+                var courseTitle = ParsePart(in lines, AssignmentPart.CourseTitle, out lines).Replace(')', ' ').Split('(');
+
+                // Parse the rest of this chunck of the response into an assignment object.
+                Assignment assignment = new()
                 {
-                    // the matter in which these assignment parts are parsed does matter.
-                    // First - DueDate
-                    string dt = ParsePart(in lines, AssignmentPart.DueDate, out lines);
-
-                    // splits out the time, only uses the date.
-                    string date = dt.Split('T')[0];
-
-                    // Second - Course Title (Not the Assignment title)
-                    var courseTitle = ParsePart(in lines, AssignmentPart.CourseTitle, out lines).Replace(')', ' ').Split('(');
-
-                    // Parse the rest of this chunck of the response into an assignment object.
-                    Assignment assignment = new()
-                    {
-                        Title = ParsePart(in lines, AssignmentPart.Title, out lines),
-                        Details = ParsePart(in lines, AssignmentPart.Details, out lines),
-                        DueDate = new DateTime(int.Parse(date[..4]), int.Parse(date[4..6]), int.Parse(date[6..]))
-                    };
-                    // Course Title contains title and instructor.
-                    // Create new Course Object using the Title and instructor.
-                    Course parsedCourse = new()
-                    {
-                        Name = courseTitle[0],
-                        Instructor = courseTitle[1].Split(" ")[0],
-                        Assignments = new()
-                    };
-                    assignment.GetCourse = parsedCourse;
-                    // add this assignment to the list and return.
-                    assignments.Add(assignment);
-                }
+                    Title = ParsePart(in lines, AssignmentPart.Title, out lines),
+                    Details = ParsePart(in lines, AssignmentPart.Details, out lines),
+                    DueDate = new DateTime(int.Parse(date[..4]), int.Parse(date[4..6]), int.Parse(date[6..]))
+                };
+                // Course Title contains title and instructor.
+                // Create new Course Object using the Title and instructor.
+                Course parsedCourse = new()
+                {
+                    Name = courseTitle[0],
+                    Instructor = courseTitle[1].Split(" ")[0],
+                    Assignments = new()
+                };
+                assignment.GetCourse = parsedCourse;
+                // add this assignment to the list and return.
+                assignments.Add(assignment);
             }
-            return assignments;
         }
+        return assignments;
     }
+
     /// <summary>
     /// Parse out the specified portion an <see cref="Assignment"/> from an array containing each line of an icalendar file.
     /// </summary>
@@ -136,26 +132,21 @@ public static class MoodleWare
         linesMinusAssignmentPart = lines;
         return "";
     }
-    public static string AssembleMoodleString(string options, IConfiguration config)
+
+    public static async Task<string> GetCalendarAsStringAsync(string source)
     {
-        return config["Moodle:BASE"] +
-                "userid=" + config["Moodle:UID"] +
-                "&" + config["Moodle:TOKEN"] +
-                config["Moodle:OPTIONS"] + options;
+        try
+        {
+            return await File.ReadAllTextAsync(source);
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Console.WriteLine("not a filepath\n" + e.Message);
+            using (var httpClient = new HttpClient())
+            {
+                // user moodle string to GET the students calendar from Moodle, store as a string.
+                return await httpClient.GetStringAsync(source);
+            }
+        }
     }
-    // TODO move this to home controller
-    //public static List<Assignment>? SearchAssignmentsByDate(DateTime toSearch, List<Assignment> assignments)
-    //{
-    //    assignments.Sort((x, y) => x.DueDate.CompareTo(y.DueDate));
-    //    string moodleString = "";
-    //    if (DateTime.Today < toSearch)
-    //    {
-    //        moodleString += MoodleWare.MoodleOptions.NextWeek;
-    //    }
-    //    else
-    //    {
-    //        moodleString += MoodleWare.MoodleOptions.ThisWeek;
-    //    }
-    //    return assignments.FindAll(a => a.DueDate.Day.Equals(toSearch.Day));
-    //}
 }

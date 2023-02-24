@@ -1,5 +1,11 @@
 
+using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Extensions;
+using AspNetCoreHero.ToastNotification.Notyf;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.SetMinimumLevel(LogLevel.Critical).ClearProviders();
 string connection = builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTION");
 
 // Add services to the container.
@@ -16,7 +22,13 @@ builder.Services.AddIdentity<Student, IdentityRole>(options =>
         //.AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
-
+builder.Services
+    .AddNotyf(config =>
+    {
+        config.DurationInSeconds = 6;
+        config.IsDismissable = true;
+        config.Position = NotyfPosition.TopRight;
+    });
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
@@ -38,6 +50,7 @@ app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseNotyf();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
@@ -53,6 +66,7 @@ using (var scope = app.Services.CreateScope())
     SeedData.Init(services, app.Configuration);
     await SeedRoles.SeedStudentRole(services);
     await SeedRoles.SeedAdminRole(services);
+    
 }
 
 app.Run();

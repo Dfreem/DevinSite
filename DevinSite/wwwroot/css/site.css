@@ -129,10 +129,6 @@ a.navbar-brand {
         color: var(--persian-plum);
     }
 
-/*#endregion*/
-
-/* #region =========== Home =========== */
-
 body {
     color: var(--charcoal);
     background: linear-gradient(35deg, rgba(146, 99, 58,.8) 0% 3%, rgba(234, 239, 189) 10.71%, rgba(144, 190, 109,.8));
@@ -140,7 +136,12 @@ body {
     background-size: cover;
     background-position: center;
     min-height: 100vh;
+    padding-block-end:5em;
 }
+/*#endregion*/
+
+/* #region =========== Home =========== */
+
 
 .assignments {
     max-width:min-content;
