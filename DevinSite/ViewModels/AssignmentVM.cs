@@ -4,25 +4,49 @@ namespace DevinSite.ViewModels;
 public class AssignmentVM
 {
     public string Title { get; set; } = default!;
-    public string? Course { get; set; }
+    public Course GetCourse { get; set; } = default!;
     public string? Details { get; set; }
-    public DateTime DueDate { get; set; }
+    public string Instructor { get; set; } = default!;
+    public DateTime DueDate { get; set; } = default!;
+    public Assignment GetAssignment { get; set; } = default!;
+    public bool IsDone { get; set; } = false;
+
+    public AssignmentVM()
+    {
+        GetAssignment = new()
+        {
+            Title = "default"
+        };
+    }
+
+    public AssignmentVM(Assignment assignment)
+    {
+        if (assignment is not null)
+        {
+            Title = assignment.Title;
+            GetCourse = assignment.GetCourse!;
+            Details = assignment.Details!;
+            DueDate = assignment.DueDate;
+            Instructor = GetCourse.Instructor;
+        }
+
+    }
 
     public static implicit operator Assignment(AssignmentVM vm)
     {
-        Course c = (Course)vm.Course;
         return new Assignment()
         {
             Title = vm.Title,
             Details = vm.Details,
             DueDate = vm.DueDate,
-            GetCourse = c,
+            GetCourse = vm.GetCourse,
+            IsDone = vm.IsDone
         };
     }
 
     public override string ToString()
     {
-        return $"{Title}\n{Course}\n{Details}\n{DueDate}";
+        return $"{Title}\n{GetCourse.Name}\n{Details}\n{DueDate}";
     }
 }
 

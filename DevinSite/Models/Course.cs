@@ -1,5 +1,4 @@
-﻿using System;
-namespace DevinSite.Models;
+﻿namespace DevinSite.Models;
 
 public class Course
 {

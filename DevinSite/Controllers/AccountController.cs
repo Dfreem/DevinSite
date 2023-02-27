@@ -49,10 +49,12 @@ public class AccountController : Controller
             if (result.Succeeded)
             {
                 await _signinManager.SignInAsync(user, isPersistent: false);
+                _toast.Success("Successfuly Registered new user " + user.UserName);
                 return RedirectToAction("Index", "Home");
             }
             else
             {
+                _toast.Error("There was an Error\n" + result.Errors.ToString());
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
@@ -66,6 +68,7 @@ public class AccountController : Controller
     public async Task<IActionResult> LogOutAsync()
     {
         await _signinManager.SignOutAsync();
+        _toast.Success("You are now signed out, Goodbye!");
         return RedirectToAction("Index", "Home");
     }
 
@@ -84,6 +87,7 @@ public class AccountController : Controller
             var result = await _signinManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
+                _toast.Success("Successfully Logged in as " + model.UserName);
                 if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                 { return Redirect(model.ReturnUrl); }
                 else
@@ -91,6 +95,7 @@ public class AccountController : Controller
                     return RedirectToAction("Index", "Home");
                 }
             }
+            _toast.Error("Unable to Sign in\n" + result.ToString());
         }
         ModelState.AddModelError("", "Invalid username/password.");
         return View(model);

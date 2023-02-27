@@ -1,0 +1,24 @@
+﻿
+@model Assignment
+@{
+
+}
+<table class="assignment table table-secondary">
+    <thead>
+        @Model.Title
+
+    </thead>
+    <tr>
+        <th>
+            Due @Model.DueDate
+        </th>
+        <th>
+            @Model.GetCourse!.Instructor's @Model.GetCourse.Name
+
+        </th>
+    </tr>
+    <tr>
+        <td>@Model.Details</td>
+    </tr>
+</table>
+<link rel="stylesheet" href="AssignmentVM.cshtml.css" />
