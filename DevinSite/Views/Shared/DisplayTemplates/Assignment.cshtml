@@ -3,22 +3,32 @@
 @{
 
 }
-<table class="assignment table table-secondary">
-    <thead>
-        @Model.Title
+@if (@Model is not null)
+{
 
-    </thead>
-    <tr>
-        <th>
-            Due @Model.DueDate
-        </th>
-        <th>
-            @Model.GetCourse!.Instructor's @Model.GetCourse.Name
+    <table class="assignment table table-secondary">
+        <thead>
+            @Model.Title
 
-        </th>
-    </tr>
-    <tr>
-        <td>@Model.Details</td>
-    </tr>
-</table>
-<link rel="stylesheet" href="AssignmentVM.cshtml.css" />
+        </thead>
+        <tr>
+            <th>
+                Due @Model.DueDate
+            </th>
+            <th>
+                @Model.GetCourse!.Instructor's @Model.GetCourse.Name
+
+            </th>
+        </tr>
+        <tr>
+            <td>@Model.Details</td>
+            <td>@Model.Notes</td>
+        </tr>
+    </table>
+    <link rel="stylesheet" href="/Assignment.cshtml.css" />
+
+}
+@if (@Model is null)
+{
+    <h3>No Assignments, Please refresh.</h3>
+} 

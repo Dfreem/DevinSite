@@ -32,8 +32,8 @@ public class HomeController : Controller
         _repo = services.GetRequiredService<ISiteRepository>();
         _currentUserName = _signInManager.Context.User.Identity!.Name;
 
-        CurrentUser = _userManager.FindByNameAsync(_currentUserName).Result;
-
+        CurrentUser = _userManager.FindByNameAsync(_currentUserName!).Result!;
+      
         // makes sure the users schedule is up to date.
         UpdateScheduleAsync().Wait();
 
@@ -58,13 +58,18 @@ public class HomeController : Controller
         }
         else
         {
-            userVM.DisplayedAssignment = CurrentUser.GetAssignments.FirstOrDefault();
+            userVM.DisplayedAssignment = _repo.Assignments.FirstOrDefault(new Assignment());
         }
 
         // if search string is not DateTime, use it to search the assignments for the search string.
         return View(userVM);
     }
-
+    /// <summary>
+    /// Select assignment sets the <see cref="UserProfileVM.DisplayedAssignment"/> property.
+    /// This property is the assignment that is displayed in the details section when an assignment is clicked.
+    /// </summary>
+    /// <param name="id">the id of the assignment that was clicked</param>
+    /// <returns>a full refresh of the Index view.</returns>
     public IActionResult SelectAssignment(int id)
     {
         SelectedAssignment = CurrentUser.GetAssignments.Find(a => a.AssignmentId.Equals(id))!;
@@ -88,6 +93,7 @@ public class HomeController : Controller
             // use the MoodleWare class to retrieve and sort the calendar.
             CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
             CurrentUser.LastUpdate = DateTime.Now;
+
             // update the user on the userManager with the new retrieved schedule.
             await _userManager.UpdateAsync(CurrentUser);
         }
@@ -110,6 +116,8 @@ public class HomeController : Controller
     public IActionResult RemoveAllAssignments()
     {
         _repo.DeleteAllStudentAssignments();
+        CurrentUser.GetAssignments.Clear();
+        _userManager.UpdateAsync(CurrentUser);
         return RedirectToAction("Index");
     }
 
@@ -119,7 +127,7 @@ public class HomeController : Controller
         Assignment? toDelete = _repo.Assignments.First(assignment => assignment.AssignmentId.Equals(id));
         if (toDelete is not null)
         {
-            _repo.DeleteAssignmnent(toDelete);
+            _repo.DeleteAssignment(toDelete);
         }
         return RedirectToAction("Index", "Home");
     }
@@ -129,8 +137,12 @@ public class HomeController : Controller
     {
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
         oldAssignment!.Notes = oldAssignment.Notes + "\n" + assignment.Notes;
-        _repo.UpdateAssignmnent(oldAssignment);
+        _repo.UpdateAssignment(oldAssignment);
         return RedirectToAction("Index");
+    }
+    async Task ExtractCourse()
+    {
+        
     }
     #endregion
     [AllowAnonymous]

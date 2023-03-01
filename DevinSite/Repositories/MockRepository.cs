@@ -39,7 +39,7 @@ namespace DevinSite.Repositories
             Assignments = new();
         }
 
-        public void DeleteAssignmnent(Assignment assignment)
+        public void DeleteAssignment(Assignment assignment)
         {
             Assignments.Remove(assignment);
         }
@@ -49,7 +49,7 @@ namespace DevinSite.Repositories
             Courses.Remove(course);
         }
 
-        public void UpdateAssignmnent(Assignment assignment)
+        public void UpdateAssignment(Assignment assignment)
         {
             int index = Assignments.FindIndex(a => a.AssignmentId.Equals(assignment.AssignmentId));
             Assignments[index] = assignment;

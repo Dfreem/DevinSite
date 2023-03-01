@@ -11,14 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevinSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230224005330_az_mysql")]
-    partial class az_mysql
+    [Migration("20230301221357_complex")]
+    partial class complex
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.13")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("DevinSite.Models.Assignment", b =>

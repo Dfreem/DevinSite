@@ -59,13 +59,14 @@ public static class MoodleWare
     /// <returns></returns>
     public static async Task<List<Assignment>> GetCalendarAsync(string moodleString)
     {
-        // create new HttpClient seperate from the web app's HttpClient.
-        string icsData = await GetCalendarAsStringAsync(moodleString);
-        // Split response string into seperate lines of text.
-        string[] lines = icsData.Split("\r\n");
-
         // Create assignments list the will hold the assignments and be returned from the method.
         List<Assignment> assignments = new();
+
+        // create new HttpClient seperate from the web app's HttpClient.
+        string icsData = await GetCalendarAsStringAsync(moodleString);
+
+        // Split response string into seperate lines of text.
+        string[] lines = icsData.Split("\r\n");
 
         // search each line in the response.
         for (int i = 0; i < lines.Length; i++)
@@ -77,7 +78,7 @@ public static class MoodleWare
                 // First - DueDate
                 string dt = ParsePart(in lines, AssignmentPart.DueDate, out lines);
 
-                // splits out the time, only uses the date.
+                // seperate time and date parts
                 var holdDT = dt.Split('T');
                 string date = holdDT[0];
                 string time = holdDT[^1];
@@ -90,7 +91,7 @@ public static class MoodleWare
                 {
                     Title = ParsePart(in lines, AssignmentPart.Title, out lines),
                     Details = ParsePart(in lines, AssignmentPart.Details, out lines),
-                    DueDate = new DateTime(int.Parse(date[..4]), int.Parse(date[4..6]), int.Parse(date[6..]), int.Parse(time[0..2]), 00, 00)
+                    DueDate = new DateTime(int.Parse(date[..4]), int.Parse(date[4..6]), int.Parse(date[6..]), int.Parse(time[0..2]), int.Parse(time[2..4]), 00)
                 };
                 // Course Title contains title and instructor.
                 // Create new Course Object using the Title and instructor.

@@ -2,8 +2,7 @@
 @using DevinSite.Util
 @{
     ViewData["Title"] = "Home";
-    string[] days = CalendarHelpers.GetShortDayStrings();
-    DateTime[] calDates = CalendarHelpers.GetThisWeek();
+    var calDates = CalendarHelpers.GetThisWeek();
 }
 <div class="vstack gap-3 section-b">
     <div class="hstack gap-2">
@@ -18,7 +17,6 @@
             <a class="btn btn-warning rounded" asp-controller="Home" asp-action="RefreshFromMoodle">Update from Moodle</a>
             <div>
                 <div id="calendar-wrap">
-
                     <div class="calendar__date">
                         <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[0].Date" class="calendar__number">Sun</a>
                         <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[1].Date" class="calendar__number">Mon</a>
@@ -49,22 +47,38 @@
             </div>
 
             <div class="assignments container">
-                @foreach (Assignment? assignment in Model.GetAssignments)
+                @if (Model.GetAssignments is not null)
                 {
-                    <div class="assmt-card d-flex">
-                        <div class="assignment-title">@assignment.Title</div>
-                        <!-- <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a> -->
-                        <a asp-action="SelectAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId">
-                            <i class="bi bi-caret-right"></i>
-                        </a>
-                    </div>
+
+                    @foreach (var assignment in Model.GetAssignments)
+                    {
+                        <div class="assmt-card d-flex">
+                            <div class="assignment-title">@assignment.Title</div>
+                            <!-- <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a> -->
+                            <a asp-action="SelectAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId">
+                                <i class="bi bi-caret-right"></i>
+                            </a>
+                        </div>
+                    }
                 }
 
             </div>
         </div>
         <div class="container w-50 h-50 bg-light">
-            
-            @Html.DisplayFor(u => u.DisplayedAssignment)
+            @if (@Model.DisplayedAssignment is not null &&
+                 @Model.DisplayedAssignment.Title is not null)
+            {
+                @Html.DisplayFor(u => u.DisplayedAssignment)
+
+                <form asp-action="UpdateNotes" asp-controller="Assignment">
+                    <input hidden asp-for="DisplayedAssignment!.AssignmentId" value="@Model.DisplayedAssignment!.AssignmentId" />
+                    <input hidden asp-for="DisplayedAssignment!.Title" value="@Model.DisplayedAssignment!.Title" />
+                    <input hidden asp-for="DisplayedAssignment!.Details" value="@Model.DisplayedAssignment!.Details" />
+                    <input hidden asp-for="DisplayedAssignment!.DueDate" value="@Model.DisplayedAssignment!.DueDate" />
+                    <textarea asp-for="DisplayedAssignment!.Notes"></textarea>
+                    <input type="submit" class="btn btn-success rounded" />
+                </form>
+            }
         </div>
     </div>
 </div>

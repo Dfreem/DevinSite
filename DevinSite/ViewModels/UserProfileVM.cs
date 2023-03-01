@@ -30,6 +30,10 @@ public class UserProfileVM
         GetStudent = student;
         GetCourses = student.Courses;
         GetAssignments = student.GetAssignments??new();
+        if (GetAssignments.IsNullOrEmpty())
+        {
+            DisplayedAssignment = new();
+        }
         Id = student.Id;
         Name = student.Name;
         Email = student.Email;

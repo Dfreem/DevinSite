@@ -1,16 +1,14 @@
-﻿
-
-namespace DevinSite.Models;
+﻿namespace DevinSite.Models;
 
 public class Assignment
 {
     public int AssignmentId { get; set; }
-    public string Title { get; set; } = default!;
+    public string Title { get; set; } = "No Title";
     public Course? GetCourse { get; set; }
     public DateTime DueDate { get; set; } = DateTime.Now;
     public string? Details { get; set; }
     public bool IsDone { get; set; } = false;
-    public String Notes { get; set; } = "";
+    public string Notes { get; set; } = "";
 
     public override string ToString()
     {

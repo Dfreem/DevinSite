@@ -46,7 +46,7 @@ public class SiteRepository : ISiteRepository
         await _context.SaveChangesAsync();
     }
 
-    public void DeleteAssignmnent(Assignment assignment)
+    public void DeleteAssignment(Assignment assignment)
     {
         _context.Assignments.Remove(assignment);
         _context.SaveChanges();
@@ -70,7 +70,7 @@ public class SiteRepository : ISiteRepository
         _context.SaveChanges();
     }
 
-    public void UpdateAssignmnent(Assignment assignment)
+    public void UpdateAssignment(Assignment assignment)
     {
         _context.Assignments.Update(assignment);
         _context.SaveChanges();

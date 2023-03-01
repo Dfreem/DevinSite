@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DevinSite.Migrations
 {
-    public partial class az_mysql : Migration
+    /// <inheritdoc />
+    public partial class complex : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
@@ -350,6 +352,7 @@ namespace DevinSite.Migrations
                 column: "GetStudentId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
