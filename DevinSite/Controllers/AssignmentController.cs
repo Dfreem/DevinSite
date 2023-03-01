@@ -24,10 +24,8 @@ public class AssignmentController : Controller
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
         oldAssignment!.Notes = assignment.Notes;
         uvm.DisplayedAssignment = oldAssignment;
-        _repo.UpdateAssignment(oldAssignment);
-        int index = CurrentUser.GetAssignments.IndexOf(oldAssignment);
-        
+        _repo.UpdateAssignment(oldAssignment);        
         _userManager.UpdateAsync(CurrentUser).Wait();
-        return RedirectToAction("SelectAssignment", "Home", oldAssignment.AssignmentId);
+        return RedirectToAction("SelectAssignment", "Home", new { id = oldAssignment.AssignmentId });
     }
 }

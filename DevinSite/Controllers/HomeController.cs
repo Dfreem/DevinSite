@@ -140,10 +140,7 @@ public class HomeController : Controller
         _repo.UpdateAssignment(oldAssignment);
         return RedirectToAction("Index");
     }
-    async Task ExtractCourse()
-    {
-        
-    }
+   
     #endregion
     [AllowAnonymous]
     public IActionResult Privacy()
