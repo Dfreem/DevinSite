@@ -2,7 +2,10 @@
 @using DevinSite.Util
 @{
     ViewData["Title"] = "Home";
-    var calDates = CalendarHelpers.GetThisWeek();
+    DateTime[] calDates = CalendarHelpers.GetThisWeek();
+    Model.DisplayedAssignment ??= new();
+    Model.DisplayedAssignment.GetCourse ??= new();
+    Model.GetAssignments ??= new() { Model.DisplayedAssignment };
 }
 <div class="vstack gap-3 section-b">
     <div class="hstack gap-2">
@@ -31,52 +34,49 @@
             <div id="search-title" class="d-flex">
                 <form class="form-inline" asp-controller="Home" asp-action="Index">
                     Title:
-                    <input type="search" name="searchString" />
-                    <input type="submit" value="filter" class="btn btn-secondary rounded-pill mx-3" />
+                    <input type="search" name="searchString"/>
+                    <input type="submit" value="filter" class="btn btn-secondary rounded-pill mx-3"/>
                 </form>
                 <form class="form-inline" asp-controller="Home" asp-action="Index">
                     <p>
                         Due Date:
-                        <input type="date" name="searchString" />
-                        <input type="submit" value="search" class="btn btn-info rounded-pill mx-3" />
+                        <input type="date" name="searchString"/>
+                        <input type="submit" value="search" class="btn btn-info rounded-pill mx-3"/>
                     </p>
                 </form>
                 <form class="form-inline" asp-controller="Home" asp-action="Index">
-                    <input type="submit" value="Show All" class="btn btn-primary rounded mx-3" />
+                    <input type="submit" value="Show All" class="btn btn-primary rounded mx-3"/>
                 </form>
             </div>
 
             <div class="assignments container">
-                @if (Model.GetAssignments is not null)
-                {
 
-                    @foreach (var assignment in Model.GetAssignments)
-                    {
-                        <div class="assmt-card d-flex">
-                            <div class="assignment-title">@assignment.Title</div>
-                            <!-- <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a> -->
-                            <a asp-action="SelectAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId">
-                                <i class="bi bi-caret-right"></i>
-                            </a>
-                        </div>
-                    }
+                @foreach (var assignment in Model.GetAssignments)
+                {
+                    <div class="assmt-card d-flex">
+                        <div class="assignment-title">@assignment.Title</div>
+                        <!-- <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a> -->
+                        <a asp-action="SelectAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId">
+                            <i class="bi bi-caret-right"></i>
+                        </a>
+                    </div>
                 }
+
 
             </div>
         </div>
         <div class="container w-50 h-50 bg-light">
-            @if (@Model.DisplayedAssignment is not null &&
-                 @Model.DisplayedAssignment.Title is not null)
+            @if (@Model.DisplayedAssignment is not null)
             {
                 @Html.DisplayFor(u => u.DisplayedAssignment)
 
                 <form asp-action="UpdateNotes" asp-controller="Assignment">
-                    <input hidden asp-for="DisplayedAssignment!.AssignmentId" value="@Model.DisplayedAssignment!.AssignmentId" />
-                    <input hidden asp-for="DisplayedAssignment!.Title" value="@Model.DisplayedAssignment!.Title" />
-                    <input hidden asp-for="DisplayedAssignment!.Details" value="@Model.DisplayedAssignment!.Details" />
-                    <input hidden asp-for="DisplayedAssignment!.DueDate" value="@Model.DisplayedAssignment!.DueDate" />
+                    <input hidden asp-for="DisplayedAssignment!.AssignmentId" value="@Model.DisplayedAssignment!.AssignmentId"/>
+                    <input hidden asp-for="DisplayedAssignment!.Title" value="@Model.DisplayedAssignment!.Title"/>
+                    <input hidden asp-for="DisplayedAssignment!.Details" value="@Model.DisplayedAssignment!.Details"/>
+                    <input hidden asp-for="DisplayedAssignment!.DueDate" value="@Model.DisplayedAssignment!.DueDate"/>
                     <textarea asp-for="DisplayedAssignment!.Notes"></textarea>
-                    <input type="submit" class="btn btn-success rounded" />
+                    <input type="submit" class="btn btn-success rounded"/>
                 </form>
             }
         </div>

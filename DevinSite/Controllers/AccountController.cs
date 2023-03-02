@@ -136,24 +136,37 @@ public class AccountController : Controller
     /// </summary>
     /// <param name = "UserProfileVM" > the viewmodel used in the UserProfile view</param>
     [HttpPost]
-    public IActionResult SetMoodleString(UserProfileVM uvm)
+    public async Task<IActionResult> SetMoodleString(UserProfileVM uvm)
     {
+
         // Remove the common parts of the URL.
-        int theSpot = uvm.NewMoodle.IndexOf("preset_what");
-        string newMoodle = uvm.NewMoodle[..theSpot];
+        //int theSpot = uvm.NewMoodle.IndexOf("preset_what");
+        //string newMoodle = uvm.NewMoodle[..theSpot];
 
-        // The important information all end with a & symbol
-        string[] parts = newMoodle.Split('&')[0..2];
-        foreach (string item in parts)
-        {
-            // the user data in the url are labeled and then dilimited with a = symbol
-            // like this authtoken=23871y4691238479187
-            string[] data = item.Split('=');
+        //// The important information all end with a & symbol
+        //string[] parts = newMoodle.Split('&')[0..2];
+        //foreach (string item in parts)
+        //{
+        //    // the user data in the url are labeled and then dilimited with a = symbol
+        //    // like this authtoken=23871y4691238479187
+        //    string[] data = item.Split('=');
 
-            // the environment variables we want are labeled with these in appsettings
-            string selector = data[0].Contains("userid") ? "Moodle:UID" : "Moodle:Token";
-            _config[selector] += data[1];
-        }
+        //    // the environment variables we want are labeled with these in appsettings
+        //    string selector = data[0].Contains("userid") ? "Moodle:UID" : "Moodle:Token";
+        //    _config[selector] += data[1];
+        //}
+
+        // for now, just store the entire moodle string for a user in the database.
+        string userName = _signinManager.Context.User.Identity!.Name!;
+        var toUpdate = await _userManager.FindByNameAsync(userName);
+        toUpdate!.MoodleString = uvm.NewMoodle;
+        toUpdate!.MoodleIsSet = true;
+        var result = await _userManager.UpdateAsync(toUpdate!);
+
+        if (result.Succeeded) _toast.Success("successfully set your connection to Moodle");
+
+        else { _toast.Warning("moodle connection was not set." + result.Errors.ToString()); }
+
         return RedirectToAction(nameof(Index));
     }
 

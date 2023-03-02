@@ -60,3 +60,4 @@ global using NodaTime.Extensions;
 // TODO format assignment partial
 // TODO replace delete trash can with done checkbox
 // TODO change selected assignment into partial
+// TODO Test no assignments

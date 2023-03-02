@@ -56,11 +56,7 @@ public class HomeController : Controller
         {
             userVM.DisplayedAssignment = SelectedAssignment;
         }
-        else
-        {
-            userVM.DisplayedAssignment = _repo.Assignments.FirstOrDefault(new Assignment());
-        }
-
+       
         // if search string is not DateTime, use it to search the assignments for the search string.
         return View(userVM);
     }
@@ -88,7 +84,7 @@ public class HomeController : Controller
     public async Task UpdateScheduleAsync()
     {
         // check users LastUpdate property to see if the last update is more than 3 days ago.
-        if (CurrentUser.LastUpdate.AddDays(3) < DateTime.Now)
+        if (CurrentUser.LastUpdate.AddDays(3) < DateTime.Now && CurrentUser.MoodleIsSet)
         {
             // use the MoodleWare class to retrieve and sort the calendar.
             CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
