@@ -8,7 +8,7 @@ public class Assignment
     public DateTime DueDate { get; set; } = DateTime.Now;
     public string? Details { get; set; }
     public bool IsDone { get; set; } = false;
-    public List<Note> Notes { get; } = new();
+    public Note Notes { get; set; } = new();
 
     public override string ToString()
     {

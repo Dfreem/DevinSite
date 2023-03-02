@@ -1,4 +1,6 @@
 ﻿
+using System.Text.RegularExpressions;
+
 namespace DevinSite.Util;
 
 public static class MoodleWare
@@ -106,6 +108,14 @@ public static class MoodleWare
                 assignments.Add(assignment);
             }
         }
+        int index = assignments.Count - 1;
+        assignments.RemoveAt(index);
+        foreach (var item in assignments)
+        {
+            Console.WriteLine(item.Details);
+            item.Details = Regex.Replace(item.Details!, @"\r\n?|\n|\r|\\n", HtmlString.NewLine.ToString());
+        }
+
         return assignments;
     }
 

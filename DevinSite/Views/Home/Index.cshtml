@@ -68,19 +68,18 @@
         </div>
         <div class="container w-50 h-50 bg-light">
             @if (@Model.DisplayedAssignment is not null)
-            {
-                Model.DisplayedAssignment.Notes.Add(new());
-                int endIndex = Model.DisplayedAssignment.Notes.Count;
-                @Html.DisplayFor(u => u.DisplayedAssignment)
-
+                {
+                    @Html.DisplayFor(u => u.DisplayedAssignment)
+   
                 <form asp-action="UpdateNotes" asp-controller="Assignment">
                     <input hidden asp-for="DisplayedAssignment!.AssignmentId" value="@Model.DisplayedAssignment!.AssignmentId" />
                     <input hidden asp-for="DisplayedAssignment!.Title" value="@Model.DisplayedAssignment!.Title" />
                     <input hidden asp-for="DisplayedAssignment!.Details" value="@Model.DisplayedAssignment!.Details" />
                     <input hidden asp-for="DisplayedAssignment!.DueDate" value="@Model.DisplayedAssignment!.DueDate" />
-                    <textarea asp-for="DisplayedAssignment!.Notes[endIndex]"></textarea>
+                    <textarea asp-for="DisplayedAssignment!.Notes.Body"></textarea>
                     <input type="submit" class="btn btn-success rounded" />
                 </form>
+                <a asp-action="DeleteNotes" asp-controller="Assignment" asp-route-id="@Model.DisplayedAssignment.Notes.NoteId"><i class="bi bi-trash"></i></a>
             }
         </div>
     </div>

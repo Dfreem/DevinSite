@@ -22,10 +22,21 @@ public class AssignmentController : Controller
     {
         var assignment = uvm.DisplayedAssignment!;
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
-        oldAssignment!.Notes.AddRange(assignment.Notes);
+        oldAssignment!.Notes.Body += "\n" + assignment.Notes.Body;
         uvm.DisplayedAssignment = oldAssignment;
-        _repo.UpdateAssignment(oldAssignment);        
+        _repo.UpdateAssignment(oldAssignment);
         _userManager.UpdateAsync(CurrentUser).Wait();
         return RedirectToAction("SelectAssignment", "Home", new { id = oldAssignment.AssignmentId });
+    }
+
+    public IActionResult DeleteNotes(int id)
+    {
+        var assignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(id))!;
+        if (assignment is not null)
+        {
+            _repo.DeleteNotes(assignment.Notes);
+        }
+        return RedirectToAction("SelectAssignment", "Home", new { id = assignment!.AssignmentId });
+
     }
 }

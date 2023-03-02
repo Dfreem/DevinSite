@@ -43,6 +43,7 @@ public class HomeController : Controller
     {
         // encapsulate user in ViewModel
         UserProfileVM userVM = new(CurrentUser);
+        //userVM = InitNewNote(userVM);
         DateTime searchDate;
 
         // try parse search string into DateTime, if DateTime, use to search due date.
@@ -56,10 +57,18 @@ public class HomeController : Controller
         {
             userVM.DisplayedAssignment = SelectedAssignment;
         }
-       
         // if search string is not DateTime, use it to search the assignments for the search string.
         return View(userVM);
     }
+
+    //public UserProfileVM InitNewNote(UserProfileVM userVM)
+    //{
+    //    userVM.DisplayedAssignment ??= new();
+    //    userVM.DisplayedAssignment.GetCourse ??= new();
+    //    userVM.GetAssignments ??= new() { userVM.DisplayedAssignment };
+    //    return userVM;
+    //}
+
     /// <summary>
     /// Select assignment sets the <see cref="UserProfileVM.DisplayedAssignment"/> property.
     /// This property is the assignment that is displayed in the details section when an assignment is clicked.
@@ -132,7 +141,7 @@ public class HomeController : Controller
     public IActionResult UpdateAssignment(Assignment assignment)
     {
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
-        oldAssignment!.Notes.AddRange(assignment.Notes);
+        oldAssignment!.Notes.Body += HtmlString.NewLine + assignment.Notes.Body;
         _repo.UpdateAssignment(oldAssignment);
         return RedirectToAction("Index");
     }

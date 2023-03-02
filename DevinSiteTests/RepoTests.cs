@@ -101,7 +101,7 @@ public class RepoTests
         Assignment toDelete = Repo.Assignments[0];
 
         // Act
-        Repo.DeleteAssignmnent(toDelete);
+        Repo.DeleteAssignment(toDelete);
         await Task.CompletedTask;
 
         // Assert
@@ -131,7 +131,7 @@ public class RepoTests
         var expectedCount = Repo.Assignments.Count - 1;
 
         // Act
-        Repo.DeleteAssignmnent(assignmentToDelete);
+        Repo.DeleteAssignment(assignmentToDelete!);
         var assignmentsAfterDelete = Repo.Assignments;
 
         // Assert

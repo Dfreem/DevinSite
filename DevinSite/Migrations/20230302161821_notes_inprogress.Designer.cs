@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevinSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230301221357_complex")]
-    partial class complex
+    [Migration("20230302161821_notes_inprogress")]
+    partial class notes_inprogress
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,10 +39,6 @@ namespace DevinSite.Migrations
 
                     b.Property<bool>("IsDone")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("StudentId")
                         .HasColumnType("varchar(255)");
@@ -90,23 +86,55 @@ namespace DevinSite.Migrations
 
             modelBuilder.Entity("DevinSite.Models.Enrollment", b =>
                 {
-                    b.Property<int>("EnrollmentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CourseId")
+                    b.Property<int>("EnrollmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GetCourseCourseID")
                         .HasColumnType("int");
 
                     b.Property<string>("GetStudentId")
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("EnrollmentId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("GetCourseCourseID");
 
                     b.HasIndex("GetStudentId");
 
                     b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("DevinSite.Models.Note", b =>
+                {
+                    b.Property<int>("NoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("GetStudentId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NoteId");
+
+                    b.HasIndex("AssignmentId")
+                        .IsUnique();
+
+                    b.HasIndex("GetStudentId");
+
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("DevinSite.Models.Student", b =>
@@ -331,7 +359,7 @@ namespace DevinSite.Migrations
             modelBuilder.Entity("DevinSite.Models.Course", b =>
                 {
                     b.HasOne("DevinSite.Models.Student", null)
-                        .WithMany("Courses")
+                        .WithMany("GetCourses")
                         .HasForeignKey("StudentId");
                 });
 
@@ -339,7 +367,7 @@ namespace DevinSite.Migrations
                 {
                     b.HasOne("DevinSite.Models.Course", "GetCourse")
                         .WithMany("GetEnrollments")
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("GetCourseCourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -348,6 +376,23 @@ namespace DevinSite.Migrations
                         .HasForeignKey("GetStudentId");
 
                     b.Navigation("GetCourse");
+
+                    b.Navigation("GetStudent");
+                });
+
+            modelBuilder.Entity("DevinSite.Models.Note", b =>
+                {
+                    b.HasOne("DevinSite.Models.Assignment", "GetAssignment")
+                        .WithOne("Notes")
+                        .HasForeignKey("DevinSite.Models.Note", "AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DevinSite.Models.Student", "GetStudent")
+                        .WithMany()
+                        .HasForeignKey("GetStudentId");
+
+                    b.Navigation("GetAssignment");
 
                     b.Navigation("GetStudent");
                 });
@@ -403,6 +448,12 @@ namespace DevinSite.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DevinSite.Models.Assignment", b =>
+                {
+                    b.Navigation("Notes")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DevinSite.Models.Course", b =>
                 {
                     b.Navigation("Assignments");
@@ -412,9 +463,9 @@ namespace DevinSite.Migrations
 
             modelBuilder.Entity("DevinSite.Models.Student", b =>
                 {
-                    b.Navigation("Courses");
-
                     b.Navigation("GetAssignments");
+
+                    b.Navigation("GetCourses");
                 });
 #pragma warning restore 612, 618
         }
