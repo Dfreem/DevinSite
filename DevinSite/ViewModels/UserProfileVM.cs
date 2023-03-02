@@ -18,6 +18,8 @@ public class UserProfileVM
     public string Email { get; set; } = default!;
     public string UserName { get; set; } = default!;
     public DateTime LastUpdate { get; set; } = default!;
+    public Assignment? DisplayedAssignment { get; set; }
+
     public UserProfileVM()
     {
 
@@ -27,13 +29,12 @@ public class UserProfileVM
     {
         GetStudent = student;
         GetCourses = student.Courses;
-        GetAssignments = student.GetAssignments;
+        GetAssignments = student.GetAssignments??new();
         Id = student.Id;
         Name = student.Name;
         Email = student.Email;
         UserName = student.UserName;
         LastUpdate = student.LastUpdate;
-        
     }
 
     public static explicit operator Student(UserProfileVM upv)

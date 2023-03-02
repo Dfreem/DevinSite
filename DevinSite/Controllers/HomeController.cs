@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿
 
 namespace DevinSite.Controllers;
 
@@ -6,15 +6,19 @@ namespace DevinSite.Controllers;
 [Authorize]
 public class HomeController : Controller
 {
-
+    #region Fields & Properties
     private readonly IServiceProvider _services;
     private readonly ISiteRepository _repo;
     private readonly IConfiguration _config;
     private readonly SignInManager<Student> _signInManager;
     private readonly UserManager<Student> _userManager;
-    private Student CurrentUser { get; }
+    private string? _currentUserName;
 
-    public string? _currentUserName;
+
+    Student CurrentUser { get; }
+    Assignment? SelectedAssignment { get; set; }
+
+    #endregion
 
     public HomeController(IServiceProvider services, IConfiguration configuration)
     {
@@ -27,33 +31,49 @@ public class HomeController : Controller
         _userManager = _services.GetRequiredService<UserManager<Student>>();
         _repo = services.GetRequiredService<ISiteRepository>();
         _currentUserName = _signInManager.Context.User.Identity!.Name;
-        CurrentUser = _userManager.FindByNameAsync(_currentUserName).Result;
-    }
 
+        CurrentUser = _userManager.FindByNameAsync(_currentUserName).Result;
+
+        // makes sure the users schedule is up to date.
+        UpdateScheduleAsync().Wait();
+
+    }
+    #region Views & Partial Views
     public IActionResult Index(string searchString)
     {
+        // encapsulate user in ViewModel
         UserProfileVM userVM = new(CurrentUser);
-        //UpdateScheduleAsync().Wait();
+        DateTime searchDate;
 
-        // if navigated to by a search, deteremine if search string is date.
-        bool didParse = DateTime.TryParse(searchString, out DateTime searchDate);
+        // try parse search string into DateTime, if DateTime, use to search due date.
+        bool didParse = DateTime.TryParse(searchString, out searchDate);
+
         if (didParse)
         {
-            // if date -> search by due date
-            userVM.GetAssignments = CurrentUser.GetAssignments
-                .FindAll(a => a.DueDate.Equals(searchDate));
+            userVM.GetAssignments.FindAll(a => a.DueDate.Day.Equals(searchDate.Day));
         }
-        else if (searchString is not null)
+        if (SelectedAssignment is not null)
         {
-            // if not date -> search by title
-            userVM.GetAssignments = CurrentUser.GetAssignments
-                .FindAll(a => a.Title.Contains(searchString) ||
-                a.Details!.Contains(searchString) ||
-                a.GetCourse!.Equals(searchString));
+            userVM.DisplayedAssignment = SelectedAssignment;
         }
+        else
+        {
+            userVM.DisplayedAssignment = CurrentUser.GetAssignments.FirstOrDefault();
+        }
+
+        // if search string is not DateTime, use it to search the assignments for the search string.
         return View(userVM);
     }
 
+    public IActionResult SelectAssignment(int id)
+    {
+        SelectedAssignment = CurrentUser.GetAssignments.Find(a => a.AssignmentId.Equals(id))!;
+        UserProfileVM userProfile = new(CurrentUser) { DisplayedAssignment = SelectedAssignment };
+        return View("Index", userProfile);
+    }
+
+    #endregion
+    #region Non-view Controller Methods
     /// <summary>
     /// Update Schedule will check when the currently logged in user was last updated.
     /// If it was more than 3 days ago, the users assignments are deleted from the DB and
@@ -63,7 +83,7 @@ public class HomeController : Controller
     public async Task UpdateScheduleAsync()
     {
         // check users LastUpdate property to see if the last update is more than 3 days ago.
-        if (CurrentUser.LastUpdate.AddDays(3).Day < DateTime.Now.Day)
+        if (CurrentUser.LastUpdate.AddDays(3) < DateTime.Now)
         {
             // use the MoodleWare class to retrieve and sort the calendar.
             CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
@@ -105,29 +125,14 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateAssignment(Assignment assignment)
+    public IActionResult UpdateAssignment(Assignment assignment)
     {
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
         oldAssignment!.Notes = oldAssignment.Notes + "\n" + assignment.Notes;
         _repo.UpdateAssignmnent(oldAssignment);
         return RedirectToAction("Index");
     }
-
-    //public static List<Assignment>? SearchAssignmentsByDate(DateTime toSearch, List<Assignment> assignments)
-    //{
-    //assignments.Sort((x, y) => x.DueDate.CompareTo(y.DueDate));
-    //    string moodleString = "";
-    //    if (DateTime.Today < toSearch)
-    //    {
-    //        moodleString += MoodleWare.MoodleOptions.NextWeek;
-    //    }
-    //    else
-    //    {
-    //        moodleString += MoodleWare.MoodleOptions.ThisWeek;
-    //    }
-    //    return assignments.FindAll(a => a.DueDate.Day.Equals(toSearch.Day));
-    //}
-
+    #endregion
     [AllowAnonymous]
     public IActionResult Privacy()
     {
@@ -140,4 +145,3 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
-

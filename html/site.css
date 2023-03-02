@@ -1,35 +1,32 @@
 ﻿@charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Skranji:wght@400;700&display=swap?family=PT+Sans:wght@400;700&display=swap&family=Dosis:wght@500;700');
-
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Skranji:wght@400;700&display=swap');
 /*
     font-family: 'Fredoka One', cursive;
     font-family: 'Skranji', cursive;
-    font-family: 'PT Sans', sans-serif;
-    font-family: 'Dosis', sans-serif;
 */
 
 /*#region ================ colors =============*/
 :root {
-    --lapis-lazuli: hsla(197, 93%, 29%, 1);
-    --teal: hsla(187, 97%, 29%, 1);
-    --persian-green: hsla(174, 100%, 33%, 1);
-    --mint: hsla(167, 98%, 39%, 1);
-    --cream: hsla(63, 69%, 85%, 1);
-    --viridian: hsla(154, 15%, 49%, 1);
-    --cambridge-blue: hsla(147, 21%, 70%, 1);
-    --mint-green: hsla(167, 29%, 85%, 1);
-    --azure-web: hsla(180, 31%, 94%, 1);
-    --mint-cream: hsla(133, 100%, 98%, 1);
-    --safety-orange: #ff7b00ff;
-    --dark-orange-web: #ff8800ff;
-    --princeton-orange: #ff9500ff;
-    --orange-peel: #ffa200ff;
-    --orange-web: #ffaa00ff;
-    --selective-yellow: #ffb700ff;
-    --mikado-yellow: #ffc300ff;
-    --jonquil: #ffd000ff;
-    --school-bus-yellow: #ffdd00ff;
-    --canary: #ffea00ff;
+    --hunter-green: #386641ff;
+    --may-green: #6a994eff;
+    --android-green: #a7c957ff;
+    --eggshell: #f2e8cfff;
+    --bittersweet-shimmer: #bc4749ff;
+    --skobeloff: #006466ff;
+    --midnight-green-eagle-green: #065a60ff;
+    --midnight-green-eagle-green-2: #0b525bff;
+    --midnight-green-eagle-green-3: #144552ff;
+    --charcoal: #1b3a4bff;
+    --prussian-blue: #212f45ff;
+    --space-cadet: #272640ff;
+    --dark-purple: #312244ff;
+    --dark-purple-2: #3e1f47ff;
+    --palatinate-purple: #4d194dff;
+    --persian-plum: #6f1d1bff;
+    --camel: #bb9457ff;
+    --bistre: #432818ff;
+    --windsor-tan: #99582aff;
+    --banana-mania: #ffe6a7ff;
 }
 /*#endregion*/
 /*#region ======== Shared ========*/
@@ -39,14 +36,14 @@ label {
 }
 
 a:any-link {
-    color: var(--viridian);
+    color: var(--prussian-blue);
     font-family: 'Fredoka One', cursive;
     text-decoration: none;
 }
 
     a:any-link:hover {
-        text-shadow: 2px 2px 2px var(--persian-green);
-        color: var(--cambridge-blue);
+        text-shadow: 2px 2px 2px var(--bittersweet-shimmer);
+        color: var(--midnight-green-eagle-green);
     }
 
 header {
@@ -54,30 +51,32 @@ header {
     background-position: 100% 0;
     background-repeat: no-repeat;
     background-size: 500px 90px;
-    background-color: #264653;
-    color: var(--teal);
+    background-color: #98f5e177;
+    color: var(--may-green);
     padding: .5em;
     position: center;
-    border-bottom: 1px #3d405b solid;
+    border-bottom: 1px var(--space-cadet) solid;
 }
 
 a.navbar-brand {
-    color: #FF7B00;
-    font-family: 'PT Sans', sans-serif;
+    color: var(--camel);
+    text-shadow: 4px 4px 4px var(--hunter-green);
+    font-family: 'Skranji', cursive;
     margin-inline-start: 2em;
+    /*    text-anchor: middle;*/
 }
 
 .cal-icon {
-    color: #f48c06;
+    color: var(--maize-crayola);
     margin-inline: 2em;
-    text-shadow: 4px 4px 4px #284b63;
+    text-shadow: 4px 4px 4px var(--luxury-red);
 }
 
 .btn-primary {
-    background-color: var(--cambridge-blue);
-    border-color: black;
-    color: #5c8001;
-    font-family: 'Dosis', sans-serif;
+    background-color: var(--banana-mania);
+    border-color: var(--midnight-green-eagle-green);
+    color: var(--dark-purple);
+    font-family: 'Futura', 'Segoe UI', sans-serif;
     border-radius: 10px;
 }
 
@@ -99,11 +98,11 @@ a.navbar-brand {
 }*/
 
 .border-top {
-    border-top: 1px solid var(--mint-cream);
+    border-top: 1px solid var(--hunter-green);
 }
 
 .border-bottom {
-    border-bottom: 1px solid var(--mint-cream);
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
@@ -111,7 +110,7 @@ a.navbar-brand {
 }
 
 .footer {
-    background-color: #264653;
+    background-color: var(--hunter-green);
     color: var(--eggshell);
     position: fixed;
     bottom: 0;
@@ -131,69 +130,34 @@ a.navbar-brand {
     }
 
 body {
-    background-color: lightgray;
+    color: var(--charcoal);
+    background: linear-gradient(35deg, rgba(146, 99, 58,.8) 0% 3%, rgba(234, 239, 189) 10.71%, rgba(144, 190, 109,.8));
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     min-height: 100vh;
-    padding-block-end: 5em;
-    color: indigo;
+    padding-block-end:5em;
 }
 /*#endregion*/
 
 /* #region =========== Home =========== */
 
-/*.assignments {
-    max-width: fit-content;
-    min-width: 50%;
-    min-height: 20em;
-    max-height: 30em;
-    background-color: cornflowerblue;
-    margin: auto;
-    box-sizing: border-box;
-    padding: 1em;
-    overflow-y:scroll;
-}*/
 
-.assmt-card {
-    min-height: fit-content;
-    max-height: 150px;
-    background-color: mintcream;
-    outline: 2px solid var(--teal);
-    margin-block: 1em;
-    border-radius: .5em;
-    max-width: 20em;
-    overflow-x: hidden;
-    min-width: 20em;
-}
-
-.assignment-title {
-    font-family: 'Dosis', sans-serif;
-    margin-inline:auto;
-}
-
-.details-arrow {
-    font-size: 3em;
-    position: relative;
-    margin-inline-start: auto;
-}
 
 /*#endregion*/
 /*#region =========== Calendar =========== */
 
 #calendar-wrap {
-    background-color: var(--mint-cream);
+    background-color: var(--android-green);
     border-radius: 1em;
-    outline: 2px solid olivedrab;
+    outline: 2px solid var(--bistre);
     margin-block: 1em;
-    min-height: min-content;
-    max-height: fit-content;
 }
 
 .calendar {
     /*    top: 20em;
     right: 20em;*/
-    background-color: darkorange;
+    background-color: var(--df-secondary-bg);
     box-sizing: border-box;
     box-shadow: 1px 1px 15px var(--df-secondary-text);
     border-radius: 8px;
@@ -202,7 +166,7 @@ body {
 }
 
 .calendar__date {
-    padding: .5em;
+    padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
     grid-gap: 10px;
@@ -217,7 +181,7 @@ body {
 }
 
     .calendar__number:nth-child(6n + 1) {
-        color: var(--teal);
+        color: #ff685d;
         font-weight: 700;
     }
 
@@ -226,15 +190,19 @@ body {
         color: #fff !important;
         font-weight: 700;
         cursor: pointer;
-        border-radius:.2em;
     }
+
+.calendar-container {
+    min-height: 100px;
+    max-height: 100px;
+}
 
 /*#endregion*/
 
 /*.open-button {
     position: absolute;
     left: 2em;*/
-/*    display:inline;*/
+    /*    display:inline;*/
 /*}*/
 
 #search-title {

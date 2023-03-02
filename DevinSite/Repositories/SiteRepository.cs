@@ -16,9 +16,10 @@ public class SiteRepository : ISiteRepository
         Courses = _context.Courses.ToList();
 
         // get all the assignments related to the current students courses
+        // and that have not been marked as complete.
         Assignments = _context.Assignments
             .Include(a => a.GetCourse)
-            .Where(a => Courses.Contains(a.GetCourse!))
+            .Where(a => Courses.Contains(a.GetCourse!) && !a.IsDone)
             .ToList();
         Students = _context.Users.ToList<Student>();
         Enrollments = _context.Enrollments

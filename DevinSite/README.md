@@ -23,11 +23,6 @@ The app uses a URL obtained from a students personal account on their Moodle.com
    <br/>
 6. push "Get Calendar URL"
    <br/>
-7. A URL is generated and displayed at the bottom of the screen, copy that and insert the uid and authtoken portions into the `appsettings.json` file you copied.
+7. A URL is generated and displayed at the bottom of the screen, copy that and paste into form on the Account View.
    <br/>
 
-
-> **Don't Forget** to run
-> `$ dotnet ef database update`
-> OR
-> `PM> Update-Database`

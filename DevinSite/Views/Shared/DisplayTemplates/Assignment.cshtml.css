@@ -1,0 +1,28 @@
+﻿/*#region ================ colors =============*/
+:root {
+    --lapis-lazuli: hsla(197, 93%, 29%, 1);
+    --teal: hsla(187, 97%, 29%, 1);
+    --persian-green: hsla(174, 100%, 33%, 1);
+    --mint: hsla(167, 98%, 39%, 1);
+    --cream: hsla(63, 69%, 85%, 1);
+    --viridian: hsla(154, 15%, 49%, 1);
+    --cambridge-blue: hsla(147, 21%, 70%, 1);
+    --mint-green: hsla(167, 29%, 85%, 1);
+    --azure-web: hsla(180, 31%, 94%, 1);
+    --mint-cream: hsla(133, 100%, 98%, 1);
+    --safety-orange: #ff7b00ff;
+    --dark-orange-web: #ff8800ff;
+    --princeton-orange: #ff9500ff;
+    --orange-peel: #ffa200ff;
+    --orange-web: #ffaa00ff;
+    --selective-yellow: #ffb700ff;
+    --mikado-yellow: #ffc300ff;
+    --jonquil: #ffd000ff;
+    --school-bus-yellow: #ffdd00ff;
+    --canary: #ffea00ff;
+}
+/*#endregion*/
+table .assignment {
+    background-color: var(--lapis-lazuli); 
+}
+

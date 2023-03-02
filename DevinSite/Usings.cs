@@ -42,6 +42,7 @@ global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.Identity.Client.Extensions.Msal;
+global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 
@@ -49,8 +50,13 @@ global using NodaTime.Extensions;
 // ========== Home ==========
 // TODO link course buttons and use course names for values
 // TODO this week / Next week buttons
-// TODO User Profile page functionality: change user info, submit button for changing password.
+// TODO Format User Profile Page.
 // TODO Note Pad
 // TODO Add Course parsing to MoodleWare
 // TODO Fix search by date
 // TODO fix size of input for notes
+// TODO Classes list
+// TODO style assignments
+// TODO format assignment partial
+// TODO replace delete trash can with done checkbox
+// TODO change selected assignment into partial
