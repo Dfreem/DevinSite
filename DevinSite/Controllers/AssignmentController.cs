@@ -22,7 +22,7 @@ public class AssignmentController : Controller
     {
         var assignment = uvm.DisplayedAssignment!;
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
-        oldAssignment!.Notes = assignment.Notes;
+        oldAssignment!.Notes.AddRange(assignment.Notes);
         uvm.DisplayedAssignment = oldAssignment;
         _repo.UpdateAssignment(oldAssignment);        
         _userManager.UpdateAsync(CurrentUser).Wait();

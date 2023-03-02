@@ -28,7 +28,7 @@ public class UserProfileVM
     public UserProfileVM(Student student)
     {
         GetStudent = student;
-        GetCourses = student.Courses;
+        GetCourses = student.GetCourses;
         GetAssignments = student.GetAssignments??new();
         if (GetAssignments.IsNullOrEmpty())
         {

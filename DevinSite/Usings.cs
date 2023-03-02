@@ -52,12 +52,12 @@ global using NodaTime.Extensions;
 // TODO this week / Next week buttons
 // TODO Format User Profile Page.
 // TODO Note Pad
-// TODO Add Course parsing to MoodleWare
+// TODO Finish Course parsing to MoodleWare (meeting times)
 // TODO Fix search by date
-// TODO fix size of input for notes
 // TODO Classes list
 // TODO style assignments
 // TODO format assignment partial
 // TODO replace delete trash can with done checkbox
 // TODO change selected assignment into partial
 // TODO Test no assignments
+// TODO Roles and Admin are

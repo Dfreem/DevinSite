@@ -132,7 +132,7 @@ public class HomeController : Controller
     public IActionResult UpdateAssignment(Assignment assignment)
     {
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
-        oldAssignment!.Notes = oldAssignment.Notes + "\n" + assignment.Notes;
+        oldAssignment!.Notes.AddRange(assignment.Notes);
         _repo.UpdateAssignment(oldAssignment);
         return RedirectToAction("Index");
     }

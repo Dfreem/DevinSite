@@ -22,7 +22,11 @@
         </tr>
         <tr>
             <td>@Model.Details</td>
-            <td>@Model.Notes</td>
+            @foreach (var note in Model.Notes)
+            {
+                <td>@note.Body</td>
+
+            }
         </tr>
     </table>
     <link rel="stylesheet" href="/Assignment.cshtml.css" />

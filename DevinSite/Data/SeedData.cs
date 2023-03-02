@@ -59,10 +59,10 @@ public static class SeedData
 
     public static async void SeedCourses(UserManager<Student> manager)
     {
-        Student currentUser = await manager.FindByNameAsync("dfreem987");
-        foreach (var assignment in currentUser.GetAssignments)
+        Student? currentUser = await manager.FindByNameAsync("dfreem987");
+        foreach (var assignment in currentUser!.GetAssignments)
         {
-            currentUser.Courses.Add(assignment.GetCourse!);
+            currentUser.GetCourses.Add(assignment.GetCourse!);
         }
         await manager.UpdateAsync(currentUser);
     }
@@ -73,12 +73,11 @@ public static class SeedData
         var userManager = services.GetRequiredService<UserManager<Student>>();
         foreach (Student student in userManager.Users)
         {
-            foreach (var course in student.Courses)
+            foreach (var course in student.GetCourses)
             {
                 // coalescing opperator checks GetEnrollments for null, if null, creates new.
                 (course.GetEnrollments ??= new()).Add(new()
                 {
-                    CourseId = course.CourseID,
                     GetCourse = course,
                     GetStudent = student
                 });
