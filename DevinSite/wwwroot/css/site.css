@@ -249,10 +249,11 @@ body {
 
 /*#region =========== User Profile Page =========== */
 .profile-table {
+  
     max-width: fit-content;
     color: var(--dark-purple-2);
     font-family: 'Fredoka One', cursive;
-    position: absolute;
+    position: relative;
     margin-top: 2em;
     margin-inline: 3em;
 }

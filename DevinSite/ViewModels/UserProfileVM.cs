@@ -36,8 +36,8 @@ public class UserProfileVM
         }
         Id = student.Id;
         Name = student.Name;
-        Email = student.Email;
-        UserName = student.UserName;
+        Email = student.Email??"Default";
+        UserName = student.UserName??"Default";
         LastUpdate = student.LastUpdate;
     }
 

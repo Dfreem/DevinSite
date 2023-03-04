@@ -113,6 +113,12 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
+    // Although these are all methods involving assignment,
+    // they all redirect to the same view, Index of the Home controller.
+    // this is the reason they are included in this controller.
+
+    // =========================== Assignment Methods ===========================
+
     /// <summary>
     /// Retreive all the assignments that belong to the signed in user, and delete them from the database.
     /// This does not delete assignments from moodle, Only what is currently stored in our database.
@@ -134,7 +140,7 @@ public class HomeController : Controller
         {
             _repo.DeleteAssignment(toDelete);
         }
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index");
     }
 
     [HttpPost]

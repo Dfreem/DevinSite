@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DevinSite.Migrations
 {
     /// <inheritdoc />
-    public partial class notes_inprogress : Migration
+    public partial class notes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

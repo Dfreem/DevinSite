@@ -1,13 +1,12 @@
 ﻿@using System.Globalization
 @model UserProfileVM
-@*@inject SignInManager<Student> signInManager*@
 @{
     ViewData["Title"] = "User Profile";
 }
 
-<div class=" m-5">
+<div class="m-auto w-75">
     <h5>Setting A New Moodle Connection</h5>
-    <ol >
+    <ol class="w-75 ">
         <li>Login to your Moodle student account</li>
         <li>Immidiatly after login, you should be able to locate your profile icon at the top right of the page and it is labeld 'My Courses', click MyCourses..</li>
         <li>On this page, you should be able to see your name and a few navigation icons directly under it. Click on dashboard.</li>
@@ -18,61 +17,66 @@
         <li>copy the URL that is generated into the text feild below labeled Moodle Calendar and hit save.</li>
     </ol>
     Now when you navigate back to the main page, you will be able to update your calendar by hitting the yellow button.
-    <table class="table profile-table">
-        <thead>
-            <tr>
-                <th class="table-active">
-                    User:
-                </th>
-                <th class="table-secondary">
-                    <input type="text" asp-for="@Model.Name" value="@Model.Name" />
-                </th>
-                <th class="table-secondary">
-                    <form asp-action="SetMoodleString">
-                        <label asp-for="@Model.NewMoodle">
-                            Moodle Connection
-                        </label>
-                        <input type="hidden" value="@Model.Id" />
-                        <input asp-for="@Model.NewMoodle" />
-                        <input type="submit" value="save calendar URL">
-                    </form>
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    User Name
-                </td>
-                <td>
-                    @Model.UserName
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    e-mail
-                </td>
-                <td>
-                    @Model.Email
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    last assignment update
-                </td>
-                <td>
-                    @Model.LastUpdate.ToString(CultureInfo.CurrentCulture);
-                </td>
-            </tr>
-    </table>
+    <br />
+    <form method="post" asp-controller="Account" asp-action="SetMoodleString" class="w-50 ms-4 my-3">
+        <div class="input-group mb-1">
+            <span class="input-group-text">
+                <b>Set Moodle Connection:</b>
+            </span>
+        </div>
+        <div class="input-group mb-1">
+
+            <input type="hidden" value="@Model.Id" />
+            <input type="text" asp-for="NewMoodle" class="form-control input-bg-dark" />
+            <input type="submit" value="save" class="btn btn-outline-dark btn-border-width-2 btn-light" />
+        </div>
+    </form>
+
+
+    <form method="post" asp-controller="Account" asp-action="EditProfileInfoAsync" asp-route-uvm="@Model" class="w-50 ms-4 my-3">
+        <div class="input-group border-radius-3 my-3">
+            <input type="hidden" value="@Model.Id" />
+            <span class="input-group-text">
+                <b>
+                    Name:
+                </b>
+            </span>
+            <input type="text" asp-for="Name" class="form-control" value="" />
+        </div>
+        <div class="input-group border-radius-3 my-3">
+
+
+            <span class="input-group-text">
+                <b>Email:</b>
+            </span>
+            <input type="text" asp-for="Email" class="form-control input-line-height-1" value="" />
+            <input type="submit" value="save" class="btn btn-sm btn-outline-dark" />
+        </div>
+    </form>
+    <form method="post" asp-action="ChangePasswordAsync" asp-controller="Account" class="w-50 ms-4 my-1">
+
+        <input type="hidden" value="@Model.Id" />
+
+        <div class="input-group mb-1">
+            <span class="input-group-text">
+                <b>New password</b>
+            </span>
+            <input type="password" asp-for="NewPassword" class="form-control input-line-height-1" />
+        </div>
+        <div class="input-group mb-1">
+            <span class="input-group-text">
+                <b>Confirm new Password</b>
+            </span>
+            <input type="password" asp-for="ConfirmPassword" class="form-control input-line-height-1" />
+
+        </div>
+        <div class="input-group mb-1">
+            <span class="input-group-text">
+                <b>Current password</b>
+            </span>
+            <input type="password" asp-for="Password" class="form-control input-line-height-1" />
+        </div>
+        <input type="submit" value="Change Password" class=" class=" btn btn-sm btn-outline-dark btn-border-radius-sm"" />
+    </form>
+    @Html.DisplayFor(model => model);
 </div>
-@* ReSharper disable once Mvc.ActionNotResolved *@
-<form asp-action="ChangePasswordAsync" asp-controller="Account">
-    <div class="d-flex">
-        <label asp-for="@Model.Password">Current password</label>
-        <input type="password" asp-for="@Model.Password" />
-        <label asp-for="@Model.NewPassword">New password</label>
-        <input type="password" asp-for="@Model.Password" />
-        <label asp-for="@Model.ConfirmPassword">Confirm new Password</label>
-        <input type="password" asp-for="@Model.ConfirmPassword" />
-        <input type="submit" value="Change Password" />
-    </div>
-</form>

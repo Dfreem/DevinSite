@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevinSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230302161821_notes_inprogress")]
-    partial class notes_inprogress
+    [Migration("20230303031352_notes")]
+    partial class notes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

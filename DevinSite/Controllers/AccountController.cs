@@ -3,6 +3,8 @@ using AspNetCoreHero.ToastNotification.Notyf;
 using Microsoft.AspNetCore.Identity;
 
 namespace DevinSite.Controllers;
+
+[Authorize]
 public class AccountController : Controller
 {
     private readonly UserManager<Student> _userManager;
@@ -21,24 +23,22 @@ public class AccountController : Controller
         _services = services;
         _toast = notyf;
     }
-    [Authorize]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        // Retrieve the name of the currently signed in user
-        string? un = _signinManager.Context.User.Identity!.Name;
-
         // get signed in user from UserManager
-        var student = await _userManager.FindByNameAsync(un!);
-        UserProfileVM userProfile = new(student!);
+        string? un = _signinManager.Context.User.Identity!.Name;
+        UserProfileVM userProfile = new(_userManager.FindByNameAsync(un!).Result!);
         return View(userProfile);
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public IActionResult RegisterAsync()
     {
         return View(new RegisterVM());
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> RegisterAsync(RegisterVM model)
     {
@@ -70,13 +70,14 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public IActionResult LogInAsync(string returnUrl = "")
     {
         var model = new LoginVM { ReturnUrl = returnUrl };
         return View(model);
     }
-
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> LogInAsync(LoginVM model)
     {
@@ -100,9 +101,24 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task EditProfileInfoAsync(Student student)
+    public async Task<IActionResult> EditProfileInfoAsync(UserProfileVM uvm)
     {
-        await _userManager.UpdateAsync(student);
+        var user = await _userManager.FindByIdAsync(uvm.Id);
+        if (uvm is null || user is null)
+        {
+            _toast.Error("I unno what hpppund");
+            return RedirectToAction("Index");
+        }
+        if (uvm.Email is not null && !uvm.Email.Equals(user!.Email))
+        {
+            user.Email = uvm.Email;
+        }
+        if (uvm.Name is not null && !uvm.Name.Equals(user.Name))
+        {
+            user.Name = uvm.Name;
+        }
+        await _userManager.UpdateAsync(user!);
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
@@ -139,24 +155,6 @@ public class AccountController : Controller
     public async Task<IActionResult> SetMoodleString(UserProfileVM uvm)
     {
 
-        // Remove the common parts of the URL.
-        //int theSpot = uvm.NewMoodle.IndexOf("preset_what");
-        //string newMoodle = uvm.NewMoodle[..theSpot];
-
-        //// The important information all end with a & symbol
-        //string[] parts = newMoodle.Split('&')[0..2];
-        //foreach (string item in parts)
-        //{
-        //    // the user data in the url are labeled and then dilimited with a = symbol
-        //    // like this authtoken=23871y4691238479187
-        //    string[] data = item.Split('=');
-
-        //    // the environment variables we want are labeled with these in appsettings
-        //    string selector = data[0].Contains("userid") ? "Moodle:UID" : "Moodle:Token";
-        //    _config[selector] += data[1];
-        //}
-
-        // for now, just store the entire moodle string for a user in the database.
         string userName = _signinManager.Context.User.Identity!.Name!;
         var toUpdate = await _userManager.FindByNameAsync(userName);
         toUpdate!.MoodleString = uvm.NewMoodle;
@@ -170,4 +168,12 @@ public class AccountController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    public async Task<IActionResult> ChangeUserName(UserProfileVM uvm)
+    {
+        var user = await _userManager!.FindByNameAsync(_signinManager.Context.User.Identity!.Name!);
+        user!.UserName = uvm.UserName;
+        await _userManager.UpdateAsync(user);
+        return RedirectToAction(nameof(Index));
+    }
 }

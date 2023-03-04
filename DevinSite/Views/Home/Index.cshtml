@@ -67,11 +67,11 @@
             </div>
         </div>
         <div class="container w-50 h-50 bg-light">
-            @if (@Model.DisplayedAssignment is not null)
-                {
-                    @Html.DisplayFor(u => u.DisplayedAssignment)
-   
-                <form asp-action="UpdateNotes" asp-controller="Assignment">
+            @if (@Model.DisplayedAssignment.AssignmentId != 0)
+            {
+                @Html.DisplayFor(u => u.DisplayedAssignment)
+
+                <form asp-action="UpdateNotes" asp-controller="Notes">
                     <input hidden asp-for="DisplayedAssignment!.AssignmentId" value="@Model.DisplayedAssignment!.AssignmentId" />
                     <input hidden asp-for="DisplayedAssignment!.Title" value="@Model.DisplayedAssignment!.Title" />
                     <input hidden asp-for="DisplayedAssignment!.Details" value="@Model.DisplayedAssignment!.Details" />
@@ -79,7 +79,11 @@
                     <textarea asp-for="DisplayedAssignment!.Notes.Body"></textarea>
                     <input type="submit" class="btn btn-success rounded" />
                 </form>
-                <a asp-action="DeleteNotes" asp-controller="Assignment" asp-route-id="@Model.DisplayedAssignment.Notes.NoteId"><i class="bi bi-trash"></i></a>
+                <a asp-action="DeleteNotes" asp-controller="Notes" asp-route-id="@Model.DisplayedAssignment.Notes.NoteId"><i class="bi bi-trash"></i></a>
+            }
+            @if (!@Model.GetStudent.MoodleIsSet)
+            {
+                <p><b><em>Set your connection to moodle <a asp-action="Index" asp-controller="Account">here</a></em></b></p>
             }
         </div>
     </div>

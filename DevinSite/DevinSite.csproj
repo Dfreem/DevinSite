@@ -35,7 +35,6 @@
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
     <None Remove="Repositories\" />
     <None Remove="Views\Shared\DisplayTemplates\" />
-    <None Remove="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
@@ -65,6 +64,5 @@
   <ItemGroup>
     <Folder Include="Repositories\" />
     <Folder Include="Views\Shared\DisplayTemplates\" />
-    <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
 </Project>

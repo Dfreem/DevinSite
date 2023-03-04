@@ -1,6 +1,0 @@
-﻿@model List<Note>
-@if (@Model.IsNullOrEmpty())
-{
-        Model.Add(new());
-}
-<textarea asp-for="@Model.Last().Body"></textarea>
