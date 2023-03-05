@@ -14,10 +14,8 @@ public class HomeController : Controller
     private readonly UserManager<Student> _userManager;
     private string? _currentUserName;
 
-
     Student CurrentUser { get; }
     Assignment? SelectedAssignment { get; set; }
-
     #endregion
 
     public HomeController(IServiceProvider services, IConfiguration configuration)
@@ -61,27 +59,21 @@ public class HomeController : Controller
         return View(userVM);
     }
 
-    //public UserProfileVM InitNewNote(UserProfileVM userVM)
-    //{
-    //    userVM.DisplayedAssignment ??= new();
-    //    userVM.DisplayedAssignment.GetCourse ??= new();
-    //    userVM.GetAssignments ??= new() { userVM.DisplayedAssignment };
-    //    return userVM;
-    //}
-
-    /// <summary>
-    /// Select assignment sets the <see cref="UserProfileVM.DisplayedAssignment"/> property.
-    /// This property is the assignment that is displayed in the details section when an assignment is clicked.
-    /// </summary>
-    /// <param name="id">the id of the assignment that was clicked</param>
-    /// <returns>a full refresh of the Index view.</returns>
-    public IActionResult SelectAssignment(int id)
+    public async Task<IActionResult> SearchByCourse(int courseId)
     {
-        SelectedAssignment = CurrentUser.GetAssignments.Find(a => a.AssignmentId.Equals(id))!;
-        UserProfileVM userProfile = new(CurrentUser) { DisplayedAssignment = SelectedAssignment };
-        return View("Index", userProfile);
+        CurrentUser.GetCourses.Find(c => c.CourseID.Equals(courseId));
+        await _userManager.UpdateAsync(CurrentUser);
+        UserProfileVM uvm = new(CurrentUser);
+        return View("Index", uvm);
     }
 
+    public async Task<IActionResult> RefreshFromMoodle()
+    {
+        CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
+        await _userManager.UpdateAsync(CurrentUser);
+        await UpdateScheduleAsync();
+        return RedirectToAction("Index");
+    }
     #endregion
     #region Non-view Controller Methods
     /// <summary>
@@ -98,19 +90,13 @@ public class HomeController : Controller
             // use the MoodleWare class to retrieve and sort the calendar.
             CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
             CurrentUser.LastUpdate = DateTime.Now;
+            CurrentUser.GetCourses.Clear();
+            CurrentUser.GetCourses.AddRange(MoodleWare.ParseCourses(CurrentUser.GetAssignments));
 
             // update the user on the userManager with the new retrieved schedule.
             await _userManager.UpdateAsync(CurrentUser);
         }
         await Task.CompletedTask;
-    }
-
-    public async Task<IActionResult> RefreshFromMoodle()
-    {
-        CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
-        await _userManager.UpdateAsync(CurrentUser);
-        await UpdateScheduleAsync();
-        return RedirectToAction("Index");
     }
 
     // Although these are all methods involving assignment,
@@ -130,6 +116,19 @@ public class HomeController : Controller
         CurrentUser.GetAssignments.Clear();
         _userManager.UpdateAsync(CurrentUser);
         return RedirectToAction("Index");
+    }
+
+    /// <summary>
+    /// Select assignment sets the <see cref="UserProfileVM.DisplayedAssignment"/> property.
+    /// This property is the assignment that is displayed in the details section when an assignment is clicked.
+    /// </summary>
+    /// <param name="id">the id of the assignment that was clicked</param>
+    /// <returns>a full refresh of the Index view.</returns>
+    public IActionResult SelectAssignment(int id)
+    {
+        SelectedAssignment = CurrentUser.GetAssignments.Find(a => a.AssignmentId.Equals(id))!;
+        UserProfileVM userProfile = new(CurrentUser) { DisplayedAssignment = SelectedAssignment };
+        return View("Index", userProfile);
     }
 
     public IActionResult RemoveAssignment(int id)

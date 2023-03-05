@@ -7,7 +7,6 @@ public class SiteRepository : ISiteRepository
     public List<Assignment> Assignments { get; set; }
     public List<Course> Courses { get; set; }
     public List<Student> Students { get; set; }
-    public List<Enrollment> Enrollments { get; set; }
     public List<Note> Notes { get; set; }
 
     private readonly ApplicationDbContext _context;
@@ -24,10 +23,6 @@ public class SiteRepository : ISiteRepository
             .Where(a => Courses.Contains(a.GetCourse!) && !a.IsDone)
             .ToList();
         Students = _context.Users.ToList<Student>();
-        Enrollments = _context.Enrollments
-            .Include(e => e.GetCourse)
-            .Include(e => e.GetStudent)
-            .ToList<Enrollment>();
         Notes = _context.Notes
             .Include(n => n.GetAssignment)
             .Include(n => n.GetStudent).ToList();

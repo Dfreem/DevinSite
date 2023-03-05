@@ -4,79 +4,98 @@
     ViewData["Title"] = "User Profile";
 }
 
-<div class="m-auto w-75">
-    <h5>Setting A New Moodle Connection</h5>
-    <ol class="w-75 ">
-        <li>Login to your Moodle student account</li>
-        <li>Immidiatly after login, you should be able to locate your profile icon at the top right of the page and it is labeld 'My Courses', click MyCourses..</li>
-        <li>On this page, you should be able to see your name and a few navigation icons directly under it. Click on dashboard.</li>
-        <li>on your dashboard page, find the calendar and the section labeled 'Upcoming Events'. At the bottom, click Go to calendar</li>
-        <li>on the calendar page, select either week or month view. Then at the bottom of the calendar, click Export Calendar.</li>
-        <li>Now select show all events and this or next week if available</li>
-        <li>push "Get Calendar URL"</li>
-        <li>copy the URL that is generated into the text feild below labeled Moodle Calendar and hit save.</li>
-    </ol>
-    Now when you navigate back to the main page, you will be able to update your calendar by hitting the yellow button.
-    <br />
-    <form method="post" asp-controller="Account" asp-action="SetMoodleString" class="w-50 ms-4 my-3">
-        <div class="input-group mb-1">
-            <span class="input-group-text">
-                <b>Set Moodle Connection:</b>
-            </span>
+<div class="d-grid">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <h5>Setting A New Moodle Connection</h5>
+            <ol class="w-75 ">
+                <li>Login to your Moodle student account</li>
+                <li>Immidiatly after login, you should be able to locate your profile icon at the top right of the page and it is labeld 'My Courses', click MyCourses..</li>
+                <li>On this page, you should be able to see your name and a few navigation icons directly under it. Click on dashboard.</li>
+                <li>on your dashboard page, find the calendar and the section labeled 'Upcoming Events'. At the bottom, click Go to calendar</li>
+                <li>on the calendar page, select either week or month view. Then at the bottom of the calendar, click Export Calendar.</li>
+                <li>Now select show all events and this or next week if available</li>
+                <li>push "Get Calendar URL"</li>
+                <li>copy the URL that is generated into the text feild below labeled Moodle Calendar and hit save.</li>
+            </ol>
+            <p>Now when you navigate back to the main page, you will be able to update your calendar by hitting the yellow button.</p>
+            <br />
         </div>
-        <div class="input-group mb-1">
+    </div>
+    <div class="row">
+        <div class="col-7 ms-auto">
+            <form method="post" asp-controller="Account" asp-action="SetMoodleString">
+                <div class="input-group mb-1">
+                    <span class="input-group-text">
+                        <b>Set Moodle Connection:</b>
+                    </span>
+                </div>
+                <div class="input-group mb-1">
 
-            <input type="hidden" value="@Model.Id" />
-            <input type="text" asp-for="NewMoodle" class="form-control input-bg-dark" />
-            <input type="submit" value="save" class="btn btn-outline-dark btn-border-width-2 btn-light" />
+                    <input type="hidden" value="@Model.Id" />
+                    <input type="text" asp-for="NewMoodle" class="form-control input-bg-dark" />
+                    <input type="submit" value="save" class="btn btn-outline-dark btn-border-width-2 btn-light" />
+                </div>
+            </form>
+
+
+            <form method="post" asp-controller="Account" asp-action="EditProfileInfoAsync" asp-route-uvm="@Model" class="my-1">
+                <div class="input-group my-1">
+                    <input type="hidden" value="@Model.Id" />
+                    <span class="input-group-text">
+                        <b>Change your personal information</b>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <b>
+                            Name:
+                        </b>
+                    </span>
+                    <input type="text" asp-for="Name" class="form-control" value="" />
+                </div>
+                <div class="input-group my-1">
+
+
+                    <span class="input-group-text">
+                        <b>Email:</b>
+                    </span>
+                    <input type="text" asp-for="Email" class="form-control input-line-height-1" value="" />
+                    <input type="submit" value="save" class="btn btn-sm btn-outline-dark" />
+                </div>
+            </form>
+            <form method="post" asp-action="ChangePasswordAsync" asp-controller="Account" class="ms-auto my-1">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <b>Change your password</b>
+                    </span>
+                    <input type="hidden" value="@Model.Id" />
+
+                    <div class="input-group mb-1">
+                        <span class="input-group-text">
+                            <b>New password</b>
+                        </span>
+                        <input type="password" asp-for="NewPassword" class="form-control input-line-height-1" />
+                    </div>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text">
+                            <b>Confirm new Password</b>
+                        </span>
+                        <input type="password" asp-for="ConfirmPassword" class="form-control input-line-height-1" />
+
+                    </div>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text">
+                            <b>Current password</b>
+                        </span>
+                        <input type="password" asp-for="Password" class="form-control input-line-height-1" />
+                        <input type="submit" value="Change Password" class=" class=" btn btn-sm btn-outline-dark btn-border-radius-sm"" />
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-
-
-    <form method="post" asp-controller="Account" asp-action="EditProfileInfoAsync" asp-route-uvm="@Model" class="w-50 ms-4 my-3">
-        <div class="input-group border-radius-3 my-3">
-            <input type="hidden" value="@Model.Id" />
-            <span class="input-group-text">
-                <b>
-                    Name:
-                </b>
-            </span>
-            <input type="text" asp-for="Name" class="form-control" value="" />
+        <div class="col-4 my-auto me-auto">
+            @Html.DisplayFor(model => model)
         </div>
-        <div class="input-group border-radius-3 my-3">
-
-
-            <span class="input-group-text">
-                <b>Email:</b>
-            </span>
-            <input type="text" asp-for="Email" class="form-control input-line-height-1" value="" />
-            <input type="submit" value="save" class="btn btn-sm btn-outline-dark" />
-        </div>
-    </form>
-    <form method="post" asp-action="ChangePasswordAsync" asp-controller="Account" class="w-50 ms-4 my-1">
-
-        <input type="hidden" value="@Model.Id" />
-
-        <div class="input-group mb-1">
-            <span class="input-group-text">
-                <b>New password</b>
-            </span>
-            <input type="password" asp-for="NewPassword" class="form-control input-line-height-1" />
-        </div>
-        <div class="input-group mb-1">
-            <span class="input-group-text">
-                <b>Confirm new Password</b>
-            </span>
-            <input type="password" asp-for="ConfirmPassword" class="form-control input-line-height-1" />
-
-        </div>
-        <div class="input-group mb-1">
-            <span class="input-group-text">
-                <b>Current password</b>
-            </span>
-            <input type="password" asp-for="Password" class="form-control input-line-height-1" />
-        </div>
-        <input type="submit" value="Change Password" class=" class=" btn btn-sm btn-outline-dark btn-border-radius-sm"" />
-    </form>
-    @Html.DisplayFor(model => model);
+    </div>
 </div>

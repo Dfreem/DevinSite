@@ -14,7 +14,6 @@ namespace DevinSite.Repositories
         }
         public List<Assignment> Assignments { get; set; }
         public List<Course> Courses { get; set; } = new ();
-        public List<Enrollment> Enrollments { get; set; } = new();
         public List<Note> Notes { get; set; } = new();
 
         public async Task AddAssignmentAsync(Assignment assignment)
@@ -58,7 +57,7 @@ namespace DevinSite.Repositories
 
         public void DeleteNotes(Note note)
         {
-            throw new NotImplementedException();
+            Notes.Remove(note);
         }
 
         public void UpdateAssignment(Assignment assignment)

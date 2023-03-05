@@ -3,16 +3,24 @@
     ViewData["Title"] = Model.Name + "'s Profile";
 }
 
-<table class="table table-sm table-dark table-outline-light table-border-width-3">
+<table class="profile-table">
     <thead>
         <tr>
-            <th>Welcaome Back @Model.Name</th>
+            <th class="text-center" colspan="2">Welcome Back @Model.Name</th>
         </tr>
     </thead>
-    <tr>
-        <td>Email: @Model.Email</td>
-    </tr>
-    <tr>
-        <td>UserName: @Model.UserName</td>
-    </tr>
+    <tbody class="p-4">
+        <tr>
+            <td class="px-3"><b>Email:</b></td>
+            <td class="px-3"> @Model.Email</td>
+        </tr>
+        <tr>
+            <td class="px-3"><b>UserName:</b></td>
+            <td class="px-3"> @Model.UserName</td>
+        </tr>
+        <tr>
+            <td class="px-3"><b>Is my Moodle connected?</b></td>
+            <td class="px-3"> @Model.GetStudent.MoodleIsSet</td>
+        </tr>
+    </tbody>
 </table>

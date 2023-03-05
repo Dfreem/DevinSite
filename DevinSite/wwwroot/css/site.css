@@ -39,7 +39,6 @@ label {
 }
 
 a:any-link {
-    color: var(--viridian);
     font-family: 'Fredoka One', cursive;
     text-decoration: none;
 }
@@ -58,7 +57,7 @@ header {
     color: var(--teal);
     padding: .5em;
     position: center;
-    border-bottom: 1px #3d405b solid;
+    border-bottom: 1px solid var(--mikado-yellow);
 }
 
 a.navbar-brand {
@@ -75,28 +74,37 @@ a.navbar-brand {
 
 .btn-primary {
     background-color: var(--cambridge-blue);
-    border-color: black;
-    color: #5c8001;
+    border-color: var(--selective-yellow);
+    color: #033f63;
     font-family: 'Dosis', sans-serif;
     border-radius: 10px;
 }
 
     .btn-primary:hover {
-        background-color: magenta var(--eggshell);
+        background-color: magenta var(--mint);
     }
 
 .btn-secondary {
-    background-color: var(--camel);
-    color: var(--banana-mania);
-    border-radius: 5px;
+    background-color: var(--lapis-lazuli);
+    color: var(--viridian);
+    border-radius: 1em;
 }
-/*.nav-pills, .nav-link.active {
-    background-color: var(--df-primary-btn);
-    color: var(--bistre);
-    font-family: 'Skranji', cursive;
-    font-weight: 700;
-    font-size: 1rem;
-}*/
+
+.btn-moodle {
+    background-color: var(--mikado-yellow);
+    color: var(--persian-green);
+    border-radius: 1em;
+    margin-inline: 1em;
+    margin-block: 1em;
+}
+
+.btn-delete {
+    border-radius: 1em;
+    margin-inline: 1em;
+    margin-bottom: 1em;
+    background-color: #aa2205;
+    color: var(--persian-green);
+}
 
 .border-top {
     border-top: 1px solid var(--mint-cream);
@@ -131,35 +139,23 @@ a.navbar-brand {
     }
 
 body {
-    background-color: lightgray;
+    background-color: #486875;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     min-height: 100vh;
     padding-block-end: 5em;
-    color: indigo;
+    color: var(--cambridge-blue);
 }
 /*#endregion*/
 
 /* #region =========== Home =========== */
 
-/*.assignments {
-    max-width: fit-content;
-    min-width: 50%;
-    min-height: 20em;
-    max-height: 30em;
-    background-color: cornflowerblue;
-    margin: auto;
-    box-sizing: border-box;
-    padding: 1em;
-    overflow-y:scroll;
-}*/
-
 .assmt-card {
     min-height: fit-content;
     max-height: 150px;
     background-color: mintcream;
-    outline: 2px solid var(--teal);
+    outline: 2px solid var(--princeton-orange);
     margin-block: 1em;
     border-radius: .5em;
     max-width: 20em;
@@ -178,13 +174,33 @@ body {
     margin-inline-start: auto;
 }
 
+.assignments {
+    max-height:20em;
+    min-width:25em;
+    overflow-y:scroll;
+    background-color:#22222244;
+}
+
+.hide-scrollbar {
+    overflow-x:clip;
+    max-width:22em;
+}
+
+.vertical-buttons {
+    position:relative;
+    max-width:fit-content;
+    display:flex;
+    flex-direction:column
+}
+
 /*#endregion*/
 /*#region =========== Calendar =========== */
 
 #calendar-wrap {
-    background-color: var(--mint-cream);
+    background-color: #90a955;
+    color: #9d0208;
     border-radius: 1em;
-    outline: 2px solid olivedrab;
+    outline: 2px solid #023047;
     margin-block: 1em;
     min-height: min-content;
     max-height: fit-content;
@@ -193,7 +209,6 @@ body {
 .calendar {
     /*    top: 20em;
     right: 20em;*/
-    background-color: darkorange;
     box-sizing: border-box;
     box-shadow: 1px 1px 15px var(--df-secondary-text);
     border-radius: 8px;
@@ -214,10 +229,11 @@ body {
     align-items: center;
     justify-content: center;
     height: 25px;
+    color: #023047;
 }
 
     .calendar__number:nth-child(6n + 1) {
-        color: var(--teal);
+        color: #fb8500;
         font-weight: 700;
     }
 
@@ -241,20 +257,18 @@ body {
     width: fit-content;
 }
 
-.card {
-    background-color: #ffffff;
-    color: #33aa99;
-}
 /* #endregion */
 
 /*#region =========== User Profile Page =========== */
 .profile-table {
-  
-    max-width: fit-content;
-    color: var(--dark-purple-2);
+    outline:2px solid var(--orange-peel);
+    border-radius:1em;
+    background-color: var(--mint-green);
+    color: var(--dark-orange-web);
     font-family: 'Fredoka One', cursive;
-    position: relative;
-    margin-top: 2em;
-    margin-inline: 3em;
+}
+
+.profile-table > thead {
+    color: var(--viridian);
 }
 /*#endregion*/
