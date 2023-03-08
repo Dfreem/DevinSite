@@ -1,12 +1,7 @@
 
-using AspNetCoreHero.ToastNotification.Abstractions;
-using AspNetCoreHero.ToastNotification.Extensions;
-using AspNetCoreHero.ToastNotification.Notyf;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.SetMinimumLevel(LogLevel.Critical).ClearProviders();
-builder.Configuration.AddUserSecrets("aspnet-DevinSite-167acab2-27d6-4b67-be19-40f3633c0601");
 string connection = builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTION")!;
 
 // Add services to the container.

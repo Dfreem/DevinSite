@@ -48,13 +48,21 @@ a:any-link {
         color: var(--cambridge-blue);
     }
 
+a.login-labels, .logout {
+    color: var(--orange-peel);
+}
+    a.login-labels:hover, .logout:hover {
+        color: var(--mint-cream);
+        background-color: #bb9457;
+        outline: 2px solid var(--viridian);
+    }
+
 header {
     background-image: url("../images/hero.png");
     background-position: 100% 0;
     background-repeat: no-repeat;
     background-size: 500px 90px;
     background-color: #264653;
-    color: var(--teal);
     padding: .5em;
     position: center;
     border-bottom: 1px solid var(--mikado-yellow);
@@ -73,20 +81,20 @@ a.navbar-brand {
 }
 
 .btn-primary {
-    background-color: var(--cambridge-blue);
-    border-color: var(--selective-yellow);
-    color: #033f63;
+    background-color: var(--lapis-lazuli);
+    border-color: var(--dark-orange-web);
+    color: var(--mikado-yellow);
     font-family: 'Dosis', sans-serif;
-    border-radius: 10px;
+    border-radius: 5em;
 }
 
     .btn-primary:hover {
-        background-color: magenta var(--mint);
+        background-color: darkmagenta;
     }
 
 .btn-secondary {
-    background-color: var(--lapis-lazuli);
-    color: var(--viridian);
+    background-color: #dde5b6;
+    color: GrayText;
     border-radius: 1em;
 }
 
@@ -129,15 +137,6 @@ a.navbar-brand {
     padding-inline: 2em;
 }
 
-.logout {
-    color: var(--camel);
-    font-family: 'Skranji', cursive;
-}
-
-    .logout:hover {
-        color: var(--persian-plum);
-    }
-
 body {
     background-color: #486875;
     background-repeat: no-repeat;
@@ -154,13 +153,14 @@ body {
 .assmt-card {
     min-height: fit-content;
     max-height: 150px;
-    background-color: mintcream;
+    background-color: var(--cream);
     outline: 2px solid var(--princeton-orange);
     margin-block: 1em;
     border-radius: .5em;
     max-width: 20em;
     overflow-x: hidden;
     min-width: 20em;
+    color: darkmagenta;
 }
 
 .assignment-title {
@@ -190,8 +190,10 @@ body {
     position:relative;
     max-width:fit-content;
     display:flex;
+    flex-wrap:nowrap;
     flex-direction:column
 }
+
 
 /*#endregion*/
 /*#region =========== Calendar =========== */
@@ -246,12 +248,6 @@ body {
     }
 
 /*#endregion*/
-
-/*.open-button {
-    position: absolute;
-    left: 2em;*/
-/*    display:inline;*/
-/*}*/
 
 #search-title {
     width: fit-content;

@@ -31,9 +31,9 @@ public class HomeController : Controller
         _currentUserName = _signInManager.Context.User.Identity!.Name;
 
         CurrentUser = _userManager.FindByNameAsync(_currentUserName!).Result!;
-      
+
         // makes sure the users schedule is up to date.
-        UpdateScheduleAsync().Wait();
+        RefreshFromMoodle().Wait();
 
     }
     #region Views & Partial Views
@@ -49,7 +49,7 @@ public class HomeController : Controller
 
         if (didParse)
         {
-            userVM.GetAssignments.FindAll(a => a.DueDate.Day.Equals(searchDate.Day));
+            userVM.GetAssignments = userVM.GetAssignments.FindAll(a => a.DueDate.Day.Equals(searchDate.Day));
         }
         if (SelectedAssignment is not null)
         {
@@ -59,17 +59,19 @@ public class HomeController : Controller
         return View(userVM);
     }
 
-    public async Task<IActionResult> SearchByCourse(int courseId)
+    public IActionResult SearchByCourse(int courseId)
     {
-        CurrentUser.GetCourses.Find(c => c.CourseID.Equals(courseId));
-        await _userManager.UpdateAsync(CurrentUser);
-        UserProfileVM uvm = new(CurrentUser);
+        UserProfileVM uvm = new(CurrentUser)
+        {
+            GetAssignments = CurrentUser.GetAssignments.FindAll(a => a.GetCourse!.CourseID.Equals(courseId))
+        };
         return View("Index", uvm);
     }
 
     public async Task<IActionResult> RefreshFromMoodle()
     {
         CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
+        CurrentUser.GetCourses.Clear();
         await _userManager.UpdateAsync(CurrentUser);
         await UpdateScheduleAsync();
         return RedirectToAction("Index");
@@ -85,18 +87,23 @@ public class HomeController : Controller
     public async Task UpdateScheduleAsync()
     {
         // check users LastUpdate property to see if the last update is more than 3 days ago.
-        if (CurrentUser.LastUpdate.AddDays(3) < DateTime.Now && CurrentUser.MoodleIsSet)
+        if (CurrentUser.LastUpdate.AddDays(-3) >= DateTime.Now)
         {
-            // use the MoodleWare class to retrieve and sort the calendar.
-            CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
-            CurrentUser.LastUpdate = DateTime.Now;
-            CurrentUser.GetCourses.Clear();
-            CurrentUser.GetCourses.AddRange(MoodleWare.ParseCourses(CurrentUser.GetAssignments));
+            var cal = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
+            var courses = MoodleWare.ParseCourses(cal);
+            List<string> courseNames = new();
 
-            // update the user on the userManager with the new retrieved schedule.
-            await _userManager.UpdateAsync(CurrentUser);
+            // compose a list of the names of the courses
+            foreach (Course course in courses)
+            {
+                if (!courseNames.Contains(course.Name))
+                {
+                    courseNames.Add(course.Name);
+                }
+            }
+            var fromRepo = _repo.Courses.FindAll(c => !courseNames.Contains(c.Name));
         }
-        await Task.CompletedTask;
+
     }
 
     // Although these are all methods involving assignment,
@@ -150,7 +157,7 @@ public class HomeController : Controller
         _repo.UpdateAssignment(oldAssignment);
         return RedirectToAction("Index");
     }
-   
+
     #endregion
     [AllowAnonymous]
     public IActionResult Privacy()

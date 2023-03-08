@@ -9,15 +9,17 @@
 
 }
 <div class="vstack gap-3 section-b">
+
+    <div class="btn-group container-sm mt-4">
+        @foreach (Course course in Model.GetCourses)
+        {
+            <a asp-action="SearchByCourse" asp-controller="Home" class="btn btn-secondary" asp-route-courseId="@course.CourseID">@course.Name</a>
+
+        }
+    </div>
+
     <div class="hstack gap-2">
         <div class="assignment-wrap">
-            <div class="btn-group container-sm mt-4" id="subject-buttons" data-bs-toggle="collapse">
-                @foreach (Course course in Model.GetCourses)
-                {
-                    <a asp-action="SearchByCourse" asp-controller="Home" class="btn btn-primary" asp-route-courseId="@course.CourseID">@course.Name</a>
-
-                }
-            </div>
             <div id="calendar-wrap">
                 <div class="calendar__date">
                     <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[0].Date" class="calendar__number">Sun</a>
@@ -38,7 +40,7 @@
                             <div class="assignment-title">@assignment.Title</div>
                             <!-- <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a> -->
                             <a asp-action="SelectAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId">
-                                <i class="bi bi-caret-right"></i>
+                                <i class="bi bi-caret-right-fill"></i>
                             </a>
                         </div>
                     }
@@ -47,30 +49,25 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-column">
-            <a class="btn btn-moodle btn-outline-light" asp-controller="Home" asp-action="RefreshFromMoodle">Update from Moodle</a>
+        <div class="d-flex flex-column flex-nowrap vertical-buttons">
+            <a class="btn btn-moodle btn-outline-primary" asp-controller="Home" asp-action="RefreshFromMoodle">Update from Moodle</a>
             <form asp-controller="Home" asp-action="Index">
                 <div class="input-group">
-                    <span class="input-group-text search-title">
+                    <label for="searchString" class="search-title">
                         search by title:
-                    </span>
+                    </label>
                     <input type="search" name="searchString" />
-                    <input type="submit" value="filter" class="btn btn-secondary rounded" />
+                    <input type="submit" value="filter" class="btn btn-primary pill" />
                 </div>
             </form>
             <form asp-controller="Home" asp-action="Index">
 
+                <label for="searchString">Due Date:</label><br />
                 <div class="input-group">
-                    <span class="input-group-text">
-                        <label for="searchString">Due Date:</label><br />
-                    </span>
-                    <input type="date" name="searchString" />
+                    <input type="date" for="searchString" />
+                    <input type="submit" value="search" class="btn btn-primary pill" />
                 </div>
-                <div class="input-group">
-                    <a asp-action="Index" asp-controller="Home" class="btn btn-primary rounded w-50 mx-auto">show All</a>
-                    <input type="submit" value="search" class="btn btn-primary rounded" />
-
-                </div>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-primary circle my-3 mx-auto">show All</a>
             </form>
         </div>
 

@@ -23,9 +23,8 @@ public class SiteRepository : ISiteRepository
             .Where(a => Courses.Contains(a.GetCourse!) && !a.IsDone)
             .ToList();
         Students = _context.Users.ToList<Student>();
-        Notes = _context.Notes
-            .Include(n => n.GetAssignment)
-            .Include(n => n.GetStudent).ToList();
+        Notes = _context.Notes.ToList();
+            
     }
 
     public async Task AddAssignmentAsync(Assignment assignment)
@@ -42,6 +41,7 @@ public class SiteRepository : ISiteRepository
 
     public async Task AddCourseAsync(Course course)
     {
+        if (_context.Courses.Any(c => c.Name.Equals(course.Name))) return;
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
     }

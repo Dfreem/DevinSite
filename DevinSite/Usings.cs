@@ -46,6 +46,11 @@ global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 
+
+global using AspNetCoreHero.ToastNotification.Abstractions;
+global using AspNetCoreHero.ToastNotification.Extensions;
+global using AspNetCoreHero.ToastNotification.Notyf;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using NodaTime.Extensions;
 // ========== Home ==========
 // TODO link course buttons and use course names for values

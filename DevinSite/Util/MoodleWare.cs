@@ -113,8 +113,13 @@ public static class MoodleWare
         assignments.RemoveAt(index);
         foreach (var item in assignments)
         {
-            Console.WriteLine(item.Details);
-            item.Details = Regex.Replace(item.Details!, @"\r\n?|\n|\r|\\n", HtmlString.NewLine.ToString());
+            Console.WriteLine(item.ToString());
+            item.Details = Regex.Replace(item.Details!, @"\\r|\\n|\\r\\n?", HtmlString.NewLine.ToString());
+            item.Title = Regex.Replace(item.Title, @"\\r|\\n|\\r\\n?", HtmlString.NewLine.ToString());
+            item.Title = String.Concat(
+                item.Title.Split('\\',
+                StringSplitOptions.RemoveEmptyEntries |
+                StringSplitOptions.TrimEntries));
         }
 
         return assignments;
@@ -137,7 +142,11 @@ public static class MoodleWare
         List<string> lineList = lines.ToList();
         int startIndex = lineList.FindIndex(l => l.StartsWith(start));
         int endIndex = lineList.FindIndex(l => l.StartsWith(stop));
-
+        if (startIndex < 0 || endIndex < 0)
+        {
+            linesMinusAssignmentPart = Array.Empty<string>();
+            return "";
+        }
         // safety checking to confirm that the two indexes are in the proper order.
         if (startIndex <= endIndex && startIndex >= 0)
         {
