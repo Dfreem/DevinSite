@@ -107,15 +107,6 @@ public class HomeController : Controller
         }
 
     }
-
-    public async Task<IActionResult> RefreshFromMoodle()
-    {
-        CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
-        await _userManager.UpdateAsync(CurrentUser);
-        await UpdateScheduleAsync();
-        return RedirectToAction("Index");
-    }
-
     // Although these are all methods involving assignment,
     // they all redirect to the same view, Index of the Home controller.
     // this is the reason they are included in this controller.
@@ -133,6 +124,19 @@ public class HomeController : Controller
         CurrentUser.GetAssignments.Clear();
         _userManager.UpdateAsync(CurrentUser);
         return RedirectToAction("Index");
+    }
+
+    /// <summary>
+    /// Select assignment sets the <see cref="UserProfileVM.DisplayedAssignment"/> property.
+    /// This property is the assignment that is displayed in the details section when an assignment is clicked.
+    /// </summary>
+    /// <param name="id">the id of the assignment that was clicked</param>
+    /// <returns>a full refresh of the Index view.</returns>
+    public IActionResult SelectAssignment(int id)
+    {
+        SelectedAssignment = CurrentUser.GetAssignments.Find(a => a.AssignmentId.Equals(id))!;
+        UserProfileVM userProfile = new(CurrentUser) { DisplayedAssignment = SelectedAssignment };
+        return View("Index", userProfile);
     }
 
     public IActionResult RemoveAssignment(int id)

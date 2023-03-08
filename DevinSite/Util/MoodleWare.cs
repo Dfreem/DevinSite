@@ -178,4 +178,21 @@ public static class MoodleWare
             }
         }
     }
+
+    public static List<Course> ParseCourses(List<Assignment> getAssignments)
+    {
+
+        List<Course> courses = new();
+        List<string> names = new();
+        
+        foreach (Assignment assignment in getAssignments)
+        {
+            if (!names.Contains(assignment.GetCourse!.Name))
+            {
+                names.Add(assignment.GetCourse.Name);
+                courses.Add(assignment.GetCourse!);
+            }
+        }
+        return courses;
+    }
 }

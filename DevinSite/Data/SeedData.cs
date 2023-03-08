@@ -39,6 +39,8 @@ public static class SeedData
             Id = "d1"
         };
         await userManager.CreateAsync(devin, "!BassCase987");
+        devin.GetAssignments = await MoodleWare.GetCalendarAsync(devin.MoodleString);
+        await userManager.UpdateAsync(devin);
 
         Student yuri = new()
         {
@@ -49,6 +51,6 @@ public static class SeedData
             Id = "y1"
         };
         await userManager.CreateAsync(yuri, "Yuri123");
-
+        
     }
 }
