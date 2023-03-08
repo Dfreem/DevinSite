@@ -28,12 +28,16 @@ public class UserProfileVM
     public UserProfileVM(Student student)
     {
         GetStudent = student;
-        GetCourses = student.Courses;
+        GetCourses = student.GetCourses;
         GetAssignments = student.GetAssignments??new();
+        if (GetAssignments.IsNullOrEmpty())
+        {
+            DisplayedAssignment = new();
+        }
         Id = student.Id;
         Name = student.Name;
-        Email = student.Email;
-        UserName = student.UserName;
+        Email = student.Email??"Default";
+        UserName = student.UserName??"Default";
         LastUpdate = student.LastUpdate;
     }
 

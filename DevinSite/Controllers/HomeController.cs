@@ -1,4 +1,4 @@
-﻿
+
 
 namespace DevinSite.Controllers;
 
@@ -32,10 +32,10 @@ public class HomeController : Controller
         _repo = services.GetRequiredService<ISiteRepository>();
         _currentUserName = _signInManager.Context.User.Identity!.Name;
 
-        CurrentUser = _userManager.FindByNameAsync(_currentUserName).Result;
+        CurrentUser = _userManager.FindByNameAsync(_currentUserName!).Result!;
 
         // makes sure the users schedule is up to date.
-        UpdateScheduleAsync().Wait();
+        RefreshFromMoodle().Wait();
 
     }
     #region Views & Partial Views
@@ -43,6 +43,7 @@ public class HomeController : Controller
     {
         // encapsulate user in ViewModel
         UserProfileVM userVM = new(CurrentUser);
+        //userVM = InitNewNote(userVM);
         DateTime searchDate;
 
         // try parse search string into DateTime, if DateTime, use to search due date.
@@ -50,28 +51,33 @@ public class HomeController : Controller
 
         if (didParse)
         {
-            userVM.GetAssignments.FindAll(a => a.DueDate.Day.Equals(searchDate.Day));
+            userVM.GetAssignments = userVM.GetAssignments.FindAll(a => a.DueDate.Day.Equals(searchDate.Day));
         }
         if (SelectedAssignment is not null)
         {
             userVM.DisplayedAssignment = SelectedAssignment;
         }
-        else
-        {
-            userVM.DisplayedAssignment = CurrentUser.GetAssignments.FirstOrDefault();
-        }
-
         // if search string is not DateTime, use it to search the assignments for the search string.
         return View(userVM);
     }
 
-    public IActionResult SelectAssignment(int id)
+    public IActionResult SearchByCourse(int courseId)
     {
-        SelectedAssignment = CurrentUser.GetAssignments.Find(a => a.AssignmentId.Equals(id))!;
-        UserProfileVM userProfile = new(CurrentUser) { DisplayedAssignment = SelectedAssignment };
-        return View("Index", userProfile);
+        UserProfileVM uvm = new(CurrentUser)
+        {
+            GetAssignments = CurrentUser.GetAssignments.FindAll(a => a.GetCourse!.CourseID.Equals(courseId))
+        };
+        return View("Index", uvm);
     }
 
+    public async Task<IActionResult> RefreshFromMoodle()
+    {
+        CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
+        CurrentUser.GetCourses.Clear();
+        await _userManager.UpdateAsync(CurrentUser);
+        await UpdateScheduleAsync();
+        return RedirectToAction("Index");
+    }
     #endregion
     #region Non-view Controller Methods
     /// <summary>
@@ -83,15 +89,23 @@ public class HomeController : Controller
     public async Task UpdateScheduleAsync()
     {
         // check users LastUpdate property to see if the last update is more than 3 days ago.
-        if (CurrentUser.LastUpdate.AddDays(3) < DateTime.Now)
+        if (CurrentUser.LastUpdate.AddDays(-3) >= DateTime.Now)
         {
-            // use the MoodleWare class to retrieve and sort the calendar.
-            CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
-            CurrentUser.LastUpdate = DateTime.Now;
-            // update the user on the userManager with the new retrieved schedule.
-            await _userManager.UpdateAsync(CurrentUser);
+            var cal = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
+            var courses = MoodleWare.ParseCourses(cal);
+            List<string> courseNames = new();
+
+            // compose a list of the names of the courses
+            foreach (Course course in courses)
+            {
+                if (!courseNames.Contains(course.Name))
+                {
+                    courseNames.Add(course.Name);
+                }
+            }
+            var fromRepo = _repo.Courses.FindAll(c => !courseNames.Contains(c.Name));
         }
-        await Task.CompletedTask;
+
     }
 
     public async Task<IActionResult> RefreshFromMoodle()
@@ -102,6 +116,12 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
+    // Although these are all methods involving assignment,
+    // they all redirect to the same view, Index of the Home controller.
+    // this is the reason they are included in this controller.
+
+    // =========================== Assignment Methods ===========================
+
     /// <summary>
     /// Retreive all the assignments that belong to the signed in user, and delete them from the database.
     /// This does not delete assignments from moodle, Only what is currently stored in our database.
@@ -110,6 +130,8 @@ public class HomeController : Controller
     public IActionResult RemoveAllAssignments()
     {
         _repo.DeleteAllStudentAssignments();
+        CurrentUser.GetAssignments.Clear();
+        _userManager.UpdateAsync(CurrentUser);
         return RedirectToAction("Index");
     }
 
@@ -119,19 +141,20 @@ public class HomeController : Controller
         Assignment? toDelete = _repo.Assignments.First(assignment => assignment.AssignmentId.Equals(id));
         if (toDelete is not null)
         {
-            _repo.DeleteAssignmnent(toDelete);
+            _repo.DeleteAssignment(toDelete);
         }
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index");
     }
 
     [HttpPost]
     public IActionResult UpdateAssignment(Assignment assignment)
     {
         var oldAssignment = _repo.Assignments.Find(a => a.AssignmentId.Equals(assignment.AssignmentId));
-        oldAssignment!.Notes = oldAssignment.Notes + "\n" + assignment.Notes;
-        _repo.UpdateAssignmnent(oldAssignment);
+        oldAssignment!.Notes.Body += HtmlString.NewLine + assignment.Notes.Body;
+        _repo.UpdateAssignment(oldAssignment);
         return RedirectToAction("Index");
     }
+
     #endregion
     [AllowAnonymous]
     public IActionResult Privacy()

@@ -46,17 +46,23 @@ global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 
+
+global using AspNetCoreHero.ToastNotification.Abstractions;
+global using AspNetCoreHero.ToastNotification.Extensions;
+global using AspNetCoreHero.ToastNotification.Notyf;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using NodaTime.Extensions;
 // ========== Home ==========
 // TODO link course buttons and use course names for values
 // TODO this week / Next week buttons
 // TODO Format User Profile Page.
-// TODO Note Pad
-// TODO Add Course parsing to MoodleWare
+// TODO Note Pad - general
+// TODO Finish Course parsing to MoodleWare (meeting times)
 // TODO Fix search by date
-// TODO fix size of input for notes
 // TODO Classes list
 // TODO style assignments
 // TODO format assignment partial
-// TODO replace delete trash can with done checkbox
-// TODO change selected assignment into partial
+// TODO Roles
+// TODO Admin area
+// TODO Priority on assignments + color on BG
+// TODO instructional message when no moodle is set

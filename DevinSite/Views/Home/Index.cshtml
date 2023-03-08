@@ -1,33 +1,34 @@
-﻿@model UserProfileVM
+@model UserProfileVM
 @using DevinSite.Util
 @{
     ViewData["Title"] = "Home";
-    string[] days = CalendarHelpers.GetShortDayStrings();
     DateTime[] calDates = CalendarHelpers.GetThisWeek();
+    Model.DisplayedAssignment ??= new();
+    Model.DisplayedAssignment.GetCourse ??= new();
+    Model.GetAssignments ??= new() { Model.DisplayedAssignment };
+
 }
 <div class="vstack gap-3 section-b">
+
+    <div class="btn-group container-sm mt-4">
+        @foreach (Course course in Model.GetCourses)
+        {
+            <a asp-action="SearchByCourse" asp-controller="Home" class="btn btn-secondary" asp-route-courseId="@course.CourseID">@course.Name</a>
+
+        }
+    </div>
+
     <div class="hstack gap-2">
         <div class="assignment-wrap">
-            <div class="btn-group container-sm mt-4" id="subject-buttons" data-bs-toggle="collapse">
-                <a href="#" class="btn btn-primary btn" id="subject-1">Course 1</a>
-                <a href="#" class="btn btn-primary btn" id="subject-2">Course 2</a>
-                <a href="#" class="btn btn-primary btn" id="subject-3">Course 3</a>
-                <a href="#" class="btn btn-primary btn" id="subject-4">Course 4</a>
-            </div>
-            <a class="btn btn-danger rounded" asp-controller="Home" asp-action="RemoveAllAssignments">Delete All</a>
-            <a class="btn btn-warning rounded" asp-controller="Home" asp-action="RefreshFromMoodle">Update from Moodle</a>
-            <div>
-                <div id="calendar-wrap">
-
-                    <div class="calendar__date">
-                        <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[0].Date" class="calendar__number">Sun</a>
-                        <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[1].Date" class="calendar__number">Mon</a>
-                        <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[2].Date" class="calendar__number">Tue</a>
-                        <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[3].Date" class="calendar__number">Wed</a>
-                        <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[4].Date" class="calendar__number">Thu</a>
-                        <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[5].Date" class="calendar__number">Fri</a>
-                        <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[6].Date" class="calendar__number">Sat</a>
-                    </div>
+            <div id="calendar-wrap">
+                <div class="calendar__date">
+                    <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[0].Date" class="calendar__number">Sun</a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[1].Date" class="calendar__number">Mon</a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[2].Date" class="calendar__number">Tue</a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[3].Date" class="calendar__number">Wed</a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[4].Date" class="calendar__number">Thu</a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[5].Date" class="calendar__number">Fri</a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[6].Date" class="calendar__number">Sat</a>
                 </div>
             </div>
             <div id="search-title" class="d-flex">
@@ -48,8 +49,18 @@
                 </form>
             </div>
 
-            <div class="assignments container">
-                @foreach (Assignment? assignment in Model.GetAssignments)
+                    @foreach (var assignment in Model.GetAssignments)
+                    {
+                        <div class="assmt-card d-flex">
+                            <div class="assignment-title">@assignment.Title</div>
+                            <!-- <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a> -->
+                            <a asp-action="SelectAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId">
+                                <i class="bi bi-caret-right-fill"></i>
+                            </a>
+                        </div>
+                    }
+
+                @foreach (var assignment in Model.GetAssignments)
                 {
                     <div class="assmt-card d-flex">
                         <div class="assignment-title">@assignment.Title</div>
@@ -60,11 +71,51 @@
                     </div>
                 }
 
+
             </div>
         </div>
+        <div class="d-flex flex-column flex-nowrap vertical-buttons">
+            <a class="btn btn-moodle btn-outline-primary" asp-controller="Home" asp-action="RefreshFromMoodle">Update from Moodle</a>
+            <form asp-controller="Home" asp-action="Index">
+                <div class="input-group">
+                    <label for="searchString" class="search-title">
+                        search by title:
+                    </label>
+                    <input type="search" name="searchString" />
+                    <input type="submit" value="filter" class="btn btn-primary pill" />
+                </div>
+            </form>
+            <form asp-controller="Home" asp-action="Index">
+
+                <label for="searchString">Due Date:</label><br />
+                <div class="input-group">
+                    <input type="date" for="searchString" />
+                    <input type="submit" value="search" class="btn btn-primary pill" />
+                </div>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-primary circle my-3 mx-auto">show All</a>
+            </form>
+        </div>
+
+        @* ============= Selected Assignment =============*@
         <div class="container w-50 h-50 bg-light">
-            
-            @Html.DisplayFor(u => u.DisplayedAssignment)
+            @if (@Model.DisplayedAssignment.AssignmentId != 0)
+            {
+                @Html.DisplayFor(u => u.DisplayedAssignment)
+
+                <form asp-action="UpdateNotes" asp-controller="Notes">
+                    <input hidden asp-for="DisplayedAssignment!.AssignmentId" value="@Model.DisplayedAssignment!.AssignmentId" />
+                    <input hidden asp-for="DisplayedAssignment!.Title" value="@Model.DisplayedAssignment!.Title" />
+                    <input hidden asp-for="DisplayedAssignment!.Details" value="@Model.DisplayedAssignment!.Details" />
+                    <input hidden asp-for="DisplayedAssignment!.DueDate" value="@Model.DisplayedAssignment!.DueDate" />
+                    <textarea asp-for="DisplayedAssignment!.Notes.Body"></textarea>
+                    <input type="submit" class="btn btn-success rounded" />
+                </form>
+                <a asp-action="DeleteNotes" asp-controller="Notes" asp-route-id="@Model.DisplayedAssignment.Notes.NoteId"><i class="bi bi-trash"></i></a>
+            }
+            @if (!@Model.GetStudent.MoodleIsSet)
+            {
+                <p><b><em>Set your connection to moodle <a asp-action="Index" asp-controller="Account">here</a></em></b></p>
+            }
         </div>
     </div>
 </div>

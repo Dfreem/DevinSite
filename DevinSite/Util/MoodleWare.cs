@@ -1,4 +1,6 @@
 ﻿
+using System.Text.RegularExpressions;
+
 namespace DevinSite.Util;
 
 public static class MoodleWare
@@ -59,13 +61,14 @@ public static class MoodleWare
     /// <returns></returns>
     public static async Task<List<Assignment>> GetCalendarAsync(string moodleString)
     {
-        // create new HttpClient seperate from the web app's HttpClient.
-        string icsData = await GetCalendarAsStringAsync(moodleString);
-        // Split response string into seperate lines of text.
-        string[] lines = icsData.Split("\r\n");
-
         // Create assignments list the will hold the assignments and be returned from the method.
         List<Assignment> assignments = new();
+
+        // create new HttpClient seperate from the web app's HttpClient.
+        string icsData = await GetCalendarAsStringAsync(moodleString);
+
+        // Split response string into seperate lines of text.
+        string[] lines = icsData.Split("\r\n");
 
         // search each line in the response.
         for (int i = 0; i < lines.Length; i++)
@@ -77,7 +80,7 @@ public static class MoodleWare
                 // First - DueDate
                 string dt = ParsePart(in lines, AssignmentPart.DueDate, out lines);
 
-                // splits out the time, only uses the date.
+                // seperate time and date parts
                 var holdDT = dt.Split('T');
                 string date = holdDT[0];
                 string time = holdDT[^1];
@@ -90,7 +93,7 @@ public static class MoodleWare
                 {
                     Title = ParsePart(in lines, AssignmentPart.Title, out lines),
                     Details = ParsePart(in lines, AssignmentPart.Details, out lines),
-                    DueDate = new DateTime(int.Parse(date[..4]), int.Parse(date[4..6]), int.Parse(date[6..]), int.Parse(time[0..2]), 00, 00)
+                    DueDate = new DateTime(int.Parse(date[..4]), int.Parse(date[4..6]), int.Parse(date[6..]), int.Parse(time[0..2]), int.Parse(time[2..4]), 00)
                 };
                 // Course Title contains title and instructor.
                 // Create new Course Object using the Title and instructor.
@@ -105,6 +108,19 @@ public static class MoodleWare
                 assignments.Add(assignment);
             }
         }
+        int index = assignments.Count - 1;
+        assignments.RemoveAt(index);
+        foreach (var item in assignments)
+        {
+            Console.WriteLine(item.ToString());
+            item.Details = Regex.Replace(item.Details!, @"\\r|\\n|\\r\\n?", HtmlString.NewLine.ToString());
+            item.Title = Regex.Replace(item.Title, @"\\r|\\n|\\r\\n?", HtmlString.NewLine.ToString());
+            item.Title = String.Concat(
+                item.Title.Split('\\',
+                StringSplitOptions.RemoveEmptyEntries |
+                StringSplitOptions.TrimEntries));
+        }
+
         return assignments;
     }
 
@@ -125,7 +141,11 @@ public static class MoodleWare
         List<string> lineList = lines.ToList();
         int startIndex = lineList.FindIndex(l => l.StartsWith(start));
         int endIndex = lineList.FindIndex(l => l.StartsWith(stop));
-
+        if (startIndex < 0 || endIndex < 0)
+        {
+            linesMinusAssignmentPart = Array.Empty<string>();
+            return "";
+        }
         // safety checking to confirm that the two indexes are in the proper order.
         if (startIndex <= endIndex && startIndex >= 0)
         {

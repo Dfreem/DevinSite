@@ -15,6 +15,7 @@ namespace DevinSite.Repositories
         public List<Assignment> Assignments { get; set; }
         public List<Course> Courses { get; set; } = new ();
         public List<Enrollment> Enrollments { get; set; } = new();
+        public List<Note> Notes { get; set; } = new();
 
         public async Task AddAssignmentAsync(Assignment assignment)
         {
@@ -34,12 +35,18 @@ namespace DevinSite.Repositories
             await Task.CompletedTask;
         }
 
+        public async Task AddNotesAsync(Note newNotes)
+        {
+            Notes.Add(newNotes);
+            await Task.CompletedTask;
+        }
+
         public void DeleteAllStudentAssignments()
         {
             Assignments = new();
         }
 
-        public void DeleteAssignmnent(Assignment assignment)
+        public void DeleteAssignment(Assignment assignment)
         {
             Assignments.Remove(assignment);
         }
@@ -49,7 +56,12 @@ namespace DevinSite.Repositories
             Courses.Remove(course);
         }
 
-        public void UpdateAssignmnent(Assignment assignment)
+        public void DeleteNotes(Note note)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateAssignment(Assignment assignment)
         {
             int index = Assignments.FindIndex(a => a.AssignmentId.Equals(assignment.AssignmentId));
             Assignments[index] = assignment;
@@ -59,6 +71,11 @@ namespace DevinSite.Repositories
         {
             int index = Courses.FindIndex(c => c.CourseID.Equals(course.CourseID));
             Courses[index] = course;
+        }
+
+        public void UpdateNotes(Note toAdd)
+        {
+            throw new NotImplementedException();
         }
     }
 }
