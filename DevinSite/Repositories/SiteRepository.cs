@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace DevinSite.Repositories;
 
@@ -7,6 +7,7 @@ public class SiteRepository : ISiteRepository
     public List<Assignment> Assignments { get; set; }
     public List<Course> Courses { get; set; }
     public List<Student> Students { get; set; }
+    public List<Enrollment> Enrollments { get; set; }
     public List<Note> Notes { get; set; }
 
     private readonly ApplicationDbContext _context;

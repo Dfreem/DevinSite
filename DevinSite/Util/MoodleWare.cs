@@ -1,5 +1,4 @@
 ﻿
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DevinSite.Util;
@@ -178,22 +177,5 @@ public static class MoodleWare
                 return await httpClient.GetStringAsync(source);
             }
         }
-    }
-
-    public static List<Course> ParseCourses(List<Assignment> getAssignments)
-    {
-
-        List<Course> courses = new();
-        List<string> names = new();
-        
-        foreach (Assignment assignment in getAssignments)
-        {
-            if (!names.Contains(assignment.GetCourse!.Name))
-            {
-                names.Add(assignment.GetCourse.Name);
-                courses.Add(assignment.GetCourse!);
-            }
-        }
-        return courses;
     }
 }

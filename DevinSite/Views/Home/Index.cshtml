@@ -1,4 +1,4 @@
-﻿@model UserProfileVM
+@model UserProfileVM
 @using DevinSite.Util
 @{
     ViewData["Title"] = "Home";
@@ -31,8 +31,23 @@
                     <a asp-controller="Home" asp-action="Index" asp-route-searchString="@calDates[6].Date" class="calendar__number">Sat</a>
                 </div>
             </div>
-            <div class="hide-scrollbar">
-                <div class="assignments container">
+            <div id="search-title" class="d-flex">
+                <form class="form-inline" asp-controller="Home" asp-action="Index">
+                    Title:
+                    <input type="search" name="searchString" />
+                    <input type="submit" value="filter" class="btn btn-secondary rounded-pill mx-3" />
+                </form>
+                <form class="form-inline" asp-controller="Home" asp-action="Index">
+                    <p>
+                        Due Date:
+                        <input type="date" name="searchString" />
+                        <input type="submit" value="search" class="btn btn-info rounded-pill mx-3" />
+                    </p>
+                </form>
+                <form class="form-inline" asp-controller="Home" asp-action="Index">
+                    <input type="submit" value="Show All" class="btn btn-primary rounded mx-3" />
+                </form>
+            </div>
 
                     @foreach (var assignment in Model.GetAssignments)
                     {
@@ -45,8 +60,18 @@
                         </div>
                     }
 
+                @foreach (var assignment in Model.GetAssignments)
+                {
+                    <div class="assmt-card d-flex">
+                        <div class="assignment-title">@assignment.Title</div>
+                        <!-- <a class="mx-4" asp-action="RemoveAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId"><i class="bi bi-trash"></i></a> -->
+                        <a asp-action="SelectAssignment" asp-controller="Home" asp-route-id="@assignment.AssignmentId">
+                            <i class="bi bi-caret-right"></i>
+                        </a>
+                    </div>
+                }
 
-                </div>
+
             </div>
         </div>
         <div class="d-flex flex-column flex-nowrap vertical-buttons">
@@ -83,7 +108,7 @@
                     <input hidden asp-for="DisplayedAssignment!.Details" value="@Model.DisplayedAssignment!.Details" />
                     <input hidden asp-for="DisplayedAssignment!.DueDate" value="@Model.DisplayedAssignment!.DueDate" />
                     <textarea asp-for="DisplayedAssignment!.Notes.Body"></textarea>
-                    <input type="submit" class="btn btn-secondary rounded" />
+                    <input type="submit" class="btn btn-success rounded" />
                 </form>
                 <a asp-action="DeleteNotes" asp-controller="Notes" asp-route-id="@Model.DisplayedAssignment.Notes.NoteId"><i class="bi bi-trash"></i></a>
             }
