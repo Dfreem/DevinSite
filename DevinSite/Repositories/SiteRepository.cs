@@ -7,7 +7,6 @@ public class SiteRepository : ISiteRepository
     public List<Assignment> Assignments { get; set; }
     public List<Course> Courses { get; set; }
     public List<Student> Students { get; set; }
-    public List<Enrollment> Enrollments { get; set; }
     public List<Note> Notes { get; set; }
 
     private readonly ApplicationDbContext _context;
@@ -25,7 +24,7 @@ public class SiteRepository : ISiteRepository
             .ToList();
         Students = _context.Users.ToList<Student>();
         Notes = _context.Notes.ToList();
-            
+
     }
 
     public async Task AddAssignmentAsync(Assignment assignment)
@@ -47,12 +46,25 @@ public class SiteRepository : ISiteRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task AddCourseRangeAsync(List<Course> courses)
+    {
+        foreach (var course in courses)
+        {
+            if (!_context.Courses.Any(c => c.Name.Equals(course.Name)))
+            {
+                await _context.Courses.AddAsync(course);
+            }
+        }
+        await _context.SaveChangesAsync();
+    }
+
+
     public void DeleteAssignment(Assignment assignment)
     {
         _context.Assignments.Remove(assignment);
         _context.SaveChanges();
     }
-    
+
     public void DeleteAllStudentAssignments()
     {
         _context.Assignments.RemoveRange(Assignments);

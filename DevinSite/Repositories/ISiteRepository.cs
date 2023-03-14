@@ -5,13 +5,13 @@ public interface ISiteRepository
 {
     List<Assignment> Assignments { get; set; }
     List<Course> Courses { get; set; }
-    List<Enrollment> Enrollments { get; set; }
     List<Note> Notes { get; set; }
 
     public Task AddAssignmentAsync(Assignment assignment);
     public Task AddCourseAsync(Course course);
     public Task AddAssignmentRangeAsync(List<Assignment> assignments);
     public Task AddNotesAsync(Note newNotes);
+    public Task AddCourseRangeAsync(List<Course> courses);
     public void UpdateAssignment(Assignment assignment);
     public void UpdateCourse(Course course);
     public void UpdateNotes(Note toAdd);

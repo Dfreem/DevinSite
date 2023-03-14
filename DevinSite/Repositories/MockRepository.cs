@@ -14,7 +14,6 @@ namespace DevinSite.Repositories
         }
         public List<Assignment> Assignments { get; set; }
         public List<Course> Courses { get; set; } = new ();
-        public List<Enrollment> Enrollments { get; set; } = new();
         public List<Note> Notes { get; set; } = new();
 
         public async Task AddAssignmentAsync(Assignment assignment)
@@ -33,6 +32,11 @@ namespace DevinSite.Repositories
         {
             Courses.Add(course);
             await Task.CompletedTask;
+        }
+
+        public Task AddCourseRangeAsync(List<Course> courses)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task AddNotesAsync(Note newNotes)

@@ -35,7 +35,7 @@ public class HomeController : Controller
         CurrentUser = _userManager.FindByNameAsync(_currentUserName!).Result!;
 
         // makes sure the users schedule is up to date.
-        RefreshFromMoodle().Wait();
+        UpdateScheduleAsync().Wait();
 
     }
     #region Views & Partial Views
@@ -65,7 +65,7 @@ public class HomeController : Controller
     {
         UserProfileVM uvm = new(CurrentUser)
         {
-            GetAssignments = CurrentUser.GetAssignments.FindAll(a => a.GetCourse!.CourseID.Equals(courseId))
+            GetAssignments = CurrentUser.GetAssignments!.FindAll(a => a.GetCourse!.CourseID.Equals(courseId))
         };
         return View("Index", uvm);
     }
@@ -73,9 +73,8 @@ public class HomeController : Controller
     public async Task<IActionResult> RefreshFromMoodle()
     {
         CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
-        CurrentUser.GetCourses.Clear();
+        CurrentUser.GetCourses!.Clear();
         await _userManager.UpdateAsync(CurrentUser);
-        await UpdateScheduleAsync();
         return RedirectToAction("Index");
     }
     #endregion
@@ -89,33 +88,25 @@ public class HomeController : Controller
     public async Task UpdateScheduleAsync()
     {
         // check users LastUpdate property to see if the last update is more than 3 days ago.
-        if (CurrentUser.LastUpdate.AddDays(-3) >= DateTime.Now)
+        if (CurrentUser.LastUpdate.AddDays(-3) <= DateTime.Now)
         {
-            var cal = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
-            var courses = MoodleWare.ParseCourses(cal);
-            List<string> courseNames = new();
-
-            // compose a list of the names of the courses
-            foreach (Course course in courses)
+            CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
+            var courses = MoodleWare.ParseCourses(CurrentUser.GetAssignments);
+            courses = courses.Distinct().ToList();
+            foreach (var course in courses)
             {
-                if (!courseNames.Contains(course.Name))
+                if (!CurrentUser.GetCourses!.Any(c => c.Name.Equals(course.Name)))
                 {
-                    courseNames.Add(course.Name);
+                    var fromRepo = _repo.Courses.Find(c => c.Name.Equals(course.Name));
+                    CurrentUser.GetCourses!.Add(fromRepo??course);
                 }
+
             }
-            var fromRepo = _repo.Courses.FindAll(c => !courseNames.Contains(c.Name));
+            CurrentUser.LastUpdate = DateTime.Now;
+            await _userManager.UpdateAsync(CurrentUser);
         }
 
     }
-
-    public async Task<IActionResult> RefreshFromMoodle()
-    {
-        CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
-        await _userManager.UpdateAsync(CurrentUser);
-        await UpdateScheduleAsync();
-        return RedirectToAction("Index");
-    }
-
     // Although these are all methods involving assignment,
     // they all redirect to the same view, Index of the Home controller.
     // this is the reason they are included in this controller.
@@ -133,6 +124,19 @@ public class HomeController : Controller
         CurrentUser.GetAssignments.Clear();
         _userManager.UpdateAsync(CurrentUser);
         return RedirectToAction("Index");
+    }
+
+    /// <summary>
+    /// Select assignment sets the <see cref="UserProfileVM.DisplayedAssignment"/> property.
+    /// This property is the assignment that is displayed in the details section when an assignment is clicked.
+    /// </summary>
+    /// <param name="id">the id of the assignment that was clicked</param>
+    /// <returns>a full refresh of the Index view.</returns>
+    public IActionResult SelectAssignment(int id)
+    {
+        SelectedAssignment = CurrentUser.GetAssignments.Find(a => a.AssignmentId.Equals(id))!;
+        UserProfileVM userProfile = new(CurrentUser) { DisplayedAssignment = SelectedAssignment };
+        return View("Index", userProfile);
     }
 
     public IActionResult RemoveAssignment(int id)
