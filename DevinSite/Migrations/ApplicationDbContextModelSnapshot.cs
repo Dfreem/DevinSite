@@ -31,7 +31,7 @@ namespace DevinSite.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("GetCourseCourseID")
+                    b.Property<int>("GetCourseCourseID")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDone")
@@ -142,7 +142,8 @@ namespace DevinSite.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -315,7 +316,9 @@ namespace DevinSite.Migrations
                 {
                     b.HasOne("DevinSite.Models.Course", "GetCourse")
                         .WithMany("Assignments")
-                        .HasForeignKey("GetCourseCourseID");
+                        .HasForeignKey("GetCourseCourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DevinSite.Models.Student", null)
                         .WithMany("GetAssignments")

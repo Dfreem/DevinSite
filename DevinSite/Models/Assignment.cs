@@ -3,8 +3,10 @@
 public class Assignment
 {
     public int AssignmentId { get; set; }
+    [Required]
     public string Title { get; set; } = "No Title";
-    public Course? GetCourse { get; set; }
+    [Required]
+    public Course GetCourse { get; set; } = default!;
     public DateTime DueDate { get; set; } = DateTime.Now;
     public string? Details { get; set; }
     public bool IsDone { get; set; } = false;

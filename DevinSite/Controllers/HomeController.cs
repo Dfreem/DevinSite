@@ -65,7 +65,7 @@ public class HomeController : Controller
     {
         UserProfileVM uvm = new(CurrentUser)
         {
-            GetAssignments = CurrentUser.GetAssignments.FindAll(a => a.GetCourse!.CourseID.Equals(courseId))
+            GetAssignments = CurrentUser.GetAssignments!.FindAll(a => a.GetCourse!.CourseID.Equals(courseId))
         };
         return View("Index", uvm);
     }
@@ -73,7 +73,7 @@ public class HomeController : Controller
     public async Task<IActionResult> RefreshFromMoodle()
     {
         CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
-        CurrentUser.GetCourses.Clear();
+        CurrentUser.GetCourses!.Clear();
         await _userManager.UpdateAsync(CurrentUser);
         return RedirectToAction("Index");
     }
@@ -88,33 +88,19 @@ public class HomeController : Controller
     public async Task UpdateScheduleAsync()
     {
         // check users LastUpdate property to see if the last update is more than 3 days ago.
-        if (CurrentUser.LastUpdate.AddDays(-3) >= DateTime.Now)
+        if (CurrentUser.LastUpdate.AddDays(-3) <= DateTime.Now)
         {
             CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
             var courses = MoodleWare.ParseCourses(CurrentUser.GetAssignments);
-            List<string> courseNames = new();
+            courses = courses.Distinct().ToList();
+            foreach (var course in courses)
+            {
+                if (!CurrentUser.GetCourses!.Any(c => c.Name.Equals(course.Name)))
+                {
+                    var fromRepo = _repo.Courses.Find(c => c.Name.Equals(course.Name));
+                    CurrentUser.GetCourses!.Add(fromRepo??course);
+                }
 
-            // compose a list of the names of the courses
-            foreach (Course course in courses)
-            {
-                if (!courseNames.Contains(course.Name))
-                {
-                    courseNames.Add(course.Name);
-                }
-                else
-                {
-                    courses.Remove(course);
-                }
-            }
-            var fromRepo = _repo.Courses.FindAll(c => !courseNames.Contains(c.Name));
-            if (fromRepo.IsNullOrEmpty())
-            {
-                await _repo.AddCourseRangeAsync(courses);
-                CurrentUser.GetCourses.AddRange(courses);
-            }
-            else
-            {
-                CurrentUser.GetCourses.AddRange(fromRepo);
             }
             CurrentUser.LastUpdate = DateTime.Now;
             await _userManager.UpdateAsync(CurrentUser);
