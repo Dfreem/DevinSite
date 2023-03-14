@@ -35,7 +35,7 @@ public class HomeController : Controller
         CurrentUser = _userManager.FindByNameAsync(_currentUserName!).Result!;
 
         // makes sure the users schedule is up to date.
-        RefreshFromMoodle().Wait();
+        UpdateScheduleAsync().Wait();
 
     }
     #region Views & Partial Views
@@ -75,7 +75,6 @@ public class HomeController : Controller
         CurrentUser.LastUpdate = CurrentUser.LastUpdate.AddDays(-3);
         CurrentUser.GetCourses.Clear();
         await _userManager.UpdateAsync(CurrentUser);
-        await UpdateScheduleAsync();
         return RedirectToAction("Index");
     }
     #endregion
@@ -91,8 +90,8 @@ public class HomeController : Controller
         // check users LastUpdate property to see if the last update is more than 3 days ago.
         if (CurrentUser.LastUpdate.AddDays(-3) >= DateTime.Now)
         {
-            var cal = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
-            var courses = MoodleWare.ParseCourses(cal);
+            CurrentUser.GetAssignments = await MoodleWare.GetCalendarAsync(CurrentUser.MoodleString);
+            var courses = MoodleWare.ParseCourses(CurrentUser.GetAssignments);
             List<string> courseNames = new();
 
             // compose a list of the names of the courses
@@ -102,8 +101,23 @@ public class HomeController : Controller
                 {
                     courseNames.Add(course.Name);
                 }
+                else
+                {
+                    courses.Remove(course);
+                }
             }
             var fromRepo = _repo.Courses.FindAll(c => !courseNames.Contains(c.Name));
+            if (fromRepo.IsNullOrEmpty())
+            {
+                await _repo.AddCourseRangeAsync(courses);
+                CurrentUser.GetCourses.AddRange(courses);
+            }
+            else
+            {
+                CurrentUser.GetCourses.AddRange(fromRepo);
+            }
+            CurrentUser.LastUpdate = DateTime.Now;
+            await _userManager.UpdateAsync(CurrentUser);
         }
 
     }

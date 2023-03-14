@@ -11,6 +11,7 @@ public interface ISiteRepository
     public Task AddCourseAsync(Course course);
     public Task AddAssignmentRangeAsync(List<Assignment> assignments);
     public Task AddNotesAsync(Note newNotes);
+    public Task AddCourseRangeAsync(List<Course> courses);
     public void UpdateAssignment(Assignment assignment);
     public void UpdateCourse(Course course);
     public void UpdateNotes(Note toAdd);

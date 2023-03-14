@@ -34,6 +34,11 @@ namespace DevinSite.Repositories
             await Task.CompletedTask;
         }
 
+        public Task AddCourseRangeAsync(List<Course> courses)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task AddNotesAsync(Note newNotes)
         {
             Notes.Add(newNotes);
